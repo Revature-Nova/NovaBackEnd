@@ -1,6 +1,7 @@
 package com.revature.nova.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -29,51 +31,36 @@ public class Product {
     // 6 Digit Int? 3 Digit Int? 6 Letter Sequence? AlphaNumeric Sequence?
     private Integer productId;
 
-
-
     @Column
     //The Elder Scrolls V - Skyrim
     private String name;
-
-
 
     @Column
     //RPG
     private String genre;
 
-
-
     @Column
     //19.49
     private Float price;
-
-
-
 
     @Column
     //M
     private String rating;
 
-
-
     @Column(columnDefinition = "varchar(1000)")
-
     private String endpoint;
-
-
 
     @Column
     //PC
     private String platform;
 
-
-
     @Column(columnDefinition = "varchar(1000)")
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name ="cart", referencedColumnName = "cart", nullable = false)
-    private Cart cart;
+    private List<Cart> cartList;
+
     /*
     Stretch Goal:
     @Column
