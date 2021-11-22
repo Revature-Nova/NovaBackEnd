@@ -13,4 +13,11 @@ public class ProductService {
     public ProductService(ProductRepo repo) {
         this.repo = repo;
     }
+
+    /**
+     * This method gets the products from the database
+     */
+    public void getProduct(){
+        repo.findAll();
+    }
 }
