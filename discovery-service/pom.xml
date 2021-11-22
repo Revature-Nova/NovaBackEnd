@@ -38,6 +38,7 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>3.0.4</version>
 		</dependency>
 
 		<dependency>
@@ -76,6 +77,10 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-netflix-eureka-server</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -104,6 +109,9 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>
+			discovery-service
+		</finalName>
 	</build>
 
 </project>
