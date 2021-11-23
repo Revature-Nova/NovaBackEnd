@@ -10,27 +10,27 @@ import java.util.List;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
 
-//    /**
-//     * This method finds the rows in the database by the specified genre
-//     * @param genre Requires the genre that the user wants to filter by
-//     * @return Returns a list of the filtered games
-//     */
-//    List<Product> findByGenre(String genre);
-//
-//    /**
-//     * This method finds the rows in the database by the specified rating
-//     * @param rating Requires the rating that the user wants to filter by
-//     * @return Returns a list of the filtered games
-//     */
-//    List<Product> findByRating(String rating);
-//
-//    /**
-//     * This method finds the rows in the database by the specified platform
-//     * @param platform Requires the platform that the user wants to filter by
-//     * @return Returns a list of the filtered games
-//     */
-//    List<Product> findByPlatform(String platform);
-//
+    /**
+     * This method finds the rows in the database by the specified genre
+     * @param genre Requires the genre that the user wants to filter by
+     * @return Returns a list of the filtered games
+     */
+    List<Product> findByGenre(String genre);
+
+    /**
+     * This method finds the rows in the database by the specified rating
+     * @param rating Requires the rating that the user wants to filter by
+     * @return Returns a list of the filtered games
+     */
+    List<Product> findByRating(String rating);
+
+    /**
+     * This method finds the rows in the database by the specified platform
+     * @param platform Requires the platform that the user wants to filter by
+     * @return Returns a list of the filtered games
+     */
+    List<Product> findByPlatform(String platform);
+
 //    /**
 //     * This method sorts by the highest to the lowest price.
 //     * @return Returns the sorted list of games

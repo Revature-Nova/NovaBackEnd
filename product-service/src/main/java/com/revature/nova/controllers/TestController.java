@@ -23,26 +23,24 @@ public class TestController {
     @CrossOrigin
     @GetMapping(value="/test", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Product> getAll(){
-        System.out.println("Test");
         return repo.findAll();
     }
-//
-//    @GetMapping(value="/test/genre", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> getByGenre(@RequestParam String genre){
-//        return repo.findByGenre(genre);
-//    }
-//
-//    @GetMapping(value="/test/rating", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> getByRating(@RequestParam String rating){
-//        return repo.findByRating(rating);
-//    }
-//
-//    @GetMapping(value="/test/platform", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> getByPlatform(@RequestParam String platform){
-//        return repo.findByPlatform(platform);
-//    }
-//
-//
+
+    @GetMapping(value="/test/genre", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getByGenre(@RequestParam String genre){
+        return repo.findByGenre(genre);
+    }
+
+    @GetMapping(value="/test/rating", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getByRating(@RequestParam String rating){
+        return repo.findByRating(rating);
+    }
+
+    @GetMapping(value="/test/platform", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getByPlatform(@RequestParam String platform){
+        return repo.findByPlatform(platform);
+    }
+
 //    @GetMapping(value="/test/orderAsc", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public List<Product> getByMax(){
 //        return repo.findAllOrderByPrice();
