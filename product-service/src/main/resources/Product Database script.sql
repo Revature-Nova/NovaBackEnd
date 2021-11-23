@@ -26,13 +26,13 @@ INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, 
 VALUES ('9','https://rawg.io/api/games/diablo-2?key=87ad23cdc737468884eb0216a7ba8df9','RPG','Diablo II','PC','39.99','Mature','https://imgur.com/kxIWgIa');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('10','https://rawg.io/api/games/halo-infinite?key=87ad23cdc737468884eb0216a7ba8df9','Action','Halo Infinite','PC','59.99','Teen','https://imgur.com/xbo1ZPa');
+VALUES ('10','https://rawg.io/api/games/halo-infinite?key=87ad23cdc737468884eb0216a7ba8df9','Shooter','Halo Infinite','PC','59.99','Teen','https://imgur.com/xbo1ZPa');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('11','https://rawg.io/api/games/halo-infinite?key=87ad23cdc737468884eb0216a7ba8df9','Action','Halo Infinite','Xbox One','59.99','Teen','https://imgur.com/xbo1ZPa');
+VALUES ('11','https://rawg.io/api/games/halo-infinite?key=87ad23cdc737468884eb0216a7ba8df9','Shooter','Halo Infinite','Xbox One','59.99','Teen','https://imgur.com/xbo1ZPa');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('12','https://rawg.io/api/games/halo-infinite?key=87ad23cdc737468884eb0216a7ba8df9','Action','Halo Infinite','Xbox Series S','59.99','Teen','https://imgur.com/xbo1ZPa');
+VALUES ('12','https://rawg.io/api/games/halo-infinite?key=87ad23cdc737468884eb0216a7ba8df9','Shooter','Halo Infinite','Xbox Series S','59.99','Teen','https://imgur.com/xbo1ZPa');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
 VALUES ('13','https://rawg.io/api/games/the-last-of-us?key=87ad23cdc737468884eb0216a7ba8df9','Action','The Last of Us','PlayStation 3','19.99','Mature','https://imgur.com/seEBsbp');
@@ -47,7 +47,7 @@ INSERT INTO product_table (product_id, genre, name, platform, price, rating, end
 INSERT INTO product_table (product_id, genre, name, platform, price, rating, endpoint, image_url) values ('18','RPG', 'Divinity Original Sin II', 'PC', 44.99, 'Mature','https://rawg.io/api/games/divinity-original-sin-2?key=87ad23cdc737468884eb0216a7ba8df9','https://imgur.com/epNFjuj');
 INSERT INTO product_table (product_id, genre, name, platform, price, rating, endpoint, image_url) values ('19','RPG', 'The Legend of Zelda: Breath of the Wild', 'Nintendo Switch', 59.99, 'E10+','https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9','https://imgur.com/onC0oCn');
 INSERT INTO product_table (product_id, genre, name, platform, price, rating, endpoint, image_url) values ('20','Adventure', 'Subnautica', 'PlayStation 4', 29.99, 'E10+','https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9','https://imgur.com/JkX9r1e');
-INSERT INTO product_table (product_id, genre, name, platform, price, rating, endpoint, image_url) values ('21','Action-Adventure', 'The Legend of Zelda: Skyward Sword', 'Wii', 19.99, 'E10+','https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9','https://imgur.com/VvU45oV');
+INSERT INTO product_table (product_id, genre, name, platform, price, rating, endpoint, image_url) values ('21','Adventure', 'The Legend of Zelda: Skyward Sword', 'Wii', 19.99, 'E10+','https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9','https://imgur.com/VvU45oV');
 INSERT INTO product_table (product_id, genre, name, platform, price, rating, endpoint, image_url) values ('22','Stealth', 'Thief', 'PlayStation 3', 21.27, 'Mature','https://rawg.io/api/games/thief?key=87ad23cdc737468884eb0216a7ba8df9','https://imgur.com/Z0EPE84');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
@@ -114,19 +114,20 @@ INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, 
 VALUES ('42','https://rawg.io/api/games/dishonored?key=87ad23cdc737468884eb0216a7ba8df9','Adventure','Dishonored','PC','29.99','Mature','https://imgur.com/aREso0Y');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('43','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Adventure','Resident Evil:Village','PlayStation 5','59.99','Mature','https://imgur.com/4ft22qv');
+VALUES ('43','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Horror','Resident Evil:Village','PlayStation 5','59.99','Mature','https://imgur.com/4ft22qv');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('44','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Adventure','Resident Evil:Village','Xbox Series X','59.99','Mature','https://imgur.com/4ft22qv');
+VALUES ('44','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Horror','Resident Evil:Village','Xbox Series X','59.99','Mature','https://imgur.com/4ft22qv');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('45','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Adventure','Resident Evil:Village','Xbox One','59.99','Mature','https://imgur.com/4ft22qv');
+VALUES ('45','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Horror','Resident Evil:Village','Xbox One','59.99','Mature','https://imgur.com/4ft22qv');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
-VALUES ('46','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Adventure','Resident Evil:Village','PlayStation 4','59.99','Mature','https://imgur.com/4ft22qv');
+VALUES ('46','https://rawg.io/api/games/resident-evil-village?key=87ad23cdc737468884eb0216a7ba8df9','Horror','Resident Evil:Village','PlayStation 4','59.99','Mature','https://imgur.com/4ft22qv');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
 VALUES ('47','https://rawg.io/api/games/persona-5?key=87ad23cdc737468884eb0216a7ba8df9','RPG','Persona 5','PlayStation 4','59.99','Mature','https://imgur.com/hpWL2MQ');
 
 INSERT INTO product_table(product_id,endpoint,genre,name,platform,price,rating, image_url)
 VALUES ('48','https://rawg.io/api/games/persona-5?key=87ad23cdc737468884eb0216a7ba8df9','RPG','Persona 5','PlayStation 3','59.99','Mature','https://imgur.com/hpWL2MQ');
+
