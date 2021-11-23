@@ -1,5 +1,6 @@
 package com.revature.nova.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,11 +23,11 @@ public class Cart {
     @Id
     private Integer cartId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false, name = "userCart", referencedColumnName = "userCart")
-    private Integer userId;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(nullable = false, name = "userCart", referencedColumnName = "userCart")
+//    private Integer userId;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cart")
-    @JoinColumn(name = "cart", referencedColumnName = "cart", nullable = false)
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cartList")
     private List<Product> productList;
 }
