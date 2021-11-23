@@ -26,7 +26,7 @@ public class UserInfoModel implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email_id")
     private String email;
 
     @OneToOne(mappedBy = "userInfoModel")
