@@ -22,6 +22,12 @@ public class UserInfoModel implements Serializable {
         this.email = regData.getEmail();
     }
 
+    public UserInfoModel(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     @Id
     @Column(name = "userinfo_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,12 @@ import java.io.Serializable;
 public class UserModel implements Serializable {
     public UserModel(UserRegistrationDTO regData) {
         this.firstName = regData.getFirstName();
-        this.lastName = regData.getFirstName();
+        this.lastName = regData.getLastName();
+    }
+
+    public UserModel(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     @Id
