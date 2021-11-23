@@ -1,5 +1,7 @@
 package com.revature.nova.services;
 
+import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.UserService;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
@@ -19,15 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserModelServiceTest {
 
+
+
     private final UserRepo userRepo;
     private final UserInfoRepo userInfoRepo;
-
+    private final UserModelService userModelService;
     @Test
-    public void testSucessfulRegisteration() {
-        UserModel newUser = new UserModel("Gregg", "Friedman");
-        UserInfoModel newUserInfo = new UserInfoModel("Gfr", "123", "gregg@friedman.com");
+    public void testSuccessfulRegistration() {
+        UserRegistrationDTO newRegDTO = new UserRegistrationDTO("Gfr", "password", "email@dot.com", "first", "last");
 
-        assertEquals(HttpStatus.CREATED, userRepo.save(newUser));
-        assertEquals(HttpStatus.CREATED, userInfoRepo.save(newUserInfo));
+
+        assertEquals(HttpStatus.CREATED, userModelService.registerUser(newRegDTO));
     }
 }
