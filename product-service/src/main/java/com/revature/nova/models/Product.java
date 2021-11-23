@@ -28,6 +28,7 @@ import java.util.List;
 public class Product {
 
     @Id
+    @GeneratedValue
     // 6 Digit Int? 3 Digit Int? 6 Letter Sequence? AlphaNumeric Sequence?
     private Integer productId;
 
