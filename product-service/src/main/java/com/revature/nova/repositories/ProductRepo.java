@@ -12,6 +12,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
     /**
      * This method finds the rows in the database by the specified genre
+     *
      * @param genre Requires the genre that the user wants to filter by
      * @return Returns a list of the filtered games
      */
@@ -19,6 +20,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
     /**
      * This method finds the rows in the database by the specified rating
+     *
      * @param rating Requires the rating that the user wants to filter by
      * @return Returns a list of the filtered games
      */
@@ -26,6 +28,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
     /**
      * This method finds the rows in the database by the specified platform
+     *
      * @param platform Requires the platform that the user wants to filter by
      * @return Returns a list of the filtered games
      */
@@ -33,21 +36,25 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
     /**
      * This method sorts by the highest to the lowest price.
+     *
      * @return Returns the sorted list of games
      */
     List<Product> findAllByOrderByPriceAsc();
 
     /**
      * This method sorts by the lowest to the highest price.
+     *
      * @return Returns the sorted list of games
      */
     List<Product> findAllByOrderByPriceDesc();
 
-//    /**
-//     * This method finds the games that are between the given price range.
-//     * @param rangeMin This is the lower end of the range
-//     * @param rangeMax This is the higher end of the range
-//     * @return Returns a list of the games with prices within the given range
-//     */
-//    List<Product> findByPriceBetween(int rangeMin, int rangeMax);
+    /**
+     * This method finds the games that are between the given price range.
+     *
+     * @param rangeMin This is the lower end of the range
+     * @param rangeMax This is the higher end of the range
+     * @return Returns a list of the games with prices within the given range
+     */
+    List<Product> findByPriceIsBetween(float rangeMin, float rangeMax);
+
 }

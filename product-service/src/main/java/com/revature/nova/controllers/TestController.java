@@ -51,8 +51,8 @@ public class TestController {
         return repo.findAllByOrderByPriceDesc();
     }
 
-//    @GetMapping(value="/test/range", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> getBy(@RequestParam int min, int max){
-//        return repo.findByPriceBetween(min,max);
-//    }
+    @GetMapping(value="/test/range", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getBy(@RequestParam float min, float max){
+        return repo.findByPriceIsBetween(min,max);
+    }
 }
