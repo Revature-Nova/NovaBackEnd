@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_model")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfo"},
         ignoreUnknown = true)
 @Getter @Setter
