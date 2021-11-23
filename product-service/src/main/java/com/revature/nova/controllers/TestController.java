@@ -4,6 +4,7 @@ import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,17 +13,19 @@ import java.util.List;
 
 @RestController
 public class TestController {
-//    private final ProductRepo repo;
-//
-//    @Autowired
-//    public TestController(ProductRepo repo) {
-//        this.repo = repo;
-//    }
-//
-//    @GetMapping(value="/test", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> get(){
-//        return repo.findAll();
-//    }
+    private final ProductRepo repo;
+
+    @Autowired
+    public TestController(ProductRepo repo) {
+        this.repo = repo;
+    }
+
+    @CrossOrigin
+    @GetMapping(value="/test", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getAll(){
+        System.out.println("Test");
+        return repo.findAll();
+    }
 //
 //    @GetMapping(value="/test/genre", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public List<Product> getByGenre(@RequestParam String genre){
