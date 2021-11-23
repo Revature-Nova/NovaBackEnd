@@ -41,18 +41,16 @@ public class TestController {
         return repo.findByPlatform(platform);
     }
 
-//    @GetMapping(value="/test/orderAsc", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> getByMax(){
-//        return repo.findAllOrderByPrice();
-//    }
-//
-//
-//    @GetMapping(value="/test/orderDesc", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<Product> getByMic(){
-//        return repo.findAllOrderByPriceDesc();
-//    }
-//
-//
+    @GetMapping(value="/test/orderAsc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getLowToHigh(){
+        return repo.findAllByOrderByPriceAsc();
+    }
+
+    @GetMapping(value="/test/orderDesc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Product> getHighToLow(){
+        return repo.findAllByOrderByPriceDesc();
+    }
+
 //    @GetMapping(value="/test/range", produces = MediaType.APPLICATION_JSON_VALUE)
 //    public List<Product> getBy(@RequestParam int min, int max){
 //        return repo.findByPriceBetween(min,max);
