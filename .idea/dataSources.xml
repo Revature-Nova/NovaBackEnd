@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mariadb://practice.cnybvnomlu5g.us-east-2.rds.amazonaws.com:3306/JWT_Test</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="Nova" uuid="ee75ca0e-2060-4147-a091-272683281724">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://nova.cvtq9j4axrge.us-east-1.rds.amazonaws.com:5432/postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
