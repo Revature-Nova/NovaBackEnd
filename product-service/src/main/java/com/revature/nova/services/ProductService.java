@@ -64,9 +64,6 @@ public class ProductService {
         }
         return productList;
     }
-  
-    public void getProduct(){
-        repo.findAll();
 
     public List<Product> getProductsContainingTitle(String search)
     {
