@@ -25,8 +25,16 @@ public class ProductService {
         this.repo = repo;
     }
 
+
+    /**
+     * This method gets the products from the database
+     */
+    public void getProduct(){
+        repo.findAll();
+
     public List<Product> getProductsContainingTitle(String search)
     {
         return repo.findByNameContaining(search);
+
     }
 }
