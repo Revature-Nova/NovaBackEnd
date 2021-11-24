@@ -24,9 +24,8 @@ public class Cart {
     @Id
     private Integer cartId;
 
-    //Transitive persistence with cascading; See section 2.2.5.4. in https://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/
-//    @OneToOne(cascade = CascadeType.ALL) //There is only one cart per user and one user per cart
-//    @JoinColumn(nullable = false, name = "userCart", referencedColumnName = "userCart")//Creates a foreign key column
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(nullable = false, name = "userCart", referencedColumnName = "userCart")
 //    private Integer userId;
 
     @JsonIgnore
