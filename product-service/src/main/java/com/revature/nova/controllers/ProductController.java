@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
 /**
@@ -19,11 +18,10 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/NovaGames")
+@RequestMapping(value = "/Nova")
 public class ProductController {
 
     private final ProductService productService;
-    private HttpStatus status;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -49,4 +47,9 @@ public class ProductController {
         return productService.filterProducts(type, value);
     }
 
+    @GetMapping(value = "sort/{sortingDirection}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Product> getSortedList(@PathVariable String sortingDirection){
+        return productService.sortedProductList(sortingDirection);
+    }
 }
