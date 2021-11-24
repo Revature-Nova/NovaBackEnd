@@ -26,6 +26,7 @@ public class ProductService {
         this.repo = repo;
     }
 
+
     /**
      * This method gets all products.
      *
@@ -63,7 +64,9 @@ public class ProductService {
         }
         return productList;
     }
-
+  
+    public void getProduct(){
+        repo.findAll();
 
     public List<Product> getProductsContainingTitle(String search)
     {
