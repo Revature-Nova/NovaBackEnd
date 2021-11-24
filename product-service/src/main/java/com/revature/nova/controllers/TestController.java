@@ -13,9 +13,7 @@ import java.util.List;
 
 @RestController
 public class TestController {
-<<<<<<< HEAD
 
-=======
     private final ProductRepo repo;
 
     @Autowired
@@ -58,5 +56,4 @@ public class TestController {
     public List<Product> getBy(@RequestParam float min, float max){
         return repo.findByPriceIsBetween(min,max);
     }
->>>>>>> ffd81c60d33ad9a70d37a4235afaf617d3919abd
 }
