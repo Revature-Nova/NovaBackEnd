@@ -27,7 +27,7 @@ public class UserModelServiceTest {
     private final UserInfoRepo userInfoRepo;
     private final UserModelService userModelService;
     @Test
-    public void testSucessfulRegisteration() {
+    public void testSuccessfulRegistration() {
 //        UserModel newUser = new UserModel("Gregg", "Friedman");
         UserRegistrationDTO newRegDTO = new UserRegistrationDTO("Gfr", "password", "email@dot.com", "first", "last");
 //        UserInfoModel newUserInfo = new UserInfoModel("Gfr", "123", "gregg@friedman.com");
