@@ -37,7 +37,7 @@ public class Product {
 
     @Column
     //Ex/Re/Ie: The Elder Scrolls V - Skyrim
-    private String name;
+    private String title;
 
     @Column
     //Ex/Re/Ie: RPG

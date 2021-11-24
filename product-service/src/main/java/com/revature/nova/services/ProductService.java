@@ -58,22 +58,24 @@ public class ProductService {
         switch (type) {
             case "genre":
                 setProductList(repo.findByGenre(value));
-                System.out.println("Product list: " + getProductList().get(0).getName());
                 break;
             case "platform":
                 setProductList(repo.findByPlatform(value));
-                System.out.println("Product list: " + getProductList().get(0).getName());
                 break;
             case "rating":
                 setProductList(repo.findByRating(value));
-                System.out.println("Product list: " + getProductList().get(0).getName());
                 break;
         }
         return productList;
     }
 
+    public List<Product> sortedList(){
+        List<Product> list = getProductList();
+        return null;
+    }
+
     public List<Product> getProductsContainingTitle(String search)
     {
-        return repo.findByNameContaining(search);
+        return repo.findByTitleContaining(search);
     }
 }

@@ -43,9 +43,9 @@ public class ProductController {
         return productService.getProductsContainingTitle(search);
     }
 
-    @GetMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/filter/{type}/{value}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Product> getFilteredList(@RequestParam String type, String value){
+    public List<Product> getFilteredList(@PathVariable String type, @PathVariable String value){
         return productService.filterProducts(type, value);
     }
 
