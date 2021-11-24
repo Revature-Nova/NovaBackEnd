@@ -26,6 +26,11 @@ public class ProductService {
         this.repo = repo;
     }
 
+    //unit testing: want to know it's returning a list of products, look at individual products within the list
+    public List<Product> getProductsContainingTitle(String search)
+    {
+        return repo.findByTitleContaining(search);
+    }
 
     /**
      * This method gets all products.
@@ -63,10 +68,5 @@ public class ProductService {
                 break;
         }
         return productList;
-    }
-
-    public List<Product> getProductsContainingTitle(String search)
-    {
-        return repo.findByNameContaining(search);
     }
 }
