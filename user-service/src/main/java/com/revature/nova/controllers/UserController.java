@@ -8,6 +8,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,9 +18,10 @@ import java.util.List;
  * This controller handles all User endpoint interactions
  *
  * @date 11/22/2021
- * @author Nova
+ * @author Gregg Friedman, Travis Hood
  */
 @RestController
+@RequestMapping(value = "/Nova")
 public class UserController {
     private final UserModelService userService;
 
@@ -38,7 +40,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user/all")
     public ResponseEntity<List<UserModel>> getUsers() {
         List<UserModel> all = userService.allUsers();
 

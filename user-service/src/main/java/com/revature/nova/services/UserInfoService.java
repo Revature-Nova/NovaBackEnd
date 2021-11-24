@@ -20,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 /**
- * @author Erika Johnson
- * Created methods (save, deleteUserInfo, setProfileInfo)
+ * Service used that communicates and queries the database for the storing and retrieving User Information
+ *
+ * @date 11/23/2021
+ * @author Erika Johnson, Gregg Friedman, Travis Hood, Kollier Martin
  */
 @Service
 @Transactional
@@ -37,18 +39,42 @@ public class UserInfoService implements UserDetailsService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
+    /**
+     * Saves a user's information
+     *
+     * @author Erika Johnson
+     * @param userInfo The data to persist
+     * @return The newly persisted data
+     */
     public UserInfoModel save (UserInfoModel userInfo){
         return userInfoRepo.save(userInfo);
     }
 
+    /**
+     * Deletes a user and their information
+     *
+     * @author Erika Johnson
+     * @param userInfo
+     */
     public void deleteUserInfo(UserInfoModel userInfo){
         userInfoRepo.delete(userInfo);
     }
 
-    //TODO: Finish method not completed
-    public UserProfileDTO setProfileInfo(UserProfileDTO userProfileDTO) {
-        UserProfileDTO userProfile = userProfileDTO;
-        return userProfileDTO;
+    /**
+     * This method sets the profile data of a user
+     *
+     * @author Erika Johnson, Kollier Martin
+     * @param userProfileDTO The DTO that stores profile data
+     * @return User Info Model with updated user profile information
+     */
+    public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+
+        userInfoModel.setMessage(userProfileDTO.getMessage());
+        userInfoModel.setState(userProfileDTO.getState());
+        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+
+        return userInfoRepo.save(userInfoModel);
     }
 
     @Override
@@ -64,17 +90,16 @@ public class UserInfoService implements UserDetailsService {
     }
 
     /**
-     *
-     * @author Gregg Friedman, Travis Hood
-     * #date 11/23/2021
-     * @return
-     *
      * Receives information to create a new user, saves it to postgreSQL
      * and returns the information in a string format
      *
      * During the registration process, the user password is encoded before persistence
+     *
+     * @author Gregg Friedman, Travis Hood, Kollier Martin
+     * @return JSONString with User information in it
      */
     public String registerUser(UserRegistrationDTO userRegDTO) {
+        JSONObject jsonObject = new JSONObject();
         UserModel newUser = new UserModel(userRegDTO);
         UserInfoModel newUserInfo = new UserInfoModel(userRegDTO);
 
@@ -88,7 +113,9 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
-        return newUser.toString();
+        jsonObject.put("User", newUser + " " + newUserInfo);
+
+        return jsonObject.toString();
     }
 }
 

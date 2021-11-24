@@ -21,6 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The filter that validates a session token whenever a request is called
+ *
+ * @date 11/23/2021
+ * @author James Brown, Kollier Martin
+ */
 @Getter @Setter
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
@@ -48,8 +54,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * parseToken
-     *
+     * This method parses a token
      * 1. Check if given token is valid
      * 2. If no error is thrown, parse token
      * 3. Configure Spring Security to set the authentication

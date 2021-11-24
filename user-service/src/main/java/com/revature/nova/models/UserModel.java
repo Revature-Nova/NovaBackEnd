@@ -7,6 +7,12 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * POJO used to store a User's public information
+ *
+ * @date 11/22/2021
+ * @author User-Feature Team
+ */
 @Entity
 @Table(name = "user_model")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfoModel"},
@@ -41,11 +47,11 @@ public class UserModel implements Serializable {
 
     @Override
     public String toString() {
-        return "UserModel {\n" +
-                "userID: " + userID + ",\n" +
-                "firstName: " + firstName + ",\n" +
-                "lastName: " + lastName + ",\n" +
-                "user info: " + userInfoModel + ",\n" +
+        return "UserModel {\\n" +
+                "userID: " + userID + ",\\n" +
+                "firstName: " + firstName + ",\\n" +
+                "lastName: " + lastName + ",\\n" +
+                "user info: " + userInfoModel + ",\\n" +
                 '}';
     }
 }

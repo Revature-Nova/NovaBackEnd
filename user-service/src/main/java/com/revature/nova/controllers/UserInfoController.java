@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * This controller handles all User Information endpoint interactions
+ *
+ * @date 11/22/2021
+ * @author Gregg Friedman, Travis Hood, Erika Johnson
+ */
 @RestController
 @RequestMapping(value = "/Nova")
 public class UserInfoController {
@@ -33,7 +39,7 @@ public class UserInfoController {
 //    @Autowired
 //    private RestTemplate restTemplate;
 
-    @PostMapping(value = "/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> userProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {
         return new ResponseEntity<>(userInfoService.setProfileInfo(userProfileDTO), HttpStatus.ACCEPTED);
     }

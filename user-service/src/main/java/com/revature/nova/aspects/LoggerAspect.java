@@ -10,9 +10,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
- * DO NOT POINTCUT A CONFIG CLASS
+ * This class provides error catching and logging advice to all functional methods
+ * Excludes: configs and filters
  *
- *
+ * @date 11/22/2021
+ * @author Kollier Martin
  */
 
 @Aspect
@@ -24,20 +26,20 @@ public class LoggerAspect {
         this.loggerService = loggerService;
     }
 
-    // TODO: This is an error
-    // Navigate into every package using the '*' wildcard
-    @Pointcut("within(com.revature.nova.*.*.*)")
+    @Pointcut("execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*)")
     public void logAll() {
 
     }
 
-    @Around("within(com.revature.nova.*.*.*)")
-    public void logAroundAll(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*)")
+    public Object logAroundAll(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             joinPoint.proceed();
         } catch (Exception ignored){
 
         }
+
+        return null;
     }
 
     @AfterThrowing(pointcut = "logAll()", throwing = "e")

@@ -8,8 +8,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author Erika Johnson
- * Added 3 fields to model ( state, favorite_genre, message) and custom args constructor
+ * POJO used to store a User's sensitive information
+ *
+ * @date 11/22/2021
+ * @author User-Feature Team, Erika Johnson
  */
 
 @Entity
@@ -26,11 +28,11 @@ public class UserInfoModel implements Serializable {
         this.email = regData.getEmail();
     }
 
-    public UserInfoModel(@NonNull String username, @NonNull String email, String state, String favorite_genre, String message) {
+    public UserInfoModel(@NonNull String username, @NonNull String email, String state, String favoriteGenre, String message) {
         this.username = username;
         this.email = email;
         this.state = state;
-        this.favorite_genre = favorite_genre;
+        this.favoriteGenre = favoriteGenre;
         this.message = message;
     }
 
@@ -55,25 +57,25 @@ public class UserInfoModel implements Serializable {
     private String state;
 
     @Column
-    private String favorite_genre;
+    private String favoriteGenre;
 
     @Column
     private String message;
 
-    @OneToOne(mappedBy = "userInfoModel")
+    @OneToOne(mappedBy = "userInfoModel", cascade = CascadeType.ALL)
     UserModel userModel;
 
     @Override
     public String toString() {
-        return "UserInfoModel {\n" +
-                "userInfoID: " + userInfoID + ",\n" +
-                "username: " + username + ",\n" +
-                "password: " + password + ",\n" +
-                "email: " + email + ",\n" +
-                "state: " + state + ",\n" +
-                "favorite_genre: " + favorite_genre + ",\n" +
-                "message: " + message + ",\n" +
-                "user: " + userModel.getLastName() + ", " + userModel.getFirstName() + ",\n" +
+        return "UserInfoModel {\\n" +
+                "userInfoID: " + userInfoID + ",\\n" +
+                "username: " + username + ",\\n" +
+                "password: " + password + ",\\n" +
+                "email: " + email + ",\\n" +
+                "state: " + state + ",\\n" +
+                "favorite genre: " + favoriteGenre + ",\\n" +
+                "message: " + message + ",\\n" +
+                "user: " + userModel.getLastName() + ", " + userModel.getFirstName() + ",\\n" +
                 '}';
     }
 }
