@@ -1,17 +1,20 @@
 package com.revature.nova.utils;
 
 import com.revature.nova.exceptions.AuthenticationException;
-import com.revature.nova.models.UserInfoModel;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * JWTUtil
@@ -47,11 +50,14 @@ public class JWTUtil {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    public String createJWT(UserInfoModel userInfoModel) {
+    public String createJWT(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setIssuer("Nova")
-                .setSubject(userInfoModel.getUsername())
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
                 .signWith(key)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .compact();
     }
@@ -62,5 +68,23 @@ public class JWTUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public String getUsernameFromToken(String token) {
+        return parseJWT(token).getSubject();
+    }
+
+    public Date getExpirationDateFromToken(String token) {
+        return parseJWT(token).getExpiration();
+    }
+
+    private Boolean isTokenExpired(String token) {
+        Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
