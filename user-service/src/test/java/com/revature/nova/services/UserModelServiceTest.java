@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @SpringBootTest
@@ -25,7 +26,7 @@ public class UserModelServiceTest {
 
     private final UserRepo userRepo;
     private final UserInfoRepo userInfoRepo;
-    private final UserModelService userModelService;
+    private final UserInfoService userInfoService;
     @Test
     public void testSuccessfulRegistration() {
 //        UserModel newUser = new UserModel("Gregg", "Friedman");
@@ -33,7 +34,7 @@ public class UserModelServiceTest {
 //        UserInfoModel newUserInfo = new UserInfoModel("Gfr", "123", "gregg@friedman.com");
 
 
-        assertEquals(HttpStatus.CREATED, userModelService.registerUser(newRegDTO));
+        assertNull(userInfoService.registerUser(newRegDTO));
 //        assertEquals(HttpStatus.CREATED, userInfoRepo.save(newUserInfo));
     }
 }

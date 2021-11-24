@@ -1,7 +1,6 @@
 package com.revature.nova.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import lombok.*;
 
@@ -19,8 +18,7 @@ import java.io.Serializable;
         ignoreUnknown = true)
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@RequiredArgsConstructor
 public class UserInfoModel implements Serializable {
     public UserInfoModel(UserRegistrationDTO regData){
         this.username = regData.getUsername();
@@ -28,10 +26,12 @@ public class UserInfoModel implements Serializable {
         this.email = regData.getEmail();
     }
 
-    public UserInfoModel(String username, String password, String email) {
+    public UserInfoModel(@NonNull String username, @NonNull String email, String state, String favorite_genre, String message) {
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.state = state;
+        this.favorite_genre = favorite_genre;
+        this.message = message;
     }
 
     @Id
@@ -40,12 +40,15 @@ public class UserInfoModel implements Serializable {
     private int userInfoID;
 
     @Column(name = "username", unique = true)
+    @NonNull
     private String username;
 
     @Column(name = "password")
+    @NonNull
     private String password;
 
     @Column
+    @NonNull
     private String email;
 
     @Column
@@ -57,16 +60,20 @@ public class UserInfoModel implements Serializable {
     @Column
     private String message;
 
-    public UserInfoModel(String username, String email, String state, String favorite_genre, String message) {
-        this.username = username;
-        this.email = email;
-        this.state = state;
-        this.favorite_genre = favorite_genre;
-        this.message = message;
-    }
-
     @OneToOne(mappedBy = "userInfoModel")
     UserModel userModel;
 
-
+    @Override
+    public String toString() {
+        return "UserInfoModel {\n" +
+                "userInfoID: " + userInfoID + ",\n" +
+                "username: " + username + ",\n" +
+                "password: " + password + ",\n" +
+                "email: " + email + ",\n" +
+                "state: " + state + ",\n" +
+                "favorite_genre: " + favorite_genre + ",\n" +
+                "message: " + message + ",\n" +
+                "user: " + userModel.getLastName() + ", " + userModel.getFirstName() + ",\n" +
+                '}';
+    }
 }

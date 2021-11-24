@@ -14,7 +14,6 @@ import java.io.Serializable;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class UserModel implements Serializable {
     public UserModel(UserRegistrationDTO regData) {
         this.firstName = regData.getFirstName();
@@ -39,4 +38,14 @@ public class UserModel implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     UserInfoModel userInfoModel;
+
+    @Override
+    public String toString() {
+        return "UserModel {\n" +
+                "userID: " + userID + ",\n" +
+                "firstName: " + firstName + ",\n" +
+                "lastName: " + lastName + ",\n" +
+                "user info: " + userInfoModel + ",\n" +
+                '}';
+    }
 }
