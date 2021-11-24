@@ -2,6 +2,9 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
+import javassist.NotFoundException;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +20,12 @@ import java.util.List;
  */
 @Service
 @Transactional
+@Getter
+@Setter
 public class ProductService {
 
     private final ProductRepo repo;
+    private List<Product> productList;
 
     @Autowired
     public ProductService(ProductRepo repo) {
@@ -48,17 +54,18 @@ public class ProductService {
      * @return Returns a list of filtered products.
      */
     public List<Product> filterProducts(String type, String value) {
-        List<Product> productList = new ArrayList<>();
-
         switch (type) {
             case "genre":
-                productList = repo.findByGenre(value);
+                setProductList(repo.findByGenre(value));
+                System.out.println("Product list: " + getProductList().get(0).getName());
                 break;
             case "platform":
-                productList = repo.findByPlatform(value);
+                setProductList(repo.findByPlatform(value));
+                System.out.println("Product list: " + getProductList().get(0).getName());
                 break;
             case "rating":
-                productList = repo.findByRating(value);
+                setProductList(repo.findByRating(value));
+                System.out.println("Product list: " + getProductList().get(0).getName());
                 break;
         }
         return productList;

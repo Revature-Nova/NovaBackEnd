@@ -23,6 +23,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private HttpStatus status;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -41,4 +42,11 @@ public class ProductController {
         //query our database for products containing search param string
         return productService.getProductsContainingTitle(search);
     }
+
+    @GetMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Product> getFilteredList(@RequestParam String type, String value){
+        return productService.filterProducts(type, value);
+    }
+
 }
