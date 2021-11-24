@@ -23,7 +23,6 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private HttpStatus status;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -40,9 +39,7 @@ public class ProductController {
     public List<Product> searchByTitle(@PathVariable String search)
     {
         //the search is case sensitive, I am going to, by default, convert the first letter to uppercase to help the search
-
         //query our database for products containing search param string
-        System.out.println(search);
         return productService.getProductsContainingTitle(search);
     }
 
@@ -51,5 +48,4 @@ public class ProductController {
     public List<Product> getFilteredList(@PathVariable String type, @PathVariable String value){
         return productService.filterProducts(type, value);
     }
-
 }
