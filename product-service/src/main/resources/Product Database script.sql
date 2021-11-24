@@ -63,9 +63,6 @@ INSERT INTO product_table(product_id,endpoint,genre,title,platform,price,rating,
 VALUES ('26','https://rawg.io/api/games/overwatch?key=87ad23cdc737468884eb0216a7ba8df9','Action','Overwatch','Xbox One','49.99','Teen','https://imgur.com/2YCznWn');
 
 INSERT INTO product_table(product_id,endpoint,genre,title,platform,price,rating, image_url)
-VALUES ('26','https://rawg.io/api/games/overwatch?key=87ad23cdc737468884eb0216a7ba8df9','Action','Overwatch','PlayStation 4','49.99','Teen','https://imgur.com/2YCznWn');
-
-INSERT INTO product_table(product_id,endpoint,genre,title,platform,price,rating, image_url)
 VALUES ('27','https://rawg.io/api/games/minecraft?key=87ad23cdc737468884eb0216a7ba8df9','Action','Minecraft','PC','19.99','E10+','https://imgur.com/rRmHBMm');
 
 INSERT INTO product_table(product_id,endpoint,genre,title,platform,price,rating, image_url)
