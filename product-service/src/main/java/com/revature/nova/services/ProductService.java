@@ -31,7 +31,7 @@ public class ProductService {
     {
         return repo.findByTitleContaining(search);
     }
-    
+
     /**
      * This method gets all products.
      *
