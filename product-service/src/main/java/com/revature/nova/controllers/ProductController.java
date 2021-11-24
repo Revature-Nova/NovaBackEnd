@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * ProductController
- * @author Michael Reece
+ * @author Michael Reece, Brittany Lowell
  * @date 11/22/21
  * Handles requests that deal with manipulating product data
  */
@@ -38,7 +38,14 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> searchByTitle(@PathVariable String search)
     {
+        //the search is case sensitive, I am going to, by default, convert the first letter to uppercase to help the search
         //query our database for products containing search param string
         return productService.getProductsContainingTitle(search);
+    }
+
+    @GetMapping(value = "/filter/{type}/{value}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Product> getFilteredList(@PathVariable String type, @PathVariable String value){
+        return productService.filterProducts(type, value);
     }
 }
