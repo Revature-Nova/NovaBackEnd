@@ -2,20 +2,33 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="product-service" />
+        <module name="nova (1)" />
+        <module name="zuul-service" />
+        <module name="discovery-service" />
+        <module name="nova" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="discovery-service" target="1.8" />
+      <module name="nova" target="1.8" />
+      <module name="nova (1)" target="1.8" />
       <module name="product-service" target="1.8" />
+      <module name="zuul-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="discovery-service" options="-parameters" />
+      <module name="nova" options="-parameters" />
+      <module name="nova (1)" options="-parameters" />
       <module name="product-service" options="-parameters" />
+      <module name="zuul-service" options="-parameters" />
     </option>
   </component>
 </project>
