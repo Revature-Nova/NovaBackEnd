@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * ProductController
- * @author Michael Reece
+ * @author Michael Reece, Brittany Lowell
  * @date 11/22/21
  * Handles requests that deal with manipulating product data
  */
