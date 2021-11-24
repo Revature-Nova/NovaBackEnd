@@ -37,7 +37,10 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> searchByTitle(@PathVariable String search)
     {
+        //the search is case sensitive, I am going to, by default, convert the first letter to uppercase to help the search
+
         //query our database for products containing search param string
+        System.out.println(search);
         return productService.getProductsContainingTitle(search);
     }
 

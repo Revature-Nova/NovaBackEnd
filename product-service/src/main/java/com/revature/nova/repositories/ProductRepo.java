@@ -9,6 +9,9 @@ import java.util.List;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
 
+    //abstract query that looks for products that contain the search query in the name
+    List<Product> findByTitleContaining(String name);
+
     /**
      * This method finds the rows in the database by the specified genre
      *
@@ -56,6 +59,4 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
      */
     List<Product> findByPriceIsBetween(float rangeMin, float rangeMax);
 
-    //abstract query that looks for products that contain the search query in the title
-    List<Product> findByTitleContaining(String name);
 }
