@@ -37,7 +37,7 @@ public class Product {
 
     @Column
     //Ex/Re/Ie: The Elder Scrolls V - Skyrim
-    private String name;
+    private String title;
 
     @Column
     //Ex/Re/Ie: RPG
@@ -52,7 +52,6 @@ public class Product {
     private String rating;
 
     @Column(columnDefinition = "varchar(1000)")
-
     private String endpoint;
 
     @Column
@@ -61,7 +60,6 @@ public class Product {
 
     @Column(columnDefinition = "varchar(1000)")
     private String imageUrl;
-
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
