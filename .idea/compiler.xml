@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="product-service" />
         <module name="nova (1)" />
+        <module name="user-service" />
         <module name="zuul-service" />
         <module name="discovery-service" />
         <module name="nova" />
@@ -19,6 +20,7 @@
       <module name="nova" target="1.8" />
       <module name="nova (1)" target="1.8" />
       <module name="product-service" target="1.8" />
+      <module name="user-service" target="1.8" />
       <module name="zuul-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -28,6 +30,7 @@
       <module name="nova" options="-parameters" />
       <module name="nova (1)" options="-parameters" />
       <module name="product-service" options="-parameters" />
+      <module name="user-service" options="-parameters" />
       <module name="zuul-service" options="-parameters" />
     </option>
   </component>
