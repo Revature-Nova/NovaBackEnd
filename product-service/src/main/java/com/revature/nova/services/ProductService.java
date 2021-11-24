@@ -29,4 +29,11 @@ public class ProductService {
     {
         return repo.findByNameContaining(search);
     }
+  
+    /**
+     * This method gets the products from the database
+     */
+    public void getProduct(){
+        repo.findAll();
+    }
 }
