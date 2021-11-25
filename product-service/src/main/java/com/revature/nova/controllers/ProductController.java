@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/NovaGames")
+@RequestMapping(value = "/Nova")
 public class ProductController {
 
     private final ProductService productService;

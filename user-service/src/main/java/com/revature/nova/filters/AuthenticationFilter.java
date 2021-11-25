@@ -46,7 +46,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        if (!request.getRequestURI().equals("/Nova/login") && !request.getRequestURI().equals("/Nova/register")) {
+        if (!request.getRequestURI().equals("/Nova/login") && !request.getRequestURI().equals("/Nova/register")
+                && !request.getRequestURI().equals("/Nova/product")) {
             parseToken(request);
         }
 
@@ -68,7 +69,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String username;
         String jwt;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String requestPrefix = httpRequest.getHeader(jwtUtil.getHeader());
+        String requestPrefix;
+
+        try {
+            requestPrefix = httpRequest.getHeader(jwtUtil.getHeader());
+        } catch (Exception e) {
+            throw new AuthenticationException("This header is empty!");
+        }
 
         if (requestPrefix != null && requestPrefix.startsWith(jwtUtil.getPrefix())) {
             jwt = requestPrefix.substring(jwtUtil.getPrefix().length());
