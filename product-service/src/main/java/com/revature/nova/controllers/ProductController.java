@@ -44,12 +44,29 @@ public class ProductController {
         return productService.getProductsContainingTitle(search);
     }
 
+    /**
+     * This method handles the get request for filtering the movie list.
+     *
+     * @param type This inputs determines how the products will be filtered. The valid filter types are:
+     *             genre, platform, and rating.
+     * @param value This input determines the value the products will be filtered by. Valid filter values include:
+     *              For genre: RPG, Action, Horror, etc.
+     *              For platform: PlayStation 4, Switch, etc.
+     *              For rating: Mature, E10+, Teen, etc.
+     * @return This method returns the filtered list.
+     */
     @GetMapping(value = "/filter/{type}/{value}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> getFilteredList(@PathVariable String type, @PathVariable String value){
         return productService.filterProducts(type, value);
     }
 
+    /**
+     *This method handles the get request for sorting the movie list.
+     *
+     * @param sortingDirection This input determines the direction in which the products will be filtered.
+     * @return This method returns the sorted list.
+     */
     @GetMapping(value = "sort/{sortingDirection}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> getSortedList(@PathVariable String sortingDirection){

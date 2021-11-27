@@ -2,14 +2,12 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
-import javassist.NotFoundException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,7 +25,6 @@ public class ProductService {
 
     private final ProductRepo repo;
     private List<Product> productList;
-    private boolean filterOn;
 
     @Autowired
     public ProductService(ProductRepo repo) {
@@ -46,8 +43,8 @@ public class ProductService {
      * @return Returns a list containing all products
      */
     public List<Product> displayAllProducts(){
-        setFilterOn(false);
-        return repo.findAll();
+        setProductList(repo.findAll());
+        return getProductList();
     }
 
     /**
@@ -66,15 +63,12 @@ public class ProductService {
         switch (type) {
             case "genre":
                 setProductList(repo.findByGenre(value));
-                setFilterOn(true);
                 break;
             case "platform":
                 setProductList(repo.findByPlatform(value));
-                setFilterOn(true);
                 break;
             case "rating":
                 setProductList(repo.findByRating(value));
-                setFilterOn(true);
                 break;
         }
         return getProductList();
@@ -84,25 +78,21 @@ public class ProductService {
      *This method sorts the product list. If there has not been a call to the filter method, then this method
      * filters all products in the database
      *
-     * @param sortingDirection
+     * @param sortingDirection This method requires the direction in which the list needs to be sorted.
+     *                         If the sortingDirection = "lowest", then a list sorted by the lowest price to
+     *                         the highest price is returned.
+     *                         If the sortingDirection = "highest", then a list sorted by the highest to the
+     *                         lowest price is returned.
      * @return
      */
     public List<Product> sortedProductList(String sortingDirection){
-        if(isFilterOn()){
-            /*See https://www.geeksforgeeks.org/how-to-sort-an-arraylist-of-objects-by-property-in-java/ for example on
+        /*See https://www.geeksforgeeks.org/how-to-sort-an-arraylist-of-objects-by-property-in-java/ for example on
     How to Sort an ArrayList of Objects by Property in Java
      */
-            if (sortingDirection.equals("lowest")) {
-                getProductList().sort(Comparator.comparing(Product::getPrice));
-            }else if (sortingDirection.equals("highest")) {
-                getProductList().sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-            }
-        } else {
-            if (sortingDirection.equals("lowest")) {
-                setProductList(repo.findAllByOrderByPriceAsc());
-            } else if (sortingDirection.equals("highest")) {
-                setProductList(repo.findAllByOrderByPriceDesc());
-            }
+        if (sortingDirection.equals("lowest")) {
+            getProductList().sort(Comparator.comparing(Product::getPrice));
+        }else if (sortingDirection.equals("highest")) {
+            getProductList().sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         }
         return getProductList();
     }
