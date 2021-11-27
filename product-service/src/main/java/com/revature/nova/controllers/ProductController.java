@@ -37,7 +37,7 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> searchByTitle(@PathVariable String search)
     {
-        //the search is case sensitive, I am going to, by default, convert the first letter to uppercase to help the search
+        //the search is case-sensitive, I am going to, by default, convert the first letter to uppercase to help the search
         //query our database for products containing search param string
         return productService.getProductsContainingTitle(search);
     }
@@ -64,11 +64,22 @@ public class ProductController {
      *This method handles the get request for sorting the movie list.
      *
      * @param sortingDirection This input determines the direction in which the products will be filtered.
+     *                         If the sortingDirection = "lowest", then a list sorted by the lowest price to
+     *                         the highest price is returned.
+     *                         If the sortingDirection = "highest", then a list sorted by the highest to the
+     *                         lowest price is returned.
      * @return This method returns the sorted list.
+     *
      */
     @GetMapping(value = "sort/{sortingDirection}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> getSortedList(@PathVariable String sortingDirection){
         return productService.sortedProductList(sortingDirection);
+    }
+
+    @GetMapping(value = "display", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public List<Product> displayAll(){
+        return productService.displayAllProducts();
     }
 }

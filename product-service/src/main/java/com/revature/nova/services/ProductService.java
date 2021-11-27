@@ -25,6 +25,7 @@ public class ProductService {
 
     private final ProductRepo repo;
     private List<Product> productList;
+    private String sortDirection; //Used to maintain the sorting direction.
 
     @Autowired
     public ProductService(ProductRepo repo) {
@@ -50,6 +51,8 @@ public class ProductService {
     /**
      * This method returns a filtered list of products using the given filter type and filter value.
      * The filter type and filter value need to match what is in the database exactly.
+     * This method abstracts away resorting the list so that the user does not have to choose a sorting method
+     * everytime they change the filter.
      *
      * @param type This inputs determines how the products will be filtered. The valid filter types are:
      *             genre, platform, and rating.
@@ -71,12 +74,17 @@ public class ProductService {
                 setProductList(repo.findByRating(value));
                 break;
         }
+        /*Checks if a sorting option has been chosen and then sorts the new list so that the user does not have
+        to resort the product list.
+         */
+        if(!getSortDirection().equals("None")){
+             sortedProductList(getSortDirection());
+        }
         return getProductList();
     }
 
     /**
-     *This method sorts the product list. If there has not been a call to the filter method, then this method
-     * filters all products in the database
+     *This method sorts the product list.
      *
      * @param sortingDirection This method requires the direction in which the list needs to be sorted.
      *                         If the sortingDirection = "lowest", then a list sorted by the lowest price to
@@ -86,14 +94,35 @@ public class ProductService {
      * @return
      */
     public List<Product> sortedProductList(String sortingDirection){
+        boolean validSortingDirection = false;
         /*See https://www.geeksforgeeks.org/how-to-sort-an-arraylist-of-objects-by-property-in-java/ for example on
     How to Sort an ArrayList of Objects by Property in Java
      */
         if (sortingDirection.equals("lowest")) {
             getProductList().sort(Comparator.comparing(Product::getPrice));
+            validSortingDirection = true;
         }else if (sortingDirection.equals("highest")) {
             getProductList().sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+            validSortingDirection = true;
+        }
+
+        /*If a valid sorting direction was inputted, then this if statement assigns the sortingDirection to
+        the sortDirection variable in this class.
+         */
+        if(validSortingDirection){
+            setSortDirection(sortingDirection);
         }
         return getProductList();
+    }
+
+    /**
+     * This method gets a list of products between a given range.
+     *
+     * @param rangeMin This variable sets the lower/min end of the desired price range.
+     * @param rangeMax This variable sets the upper/max end of the desired price range.
+     * @return This method returns a list of products with prices that fall in the desired range.
+     */
+    public List<Product> productRange(float rangeMin, float rangeMax){
+        return repo.findByPriceIsBetween(rangeMin,rangeMax);
     }
 }
