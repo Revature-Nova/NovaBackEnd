@@ -71,13 +71,30 @@ public class ProductController {
      * @return This method returns the sorted list.
      *
      */
-    @GetMapping(value = "sort/{sortingDirection}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/sort/{sortingDirection}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> getSortedList(@PathVariable String sortingDirection){
         return productService.sortedProductList(sortingDirection);
     }
 
-    @GetMapping(value = "display", produces = MediaType.APPLICATION_JSON_VALUE)
+    /**
+     * This method handles the get request for obtaining a list of products with prices between the given range.
+     * @param min This variable sets the lower/min end of the desired price range.
+     * @param max This variable sets the upper/max end of the desired price range.
+     * @return This method returns a list of products with prices that fall in the desired range.
+     */
+    @GetMapping(value = "/range/{min}/{max}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public List<Product> getRange(@PathVariable float min, @PathVariable float max){
+        return productService.productRange(min,max);
+    }
+
+    /**
+     * This method handles the get request for obtaining a list of all products.
+     *
+     * @return Returns a list containing all products.
+     */
+    @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> displayAll(){
         return productService.displayAllProducts();

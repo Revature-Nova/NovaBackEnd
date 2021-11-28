@@ -25,7 +25,7 @@ public class ProductService {
 
     private final ProductRepo repo;
     private List<Product> productList;
-    private String sortDirection; //Used to maintain the sorting direction.
+    private String sortDirection = "None"; //Used to maintain the sorting direction.
 
     @Autowired
     public ProductService(ProductRepo repo) {
@@ -39,12 +39,14 @@ public class ProductService {
     }
 
     /**
-     * This method gets all products.
+     * This method gets all products. Can also be used to reset the list if the user wants to remove the selected
+     * filter. Also resets the sorting direction.
      *
-     * @return Returns a list containing all products
+     * @return Returns a list containing all unsorted products.
      */
     public List<Product> displayAllProducts(){
         setProductList(repo.findAll());
+        setSortDirection("None");
         return getProductList();
     }
 
@@ -74,6 +76,7 @@ public class ProductService {
                 setProductList(repo.findByRating(value));
                 break;
         }
+
         /*Checks if a sorting option has been chosen and then sorts the new list so that the user does not have
         to resort the product list.
          */
@@ -116,13 +119,22 @@ public class ProductService {
     }
 
     /**
-     * This method gets a list of products between a given range.
+     * This method gets a list of products with prices between a given range.
      *
      * @param rangeMin This variable sets the lower/min end of the desired price range.
      * @param rangeMax This variable sets the upper/max end of the desired price range.
      * @return This method returns a list of products with prices that fall in the desired range.
      */
     public List<Product> productRange(float rangeMin, float rangeMax){
-        return repo.findByPriceIsBetween(rangeMin,rangeMax);
+        //Gets the list of products with prices between the given range and then updates the productList.
+        setProductList(repo.findByPriceIsBetween(rangeMin,rangeMax));
+
+        /*Checks if a sorting option has been chosen and then sorts the new list so that the user does not have
+        to resort the product list.
+         */
+        if(!getSortDirection().equals("None")){
+            sortedProductList(getSortDirection());
+        }
+        return getProductList();
     }
 }
