@@ -31,7 +31,8 @@ public class LoggerAspect {
 
     }
 
-    @Around("logAll()")
+    @Around("execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*) " +
+            "&& !this(org.springframework.data.repository.Repository)")
     public void logAroundAll(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             joinPoint.proceed();
