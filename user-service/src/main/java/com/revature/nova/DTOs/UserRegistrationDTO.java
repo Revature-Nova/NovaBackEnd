@@ -8,8 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
- * UserRegistrationDTO
- *
  * This DTO stores user registration data
  * Username Regex: Can have any lowercase or capital letter and any number [0-9]
  * Password Regex: Needs at least one capital letter, one number, and one symbol
