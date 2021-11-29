@@ -35,7 +35,14 @@ public class ProductService {
     //unit testing: want to know it's returning a list of products, look at individual products within the list
     public List<Product> getProductsContainingTitle(String search)
     {
-        return repo.findByTitleContaining(search);
+        //Finds product(s) by their title and sets the productList equal to the results
+        setProductList(repo.findByTitleContaining(search));
+
+        //Maintains sorting direction
+        if(!getSortDirection().equals("None")){
+            sortedProductList(getSortDirection());
+        }
+        return getProductList();
     }
 
     /**
