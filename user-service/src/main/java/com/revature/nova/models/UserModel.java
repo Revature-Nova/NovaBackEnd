@@ -47,11 +47,18 @@ public class UserModel implements Serializable {
 
     @Override
     public String toString() {
+<<<<<<< Updated upstream
         return "UserModel {\\n" +
                 "userID: " + userID + ",\\n" +
                 "firstName: " + firstName + ",\\n" +
                 "lastName: " + lastName + ",\\n" +
                 "user info: " + userInfoModel + ",\\n" +
+=======
+        return "User {\n" +
+                "  First Name: " + firstName + ",\n" +
+                "  Last Name: " + lastName + ",\n" +
+                "  Info: " + userInfoModel + ",\n" +
+>>>>>>> Stashed changes
                 '}';
     }
 }

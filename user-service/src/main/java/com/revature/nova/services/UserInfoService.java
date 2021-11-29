@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
@@ -113,7 +115,14 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
+<<<<<<< Updated upstream
         jsonObject.put("User", newUser + " " + newUserInfo);
+=======
+        Map<UserModel, UserInfoModel> userMap = new HashMap<>();
+        userMap.put(newUser, newUserInfo);
+
+        jsonObject.put("New User", userMap);
+>>>>>>> Stashed changes
 
         return jsonObject.toString();
     }
