@@ -3,6 +3,7 @@ package com.revature.nova.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,8 +19,8 @@ import java.io.Serializable;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "user"},
         ignoreUnknown = true)
 @Getter @Setter
-@NoArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserInfoModel implements Serializable {
     public UserInfoModel(UserRegistrationDTO regData){
         this.username = regData.getUsername();
@@ -64,7 +65,6 @@ public class UserInfoModel implements Serializable {
                 "  State: " + state + ",\\n" +
                 "  Favorite Genre: " + favoriteGenre + ",\\n" +
                 "  Profile Message: " + message + ",\\n" +
-                "  User: " + userModel.getLastName() + ", " + userModel.getFirstName() + ",\\n" +
                 '}';
     }
 }
