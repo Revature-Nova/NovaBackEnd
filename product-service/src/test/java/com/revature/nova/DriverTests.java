@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @SpringBootTest
-class ProductServiceTests {
+class DriverTests {
 
 	@Test
 	void contextLoads() {
