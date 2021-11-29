@@ -24,14 +24,14 @@ public class LoggerAspect {
     public LoggerAspect(LoggerService loggerService) {
         this.loggerService = loggerService;
     }
-  
 
-    @Pointcut("!within(@org.springframework.stereotype.Repository *) && execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*)")
+    @Pointcut("execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*) " +
+            "&& !this(org.springframework.data.repository.Repository)")
     public void logAll() {
 
     }
 
-    @Around("!within(@org.springframework.stereotype.Repository *) && execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*)")
+    @Around("logAll()")
     public void logAroundAll(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             joinPoint.proceed();
