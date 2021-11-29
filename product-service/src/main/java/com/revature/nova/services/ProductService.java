@@ -79,8 +79,5 @@ public class ProductService {
         return null;
     }
 
-    public List<Product> getProductsContainingTitle(String search)
-    {
-        return repo.findByTitleContaining(search);
-    }
+
 }

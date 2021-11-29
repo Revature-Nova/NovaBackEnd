@@ -17,20 +17,15 @@ import java.util.List;
 @Setter //Lombok Setter for all variable fields; adds boilerplate setters at compile time
 @NoArgsConstructor(onConstructor = @__(@Autowired)) //Lombok boilerplate NoArgsConstructor created at compile time
 @AllArgsConstructor(onConstructor = @__(@Autowired)) //Lombok boilerplate ArgsConstructor created at compile time
-@Table(name = "Cart_Table") //More specific annotation that sets the table name; acts like an alias for the
-//// model in the relational database
 public class Cart {
 
     @Id
-    private Integer cartId;
-
-
-    //Transitive persistence with cascading; See section 2.2.5.4. in https://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/
-//    @OneToOne(cascade = CascadeType.ALL) //There is only one cart per user and one user per cart
-//    @JoinColumn(nullable = false, name = "userCart", referencedColumnName = "userCart")//Creates a foreign key column
-//    private Integer userId;
-
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cartList")
-    private List<Product> productList;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cart")
+    private UserModel user;
+
+
+    @ManyToMany
+    private List<CartProduct> cartProducts;
+
 }
