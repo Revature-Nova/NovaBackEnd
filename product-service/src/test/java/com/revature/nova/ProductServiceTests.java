@@ -1,26 +1,68 @@
 package com.revature.nova;
 
 import com.revature.nova.models.Product;
+import com.revature.nova.repositories.ProductRepo;
+import com.revature.nova.services.ProductService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Comparator;
 import java.util.List;
+
 
 @SpringBootTest
 class ProductServiceTests {
+	private ProductService productService;
+	private List<Product> testProductList;
+	private final ProductRepo productRepo;
 
-	@Test
-	void contextLoads() {
+	public ProductServiceTests(ProductService productService, ProductRepo productRepo) {
+		this.productService = productService;
+		this.productRepo = productRepo;
 	}
 
-//	public List<Product> displayAllProducts(){
+	@BeforeEach
+	void setUp() {
+	}
+
+	@AfterEach
+	public void tearDown(){
+		this.productService = null;
+	}
+
+	//	public List<Product> displayAllProducts(){
 //		setProductList(repo.findAll());
 //		setSortDirection("None");
 //		return getProductList();
 //	}
-//
+//	/*
+//	Unit testing:
+//	Success: instantiates a list of products, fills the list, and then returns it
+//	Failure: returns an empty list
+//	 */
+
+
+	@Test
+	public void Test_successfullyDisplayAllProducts(){
+		//Arrange: Completed in the constructor
+		//Act
+		testProductList = this.productService.displayAllProducts();
+		//Assert
+		Assertions.assertNotEquals(0, testProductList.size());
+	}
+
+	@Test
+	public void Test_failToDisplayProductsDueToEmptyDatabase(){
+		//Arrange
+		productRepo.deleteAll();
+		//Act
+		testProductList = productService.displayAllProducts();
+		//Assert
+		Assertions.assertEquals(0, testProductList.size());
+	}
 
 
 //	public List<Product> filterProducts(String type, String value) {
@@ -41,6 +83,11 @@ class ProductServiceTests {
 //		}
 //		return getProductList();
 //	}
+	@Test
+	public void Test_filterProducts(){
+
+	}
+
 //
 //	public List<Product> sortedProductList(String sortingDirection){
 //		boolean validSortingDirection = false;
@@ -57,6 +104,10 @@ class ProductServiceTests {
 //		}
 //		return getProductList();
 //	}
+	@Test
+	public void Test_sortedProductList(){
+
+	}
 //
 //	public List<Product> productRange(float rangeMin, float rangeMax){
 //		//Gets the list of products with prices between the given range and then updates the productList.
@@ -70,5 +121,10 @@ class ProductServiceTests {
 //		}
 //		return getProductList();
 //	}
+
+	@Test
+	public void Test_productRange(){
+
+	}
 
 }

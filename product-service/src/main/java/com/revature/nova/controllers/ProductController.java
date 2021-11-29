@@ -59,7 +59,6 @@ public class ProductController {
         return productService.filterProducts(type, value);
     }
 
-
     /**
      *This method handles the get request for sorting the movie list.
      *

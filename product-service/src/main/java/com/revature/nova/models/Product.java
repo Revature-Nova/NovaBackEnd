@@ -71,5 +71,4 @@ public class Product {
     private Integer quantity;
 
     */
-
 }
