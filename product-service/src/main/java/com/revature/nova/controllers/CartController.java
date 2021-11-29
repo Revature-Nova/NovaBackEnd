@@ -33,6 +33,6 @@ public class CartController {
 
         UserModel user = this.restTemplate.getForObject("http://user-service/user/"+userId, UserModel.class);
         
-        return this.cartRepo.getById(user);
+        return this.cartRepo.getById(user.getUserID());
     }
 }
