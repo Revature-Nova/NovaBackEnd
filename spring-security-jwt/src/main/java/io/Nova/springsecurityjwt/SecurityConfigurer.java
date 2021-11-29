@@ -38,7 +38,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().
-                authorizeRequests().antMatchers("/authenticate").permitAll().
+                authorizeRequests().antMatchers("/authenticate", "/register", "/customers", "/customer/{username}").permitAll().
                 anyRequest().authenticated().and().sessionManagement().
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS); /* Tells spring security not to manage the session*/
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
