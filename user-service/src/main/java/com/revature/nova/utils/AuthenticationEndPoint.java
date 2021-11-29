@@ -8,6 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This EndPoint sends an error back as a response to a failed token parsing
+ *
+ * @date 11/23/2021
+ * @author James Brown, Kollier Martin
+ */
 @Component
 public class AuthenticationEndPoint implements AuthenticationEntryPoint {
     @Override

@@ -2,6 +2,12 @@ package com.revature.nova.models;
 
 import javax.persistence.*;
 
+/**
+ * POJO used for logging error data to the database
+ *
+ * @date 11/22/2021
+ * @author User-Feature Team
+ */
 @Entity
 public class Logger {
     @Id

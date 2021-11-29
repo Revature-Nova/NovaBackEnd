@@ -1,6 +1,7 @@
 package com.revature.nova.filters;
 
 import com.revature.nova.exceptions.AuthenticationException;
+import com.revature.nova.services.LoggerService;
 import com.revature.nova.services.UserInfoService;
 import com.revature.nova.utils.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -21,14 +22,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The filter that validates a session token whenever a request is called
+ *
+ * @date 11/23/2021
+ * @author James Brown, Kollier Martin
+ */
 @Getter @Setter
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
     private final UserInfoService userInfoService;
     private final JWTUtil jwtUtil;
+    private final LoggerService loggerService;
 
     @Autowired
-    public AuthenticationFilter(UserInfoService userInfoService, JWTUtil jwtUtil){
+    public AuthenticationFilter(UserInfoService userInfoService, JWTUtil jwtUtil, LoggerService loggerService) {
+        this.loggerService = loggerService;
         this.userInfoService = userInfoService;
         this.jwtUtil = jwtUtil;
     }
@@ -36,19 +45,25 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     public AuthenticationFilter() {
         this.jwtUtil = new JWTUtil();
         this.userInfoService = getUserInfoService();
+        this.loggerService = getLoggerService();
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         if (!request.getRequestURI().equals("/Nova/login") && !request.getRequestURI().equals("/Nova/register")) {
-            parseToken(request);
+            try {
+                parseToken(request);
+            } catch (NullPointerException e) {
+                loggerService.writeLog(String.format("%s was thrown in method %s with message: %s",
+                        e.getClass().getSimpleName(), e.getClass() + "." + e.getClass().getName(), e.getMessage()), 3);
+            }
         }
 
         chain.doFilter(request, response);
     }
 
     /**
-     * parseToken
+     * This method parses a token
      *
      * 1. Check if given token is valid
      * 2. If no error is thrown, parse token
