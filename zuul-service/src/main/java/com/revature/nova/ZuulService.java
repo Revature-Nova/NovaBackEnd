@@ -2,12 +2,16 @@ package com.revature.nova;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
-public class UserService {
+@EnableZuulProxy
+@EnableDiscoveryClient
+public class ZuulService {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserService.class, args);
+		SpringApplication.run(ZuulService.class, args);
 	}
 
 }

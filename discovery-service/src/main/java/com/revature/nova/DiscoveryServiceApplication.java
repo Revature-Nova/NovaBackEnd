@@ -2,12 +2,15 @@ package com.revature.nova;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
 
 @SpringBootApplication
-public class ProductService {
+@EnableEurekaServer
+public class DiscoveryServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProductService.class, args);
+		SpringApplication.run(DiscoveryServiceApplication.class, args);
 	}
 
 }
