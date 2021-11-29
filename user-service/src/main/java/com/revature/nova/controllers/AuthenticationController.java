@@ -59,11 +59,11 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveUser(@RequestBody @Valid UserRegistrationDTO user) {
+    public ResponseEntity<String> saveUser(@RequestBody @Valid UserRegistrationDTO user) {
         return new ResponseEntity<>(userInfoService.registerUser(user), HttpStatus.CREATED);
     }
 
-    public boolean authenticate(String username, String password) throws Exception {
+    public boolean authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             return true;
