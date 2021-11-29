@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
@@ -90,17 +92,16 @@ public class UserInfoService implements UserDetailsService {
     }
 
     /**
-     *
-     * @author Gregg Friedman, Travis Hood
-     * #date 11/23/2021
-     * @return The persisted User's information
-     *
      * Receives information to create a new user, saves it to postgreSQL
      * and returns the information in a string format
      *
      * During the registration process, the user password is encoded before persistence
+     *
+     * @author Gregg Friedman, Travis Hood, Kollier Martin
+     * @return JSONString with User information in it
      */
     public String registerUser(UserRegistrationDTO userRegDTO) {
+        JSONObject jsonObject = new JSONObject();
         UserModel newUser = new UserModel(userRegDTO);
         UserInfoModel newUserInfo = new UserInfoModel(userRegDTO);
         JSONObject jsonObject = new JSONObject();
@@ -115,7 +116,11 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
-        jsonObject.put("New User", newUser.toString());
+        Map<UserModel, UserInfoModel> userMap = new HashMap<>();
+        userMap.put(newUser, newUserInfo);
+
+        jsonObject.put("New User", userMap);
+
 
         return jsonObject.toString();
     }

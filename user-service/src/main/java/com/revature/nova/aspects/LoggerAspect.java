@@ -24,6 +24,7 @@ public class LoggerAspect {
     public LoggerAspect(LoggerService loggerService) {
         this.loggerService = loggerService;
     }
+  
 //
 //    @Pointcut("execution(* com.revature.nova.*..*(..)) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*)")
 //    public void logAll() {

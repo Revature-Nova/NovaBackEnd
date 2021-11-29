@@ -30,7 +30,6 @@ public class UserInfoController {
         this.userInfoService = userInfoService;
     }
 
-
     @PostMapping(value = "/user/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {
         return new ResponseEntity<>(userInfoService.setProfileInfo(userProfileDTO), HttpStatus.ACCEPTED);
