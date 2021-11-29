@@ -3,8 +3,6 @@ package com.revature.nova.DTOs;
 import lombok.*;
 
 /**
- * LoginCredentialsDTO
- *
  * This DTO stores user login data
  *
  * @author User-Feature Team

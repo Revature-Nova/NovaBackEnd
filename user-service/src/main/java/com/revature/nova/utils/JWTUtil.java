@@ -17,15 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * JWTUtil
- *
- * This class will focus on the creation and parsing of Java Web Tokens
+ * This utility focuses on the creation and parsing of Java Web Tokens using designated secret credentials
  *
  * Subject: The current session username
  * Expiration Time: 24 hours
  *
  * @date 11/22/2021
- * @author User-Feature Team
+ * @author Kollier Martin, James Brown, Emmanuel Tejeda
  */
 
 @Component
