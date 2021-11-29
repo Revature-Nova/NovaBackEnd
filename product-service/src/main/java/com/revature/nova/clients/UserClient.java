@@ -1,12 +1,10 @@
 package com.revature.nova.clients;
 
 
-import com.revature.nova.models.Product;
 import com.revature.nova.models.UserModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.web.reactive.function.client.WebClient.create;

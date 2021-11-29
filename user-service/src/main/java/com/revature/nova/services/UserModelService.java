@@ -1,15 +1,10 @@
 package com.revature.nova.services;
 
-import com.revature.nova.clients.ProductClient;
-import com.revature.nova.models.Product
 import com.revature.nova.exceptions.UserDoesNotExistException;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserRepo;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
 
 import javax.transaction.Transactional;
 import java.util.List;

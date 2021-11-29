@@ -1,12 +1,12 @@
 package com.revature.nova.services;
 
+import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
@@ -100,11 +98,9 @@ public class UserInfoService implements UserDetailsService {
      * @author Gregg Friedman, Travis Hood, Kollier Martin
      * @return JSONString with User information in it
      */
-    public String registerUser(UserRegistrationDTO userRegDTO) {
-        JSONObject jsonObject = new JSONObject();
+    public RegisteredDataDTO registerUser(UserRegistrationDTO userRegDTO) {
         UserModel newUser = new UserModel(userRegDTO);
         UserInfoModel newUserInfo = new UserInfoModel(userRegDTO);
-        JSONObject jsonObject = new JSONObject();
 
         newUserInfo.setPassword(encoder.encode(newUserInfo.getPassword()));
 
@@ -116,13 +112,7 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
-        Map<UserModel, UserInfoModel> userMap = new HashMap<>();
-        userMap.put(newUser, newUserInfo);
-
-        jsonObject.put("New User", userMap);
-
-
-        return jsonObject.toString();
+        return new RegisteredDataDTO(newUser, newUserInfo);
     }
 }
 

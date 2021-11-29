@@ -1,5 +1,6 @@
 package com.revature.nova.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import lombok.*;
@@ -40,15 +41,16 @@ public class UserModel implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     UserInfoModel userInfoModel;
 
     @Override
     public String toString() {
-        return "User {\\n" +
-                "  First Name: " + firstName + ",\\n" +
-                "  Last Name: " + lastName + ",\\n" +
-                "  Info: " + userInfoModel + ",\\n" +
+        return "{\n" +
+                "  \"First Name\" : " + firstName + ",\n" +
+                "  \"Last Name\" : " + lastName + ",\n" +
+                "  \"Username\": " + userInfoModel.getUsername() + "\n" +
                 '}';
     }
 

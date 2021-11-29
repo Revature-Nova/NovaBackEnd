@@ -1,16 +1,11 @@
 package com.revature.nova.clients;
 
-
 import com.revature.nova.models.Product;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.Disposable;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.web.reactive.function.client.WebClient.create;
 
 public class ProductClient {
     private final WebClient client;

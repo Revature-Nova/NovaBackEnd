@@ -1,5 +1,6 @@
 package com.revature.nova.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import lombok.*;
@@ -16,7 +17,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "user_info")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "user"},
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userModel"},
         ignoreUnknown = true)
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
@@ -62,15 +63,18 @@ public class UserInfoModel implements Serializable {
     @Column
     private String message;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "userInfoModel", cascade = CascadeType.ALL)
     UserModel userModel;
 
     @Override
     public String toString() {
-        return "User Info {\\n" +
-                "  Username: " + username + ",\\n" +
-                "  Email: " + email + ",\\n" +
-                "  State: " + state + ",\\n" +
-                "  Favorite Genre: " + favoriteGenre + ",\\n" +
-                "  Profile Message: " + message + ",\\n" +
+        return "{\n" +
+                "  \"Username\": " + username + ",\n" +
+                "  \"Email\": " + email + ",\n" +
+                "  \"State\": " + state + ",\n" +
+                "  \"Favorite Genre\": " + favoriteGenre + ",\n" +
+                "  \"Profile Message\": " + message + "\n" +
+                "}";
+    }
 }
