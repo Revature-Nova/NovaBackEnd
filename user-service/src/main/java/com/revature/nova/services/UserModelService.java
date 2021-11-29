@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * This service handles User repo queries
+ *
+ * @author Gregg Friedman, Travis Hood, Kollier Martin
+ * @date 11/23/2021
+ */
 @Service
 @Transactional
 public class UserModelService {
@@ -19,11 +25,11 @@ public class UserModelService {
     }
 
     /**
+     * Returns all users in the postgreSQL database
+     *
      * @author Gregg Friedman, Travis Hood, Kollier Martin
      * @date 11/23/2021
-     * @return
-     *
-     * Returns all users in the postgreSQL database
+     * @return A list of all Users from the database
      */
 
     public List<UserModel> allUsers(){
