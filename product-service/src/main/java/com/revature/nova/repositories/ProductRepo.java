@@ -4,7 +4,6 @@ import com.revature.nova.models.Logger;
 import com.revature.nova.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -35,20 +34,6 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
      * @return Returns a list of the filtered games
      */
     List<Product> findByPlatform(String platform);
-
-    /**
-     * This method sorts by the highest to the lowest price.
-     *
-     * @return Returns the sorted list of games
-     */
-    List<Product> findAllByOrderByPriceAsc();
-
-    /**
-     * This method sorts by the lowest to the highest price.
-     *
-     * @return Returns the sorted list of games
-     */
-    List<Product> findAllByOrderByPriceDesc();
 
     /**
      * This method finds the games that are between the given price range.

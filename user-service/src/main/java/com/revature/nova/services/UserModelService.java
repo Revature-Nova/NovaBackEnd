@@ -1,11 +1,8 @@
 package com.revature.nova.services;
 
-<<<<<<< Updated upstream
 import com.revature.nova.clients.ProductClient;
-import com.revature.nova.models.Product;
-=======
+import com.revature.nova.models.Product
 import com.revature.nova.exceptions.UserDoesNotExistException;
->>>>>>> Stashed changes
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserRepo;
 import org.json.JSONObject;
@@ -37,6 +34,7 @@ public class UserModelService {
     /**
      * Returns all users in the postgreSQL database
      *
+     * @author Gregg Friedman, Travis Hood, Kollier Martin
      * @date 11/23/2021
      * @return A list of all Users from the database
      */
@@ -44,10 +42,6 @@ public class UserModelService {
         return userRepo.findAll();
     }
 
-<<<<<<< Updated upstream
-    public UserModel getUserByID(int id){
-        return userRepo.findById(id).get();
-=======
     /**
      * Searches and returns a User based on their ID, if they exist
      *
@@ -64,6 +58,5 @@ public class UserModelService {
        } else {
            throw new UserDoesNotExistException("User with ID " + id + " does not exist.");
        }
->>>>>>> Stashed changes
     }
 }

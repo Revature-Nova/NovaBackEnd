@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 >>>>>>> Stashed changes
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.security.PermitAll;
 import java.util.List;
@@ -37,16 +38,6 @@ import static org.springframework.http.MediaType.*;
 public class UserController {
     private final UserModelService userService;
     private final ProductClient productClient;
-
-//    @Bean
-//    @LoadBalanced
-//    RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
-//
-//    // TODO: WebClient instead?
-//    @Autowired
-//    private RestTemplate restTemplate;
 
     @Autowired
     public UserController(UserModelService userService) {

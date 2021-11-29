@@ -1,6 +1,5 @@
 package com.revature.nova.DTOs;
 
-import com.revature.nova.models.UserInfoModel;
 import lombok.*;
 
 /**

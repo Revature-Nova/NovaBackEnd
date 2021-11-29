@@ -30,20 +30,8 @@ public class UserInfoController {
         this.userInfoService = userInfoService;
     }
 
-<<<<<<< Updated upstream
-//    @Bean
-//    @LoadBalanced
-//    RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
-//
-//    @Autowired
-//    private RestTemplate restTemplate;
-
-=======
->>>>>>> Stashed changes
     @PostMapping(value = "/user/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> userProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {
+    public ResponseEntity<?> setProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {
         return new ResponseEntity<>(userInfoService.setProfileInfo(userProfileDTO), HttpStatus.ACCEPTED);
     }
 }

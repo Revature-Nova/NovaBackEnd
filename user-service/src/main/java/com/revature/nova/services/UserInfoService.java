@@ -41,6 +41,18 @@ public class UserInfoService implements UserDetailsService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserInfoModel userModel = userInfoRepo.findByUsername(username);
+
+        if (userModel != null) {
+            return new User(userModel.getUsername(), userModel.getPassword(),
+                    new ArrayList<>());
+        } else {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+    }
+
     /**
      * Saves a user's information
      *
@@ -56,7 +68,7 @@ public class UserInfoService implements UserDetailsService {
      * Deletes a user and their information
      *
      * @author Erika Johnson
-     * @param userInfo
+     * @param userInfo The model to delete
      */
     public void deleteUserInfo(UserInfoModel userInfo){
         userInfoRepo.delete(userInfo);
@@ -79,18 +91,6 @@ public class UserInfoService implements UserDetailsService {
         return userInfoRepo.save(userInfoModel);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserInfoModel userModel = userInfoRepo.findByUsername(username);
-
-        if (userModel != null) {
-            return new User(userModel.getUsername(), userModel.getPassword(),
-                    new ArrayList<>());
-        } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
-    }
-
     /**
      * Receives information to create a new user, saves it to postgreSQL
      * and returns the information in a string format
@@ -104,6 +104,7 @@ public class UserInfoService implements UserDetailsService {
         JSONObject jsonObject = new JSONObject();
         UserModel newUser = new UserModel(userRegDTO);
         UserInfoModel newUserInfo = new UserInfoModel(userRegDTO);
+        JSONObject jsonObject = new JSONObject();
 
         newUserInfo.setPassword(encoder.encode(newUserInfo.getPassword()));
 
@@ -115,14 +116,11 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
-<<<<<<< Updated upstream
-        jsonObject.put("User", newUser + " " + newUserInfo);
-=======
         Map<UserModel, UserInfoModel> userMap = new HashMap<>();
         userMap.put(newUser, newUserInfo);
 
         jsonObject.put("New User", userMap);
->>>>>>> Stashed changes
+
 
         return jsonObject.toString();
     }
