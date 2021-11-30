@@ -1,9 +1,10 @@
 package com.revature.nova.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Logger {
+public class Logger implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
