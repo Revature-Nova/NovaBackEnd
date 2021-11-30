@@ -20,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 /**
- * @author Erika Johnson
- * Created methods (save, deleteUserInfo, setProfileInfo)
+ * Service used that communicates and queries the database for the storing and retrieving User Information
+ *
+ * @date 11/23/2021
+ * @author Erika Johnson, Gregg Friedman, Travis Hood, Kollier Martin
  */
 @Service
 @Transactional
@@ -37,20 +39,6 @@ public class UserInfoService implements UserDetailsService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
-    public UserInfoModel save (UserInfoModel userInfo){
-        return userInfoRepo.save(userInfo);
-    }
-
-    public void deleteUserInfo(UserInfoModel userInfo){
-        userInfoRepo.delete(userInfo);
-    }
-
-    //TODO: Finish method not completed
-    public UserProfileDTO setProfileInfo(UserProfileDTO userProfileDTO) {
-        UserProfileDTO userProfile = userProfileDTO;
-        return userProfileDTO;
-    }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfoModel userModel = userInfoRepo.findByUsername(username);
@@ -64,10 +52,48 @@ public class UserInfoService implements UserDetailsService {
     }
 
     /**
+     * Saves a user's information
+     *
+     * @author Erika Johnson
+     * @param userInfo The data to persist
+     * @return The newly persisted data
+     */
+    public UserInfoModel save (UserInfoModel userInfo){
+        return userInfoRepo.save(userInfo);
+    }
+
+    /**
+     * Deletes a user and their information
+     *
+     * @author Erika Johnson
+     * @param userInfo The model to delete
+     */
+    public void deleteUserInfo(UserInfoModel userInfo){
+        userInfoRepo.delete(userInfo);
+    }
+
+    /**
+     * This method sets the profile data of a user
+     *
+     * @author Erika Johnson, Kollier Martin
+     * @param userProfileDTO The DTO that stores profile data
+     * @return User Info Model with updated user profile information
+     */
+    public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+
+        userInfoModel.setMessage(userProfileDTO.getMessage());
+        userInfoModel.setState(userProfileDTO.getState());
+        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+
+        return userInfoRepo.save(userInfoModel);
+    }
+
+    /**
      *
      * @author Gregg Friedman, Travis Hood
      * #date 11/23/2021
-     * @return
+     * @return The persisted User's information
      *
      * Receives information to create a new user, saves it to postgreSQL
      * and returns the information in a string format
@@ -77,6 +103,7 @@ public class UserInfoService implements UserDetailsService {
     public String registerUser(UserRegistrationDTO userRegDTO) {
         UserModel newUser = new UserModel(userRegDTO);
         UserInfoModel newUserInfo = new UserInfoModel(userRegDTO);
+        JSONObject jsonObject = new JSONObject();
 
         newUserInfo.setPassword(encoder.encode(newUserInfo.getPassword()));
 
@@ -88,7 +115,9 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
-        return newUser.toString();
+        jsonObject.put("New User", newUser.toString());
+
+        return jsonObject.toString();
     }
 }
 

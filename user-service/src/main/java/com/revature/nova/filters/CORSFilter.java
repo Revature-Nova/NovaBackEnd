@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Global configuration for a CORSFilter
+ *
+ * @date 11/22/2021
+ * @author Kollier Martin
+ */
 @Component
 public class CORSFilter extends OncePerRequestFilter {
 

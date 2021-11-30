@@ -22,6 +22,12 @@ import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * Handles authentication for user login and registration
+ *
+ * @date 11/23/2021
+ * @author Kollier Martin, James Brown, Emmanuel Tejeda
+ */
 @RestController
 @RequestMapping(value = "/Nova")
 public class AuthenticationController {
