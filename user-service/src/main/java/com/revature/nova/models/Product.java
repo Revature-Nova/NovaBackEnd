@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 
@@ -29,7 +28,7 @@ import java.util.List;
 /**
  * This class defines the product model used throughout the project.
  */
-public class Product implements Serializable {
+public class Product {
 
     @Id
     //Ex/Re/Ie:  6 Digit Int? 3 Digit Int? 6 Letter Sequence? AlphaNumeric Sequence?
@@ -65,10 +64,27 @@ public class Product implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Cart> cartList;
 
+    @Override
+    public String toString() {
+        return "Product {\n" +
+                "productId: " + productId + ",\n" +
+                "title: " + title + ",\n" +
+                "genre: " + genre + ",\n" +
+                "price: " + price + ",\n" +
+                "rating: " + rating + ",\n" +
+                "endpoint: " + endpoint + ",\n" +
+                "platform: " + platform + ",\n" +
+                "imageUrl: " + imageUrl + ",\n" +
+                "cartList: " + cartList + ",\n" +
+                '}';
+    }
+
+
     /*
     Stretch Goal:
     @Column
     private Integer quantity;
 
     */
+
 }
