@@ -72,5 +72,4 @@ public class Product implements Serializable {
     private Integer quantity;
 
     */
-
 }
