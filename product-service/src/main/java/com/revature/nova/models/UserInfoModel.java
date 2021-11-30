@@ -52,15 +52,12 @@ public class UserInfoModel implements Serializable {
 
     @Override
     public String toString() {
-        return "UserInfoModel {\\n" +
-                "userInfoID: " + userInfoID + ",\\n" +
-                "username: " + username + ",\\n" +
-                "password: " + password + ",\\n" +
-                "email: " + email + ",\\n" +
-                "state: " + state + ",\\n" +
-                "favorite genre: " + favoriteGenre + ",\\n" +
-                "message: " + message + ",\\n" +
-                "user: " + userModel.getLastName() + ", " + userModel.getFirstName() + ",\\n" +
-                '}';
+        return "{\n" +
+                "  \"Username\": " + username + ",\n" +
+                "  \"Email\": " + email + ",\n" +
+                "  \"State\": " + state + ",\n" +
+                "  \"Favorite Genre\": " + favoriteGenre + ",\n" +
+                "  \"Profile Message\": " + message + "\n" +
+                "}";
     }
 }
