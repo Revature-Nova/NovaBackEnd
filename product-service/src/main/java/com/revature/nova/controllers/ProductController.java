@@ -16,7 +16,7 @@ import java.util.List;
  * @date 11/22/21
  * Handles requests that deal with manipulating product data
  */
-
+@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping(value = "/Nova")
 public class ProductController {
@@ -93,6 +93,7 @@ public class ProductController {
      *
      * @return Returns a list containing all products.
      */
+
     @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> displayAll(){
