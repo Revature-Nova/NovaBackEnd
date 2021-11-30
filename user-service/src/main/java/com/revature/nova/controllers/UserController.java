@@ -55,9 +55,9 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = "/product", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> getProduct(){
-        List<Product> list = productClient.getProduct("Terraria");
+    @GetMapping(value = "/product/{title}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Product>> getProduct(@PathVariable String title){
+        List<Product> list = productClient.getProduct(title);
 
         return ResponseEntity.ok()
                 .body(list);
