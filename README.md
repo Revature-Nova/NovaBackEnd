@@ -44,4 +44,10 @@ It is your choice to decide which branch you would like run from.
 
 ## Contributors
 
-> Kollier Martin & Erika Johnson
+> Travis Hood <br />
+James Brown <br />
+Kollier Martin <br />
+Gregg Friedman <br />
+Connor Phillips <br />
+Emmanuel Tejeda <br />
+Erika Johnson <br />
