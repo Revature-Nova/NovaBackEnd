@@ -13,9 +13,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +34,9 @@ import java.io.IOException;
 @Getter @Setter
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
-    private final UserInfoService userInfoService;
-    private final JWTUtil jwtUtil;
-    private final LoggerService loggerService;
+    private UserInfoService userInfoService;
+    private JWTUtil jwtUtil;
+    private LoggerService loggerService;
 
     @Autowired
     public AuthenticationFilter(UserInfoService userInfoService, JWTUtil jwtUtil, LoggerService loggerService) {
@@ -43,13 +46,24 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     public AuthenticationFilter() {
-        this.jwtUtil = new JWTUtil();
-        this.userInfoService = getUserInfoService();
-        this.loggerService = getLoggerService();
+        this.jwtUtil = null;
+        this.userInfoService = null;
+        this.loggerService = null;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        if (userInfoService == null && loggerService == null && jwtUtil == null) {
+            ServletContext servletContext = request.getServletContext();
+            WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+
+            if (webApplicationContext != null) {
+                jwtUtil = webApplicationContext.getBean(JWTUtil.class);
+                userInfoService = webApplicationContext.getBean(UserInfoService.class);
+                loggerService = webApplicationContext.getBean(LoggerService.class);
+            }
+        }
+
         if (!request.getRequestURI().equals("/Nova/login") && !request.getRequestURI().equals("/Nova/register")) {
             try {
                 parseToken(request);
@@ -78,16 +92,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         String username;
         String jwt;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String requestPrefix;
+        String tokenWithPrefix = httpRequest.getHeader(jwtUtil.getHeader().toLowerCase());
 
-        try {
-            requestPrefix = httpRequest.getHeader(jwtUtil.getHeader());
-        } catch (Exception e) {
-            throw new AuthenticationException("This header is empty!");
-        }
-
-        if (requestPrefix != null && requestPrefix.startsWith(jwtUtil.getPrefix())) {
-            jwt = requestPrefix.substring(jwtUtil.getPrefix().length());
+        if (tokenWithPrefix != null && tokenWithPrefix.startsWith(jwtUtil.getPrefix())) {
+            jwt = tokenWithPrefix.substring(jwtUtil.getPrefix().length());
 
             try {
                 username = jwtUtil.getUsernameFromToken(jwt);

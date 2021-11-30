@@ -1,5 +1,6 @@
 package com.revature.nova.controllers;
 
+
 import com.revature.nova.clients.ProductClient;
 import com.revature.nova.models.Product;
 import com.revature.nova.models.UserModel;
@@ -28,9 +29,9 @@ public class UserController {
     private final ProductClient productClient;
 
     @Autowired
-    public UserController(UserModelService userService) {
+    public UserController(UserModelService userService, ProductClient productClient) {
         this.userService = userService;
-        this.productClient = new ProductClient();
+        this.productClient = productClient;
     }
 
     @GetMapping("/user/all")

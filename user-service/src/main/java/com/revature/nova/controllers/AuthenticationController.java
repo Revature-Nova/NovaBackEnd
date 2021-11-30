@@ -1,6 +1,7 @@
 package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.LoginCredentialsDTO;
+import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.AuthenticationException;
 import com.revature.nova.services.UserInfoService;
@@ -58,7 +59,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveUser(@RequestBody @Valid UserRegistrationDTO user) {
+    public ResponseEntity<RegisteredDataDTO> saveUser(@RequestBody @Valid UserRegistrationDTO user) {
         return new ResponseEntity<>(userInfoService.registerUser(user), HttpStatus.CREATED);
     }
 

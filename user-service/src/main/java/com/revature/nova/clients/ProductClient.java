@@ -1,15 +1,20 @@
 package com.revature.nova.clients;
 
 import com.revature.nova.models.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.persistence.Access;
 import java.util.List;
 
+@Service
 public class ProductClient {
     private final WebClient client;
 
+    @Autowired
     public ProductClient(){
         client = WebClient.builder()
                 .baseUrl("http://localhost:8090")
