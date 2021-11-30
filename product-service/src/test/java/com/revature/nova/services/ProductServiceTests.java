@@ -2,25 +2,18 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
-import com.revature.nova.services.ProductService;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockSettings;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
