@@ -1,6 +1,5 @@
 package com.revature.nova.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +26,6 @@ public class Cart implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "cart")
     private UserModel user;
-
 
     @ManyToMany(targetEntity = CartProduct.class)
     private List<CartProduct> cartProducts;
