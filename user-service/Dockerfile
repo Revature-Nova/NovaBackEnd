@@ -1,6 +1,6 @@
 FROM java:8
 
-EXPOSE 8080
+EXPOSE 8089
 
 ADD target/user-service.jar user-service.jar
 
