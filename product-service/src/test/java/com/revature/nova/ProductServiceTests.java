@@ -1,12 +1,7 @@
 package com.revature.nova;
 
-import com.revature.nova.models.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Comparator;
-import java.util.List;
 
 @SpringBootTest
 class ProductServiceTests {

@@ -64,6 +64,22 @@ public class Product {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Cart> cartList;
 
+    @Override
+    public String toString() {
+        return "Product {\n" +
+                "productId: " + productId + ",\n" +
+                "title: " + title + ",\n" +
+                "genre: " + genre + ",\n" +
+                "price: " + price + ",\n" +
+                "rating: " + rating + ",\n" +
+                "endpoint: " + endpoint + ",\n" +
+                "platform: " + platform + ",\n" +
+                "imageUrl: " + imageUrl + ",\n" +
+                "cartList: " + cartList + ",\n" +
+                '}';
+    }
+
+
     /*
     Stretch Goal:
     @Column
