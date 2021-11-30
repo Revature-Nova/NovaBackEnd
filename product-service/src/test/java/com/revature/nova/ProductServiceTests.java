@@ -3,65 +3,61 @@ package com.revature.nova;
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
 import com.revature.nova.services.ProductService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockSettings;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Mockito.*;
 
+
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class ProductServiceTests {
 	private ProductService productService;
 	private List<Product> testProductList;
-	private final ProductRepo productRepo;
 
-	public ProductServiceTests(ProductService productService, ProductRepo productRepo) {
+	@Mock
+	private ProductService mockProductService;
+
+	@Mock
+	private ProductRepo productRepo;
+
+	@Autowired
+	public ProductServiceTests(ProductService productService) {
 		this.productService = productService;
-		this.productRepo = productRepo;
 	}
 
-	@BeforeEach
-	void setUp() {
-	}
-
-	@AfterEach
-	public void tearDown(){
-		this.productService = null;
-	}
-
-	//	public List<Product> displayAllProducts(){
-//		setProductList(repo.findAll());
-//		setSortDirection("None");
-//		return getProductList();
-//	}
-//	/*
-//	Unit testing:
-//	Success: instantiates a list of products, fills the list, and then returns it
-//	Failure: returns an empty list
-//	 */
-
-
+	/**
+	 * This test checks if display all products returns a list that is not empty when the database is not empty.
+	 **/
 	@Test
 	public void Test_successfullyDisplayAllProducts(){
-		//Arrange: Completed in the constructor
+		//Arrange: set up in constructor
 		//Act
 		testProductList = this.productService.displayAllProducts();
 		//Assert
-		Assertions.assertNotEquals(0, testProductList.size());
+		Assertions.assertTrue(testProductList.size()>0);
 	}
 
+	/**
+	 * This test checks if display all products returns an empty list if the database is empty.
+	 **/
 	@Test
 	public void Test_failToDisplayProductsDueToEmptyDatabase(){
 		//Arrange
-		productRepo.deleteAll();
 		//Act
-		testProductList = productService.displayAllProducts();
+		testProductList = mockProductService.displayAllProducts();
 		//Assert
-		Assertions.assertEquals(0, testProductList.size());
+		Assertions.assertFalse(testProductList.size()>0);
 	}
 
 
