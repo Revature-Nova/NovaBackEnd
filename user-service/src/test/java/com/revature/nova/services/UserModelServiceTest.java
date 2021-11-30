@@ -1,9 +1,6 @@
 package com.revature.nova.services;
 
 import com.revature.nova.DTOs.UserRegistrationDTO;
-import com.revature.nova.UserService;
-import com.revature.nova.models.UserInfoModel;
-import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
 import lombok.AllArgsConstructor;
@@ -11,9 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 
@@ -31,17 +26,10 @@ public class UserModelServiceTest {
     @Test
     public void testSuccessfulRegistration() {
         UserRegistrationDTO newRegDTO = new UserRegistrationDTO("Gfr", "password", "email@dot.com", "first", "last");
-
-
-//        assertEquals(HttpStatus.CREATED, userModelService.registerUser(newRegDTO));
-
-//    @Test
-//    public void testSuccessfulRegistration() {
-//        UserModel newUser = new UserModel("Gregg", "Friedman");
 //        UserInfoModel newUserInfo = new UserInfoModel("Gfr", "123", "gregg@friedman.com");
 
 
-//        assertNull(userInfoService.registerUser(newRegDTO));
+        assertNull(userInfoService.registerUser(newRegDTO));
 //        assertEquals(HttpStatus.CREATED, userInfoRepo.save(newUserInfo));
     }
 }
