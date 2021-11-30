@@ -6,10 +6,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import javax.persistence.Access;
 import java.util.List;
 
+/**
+ * This client handles requests to the product service
+ *
+ * @date 11/26/2021
+ * @author Kollier Martin
+ */
 @Service
 public class ProductClient {
     private final WebClient client;
