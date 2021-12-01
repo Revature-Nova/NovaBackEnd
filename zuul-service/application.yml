@@ -1,4 +1,9 @@
-ribbon.eureka.enabled: false
+management:
+  endpoint:
+    routes:
+      enabled:true
+
+ribbon.eureka.enabled: true
 zuul:
   ignoredServices: "*"
   routes:
