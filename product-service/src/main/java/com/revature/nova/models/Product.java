@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * This class defines the product model used throughout the project.
  */
-public class Product {
+public class Product implements Serializable {
 
     @Id
     //Ex/Re/Ie:  6 Digit Int? 3 Digit Int? 6 Letter Sequence? AlphaNumeric Sequence?
@@ -71,5 +71,4 @@ public class Product {
     private Integer quantity;
 
     */
-
 }

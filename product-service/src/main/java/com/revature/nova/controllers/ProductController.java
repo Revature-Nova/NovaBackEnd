@@ -2,6 +2,7 @@ package com.revature.nova.controllers;
 
 
 import com.revature.nova.models.Product;
+import com.revature.nova.rawg.DescriptionInfo;
 import com.revature.nova.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.List;
  * @date 11/22/21
  * Handles requests that deal with manipulating product data
  */
-
+@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping(value = "/Nova")
 public class ProductController {
@@ -59,7 +60,6 @@ public class ProductController {
         return productService.filterProducts(type, value);
     }
 
-
     /**
      *This method handles the get request for sorting the movie list.
      *
@@ -94,10 +94,25 @@ public class ProductController {
      *
      * @return Returns a list containing all products.
      */
-    @CrossOrigin
     @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> displayAll(){
         return productService.displayAllProducts();
+    }
+
+    /**
+     * Search our database for something matching title
+     * @param id for object
+     * @return description for the specified object
+     */
+    @GetMapping(value = "/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public String gameDescription(@PathVariable Integer id)
+    {
+        //get product from database
+        Product currentProduct = productService.getProductById(id);
+        System.out.println("DEBUG: Hitting endpoint" + currentProduct.getEndpoint());
+
+        return DescriptionInfo.getDescription(currentProduct);
     }
 }

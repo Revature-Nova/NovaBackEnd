@@ -124,7 +124,7 @@ public class ProductService {
         }
         return getProductList();
     }
-
+  
     /**
      * This method gets a list of products with prices between a given range.
      *
@@ -143,5 +143,10 @@ public class ProductService {
             sortedProductList(getSortDirection());
         }
         return getProductList();
+    }
+
+    public Product getProductById(Integer id)
+    {
+        return repo.getById(id);
     }
 }

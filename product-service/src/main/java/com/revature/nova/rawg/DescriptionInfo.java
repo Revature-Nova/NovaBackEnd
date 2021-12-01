@@ -18,6 +18,9 @@ public class DescriptionInfo {
         JSONObject object = new JSONObject(jsonResponse);
 
         //return the description out of the product object
-        return object.getString("description");
+        String test =  object.getString("description_raw");
+        System.out.println(test);
+        return test;
+//        return object.getString("description");
     }
 }
