@@ -54,4 +54,26 @@ public class UserModelService {
            throw new UserDoesNotExistException("User with ID " + id + " does not exist.");
        }
     }
+
+    /**
+     * Searches and deleted a User based on their ID, if they exist
+     *
+     * @author Kollier Martin
+     * @date 12/1/2021
+     * @param id User ID to query for
+     */
+    public void deleteByID(int id) {
+        userRepo.deleteById(id);
+    }
+
+    /**
+     * Searches and deleted a User based on their ID, if they exist
+     *
+     * @author Kollier Martin
+     * @date 12/1/2021
+     * @param firstName First name to query for
+     */
+    public void deleteByFirstName(String firstName) {
+        userRepo.deleteByFirstName(firstName);
+    }
 }
