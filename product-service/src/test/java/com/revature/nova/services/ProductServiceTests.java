@@ -5,9 +5,7 @@ import com.revature.nova.repositories.ProductRepo;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -53,7 +51,7 @@ class ProductServiceTests {
     @Test
     public void Test_successfullyDisplayAllProducts() {
         //Arrange
-        doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
+        Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
         //Act
         testProductList = this.productService.displayAllProducts();
         //Assert
@@ -67,7 +65,7 @@ class ProductServiceTests {
     public void Test_failToDisplayProductsDueToEmptyDatabase() {
         //Arrange
         setMockDatabaseData(Collections.emptyList());
-        doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
+        Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
         //Act
         testProductList = productService.displayAllProducts();
         //Assert
