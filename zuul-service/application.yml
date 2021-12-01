@@ -6,4 +6,6 @@ zuul:
     user-service:
       path: /user-service/**
       url: http://18.212.102.32:8089
-      
+    google:
+      path /google/**
+      https://www.google.com/
