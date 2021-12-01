@@ -1,7 +1,8 @@
 management:
-  endpoint:
-    routes:
-      enabled:true
+  endpoints:
+    web:
+      exposure:
+        include: routes,filters
 
 ribbon.eureka.enabled: true
 zuul:
