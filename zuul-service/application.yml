@@ -2,13 +2,13 @@
 zuul:
   ignoredServices: "*"
   routes:
-    product:
+    product-service:
       path: /product-service/**
 # serviceId as registed with Eureka. Enabled and used when ribbon.eureka.enabled is true.
       serviceId: product-service
       
 # zuul.routes.<the route>.url used when ribbon.eureka.enabled is false, serviceId is disabled.
-#      url: http://http://18.212.102.32:8090/
+      url: http://18.212.102.32:8090/product-service
 
 # stripPrefix set to true if context path is set to /
-      stripPrefix: true
+      stripPrefix: false
