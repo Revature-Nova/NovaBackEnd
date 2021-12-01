@@ -7,10 +7,7 @@ import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -53,6 +50,20 @@ public class UserController {
         }
 
         return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<?> deleteByID(@PathVariable int id) {
+        userService.deleteByID(id);
+        return ResponseEntity.ok()
+                .body("User successfully deleted.");
+    }
+
+    @DeleteMapping("/user/{firstName}")
+    public ResponseEntity<?> deleteByFirstName(@PathVariable String firstName) {
+        userService.deleteByFirstName(firstName);
+        return ResponseEntity.ok()
+                .body("User successfully deleted.");
     }
 
     @GetMapping(value = "/product/{title}", produces = APPLICATION_JSON_VALUE)

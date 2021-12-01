@@ -26,7 +26,7 @@ public class LoggerService {
     }
 
     public void writeLog(String message, int level) {
-        Logger logger = new Logger(getCurrentDateTime(), message, level);
+        Logger logger = new Logger(level, message, getCurrentDateTime());
 
         repo.save(logger);
     }
