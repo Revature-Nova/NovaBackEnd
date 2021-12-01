@@ -11,11 +11,10 @@ import java.util.List;
 @Getter @Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "productList"})
 @NoArgsConstructor(onConstructor = @__(@Autowired))
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class Cart {
     private Integer cartId;
 
-    @NonNull
     private List<Product> productList;
 
     @PostConstruct

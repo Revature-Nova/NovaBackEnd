@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/Nova")
 public class ProductController {
-
+    // Add CartClient here
     private final ProductService productService;
 
     @Autowired
