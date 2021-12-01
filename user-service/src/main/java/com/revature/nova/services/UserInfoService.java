@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
@@ -113,6 +114,10 @@ public class UserInfoService implements UserDetailsService {
         newUserInfo.setUserModel(newUser);
 
         return new RegisteredDataDTO(newUser, newUserInfo);
+    }
+
+    public List getAllProfiles(){
+        return userInfoRepo.findAll();
     }
 }
 
