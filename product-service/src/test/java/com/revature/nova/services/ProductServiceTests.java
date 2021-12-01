@@ -18,17 +18,27 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-@Getter
-@Setter
 class ProductServiceTests {
+    //This is the service that we are testing
     private ProductService productService;
-    private List<Product> testProductList;
+    //This is the actual product list that is returned by the method being tested
+    private List<Product> actualProductList;
+    /*This list simulates the database and contains all necessary examples for testing
+    the methods in the ProductService Class.
+     */
     private List<Product> mockDatabaseData;
-    private List<Product> expectedList;
+    //This is the list of products that each method should be returning
+    private List<Product> expectedProductList;
 
+    /*
+    This is the mock repo. If you don't define what this mock repo should return when specific methods are
+    called, then an empty list will be returned since no data is retrieved. This mock repo does not interact
+    with the real database.
+     */
     @Mock
     private ProductRepo mockProductRepo;
 
+    //Before each test, the mock database is populated
     @BeforeEach
     void setUp() {
         productService = new ProductService(mockProductRepo);
@@ -46,25 +56,26 @@ class ProductServiceTests {
         setMockDatabaseData(temp);
     }
 
+    //Reset everything that is reused in each test to prevent any side effects
     @AfterEach
     void tearDown() {
-        setExpectedList(null);
+        expectedProductList = null;
         setMockDatabaseData(null);
         productService = null;
     }
 
     //Tests for the displayAllProducts method in the ProductService class.
     /**
-     * This test checks if display all products returns a list that is not empty when the database is not empty.
+     * This test checks if displayAllProducts returns a list that contains all products in the database.
      **/
     @Test
     public void Test_successfullyDisplayAllProducts() {
         //Arrange
         Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
         //Act
-        testProductList = this.productService.displayAllProducts();
+        actualProductList = this.productService.displayAllProducts();
         //Assert
-        Assertions.assertTrue(testProductList.size() > 0);
+        Assertions.assertEquals(getMockDatabaseData(), actualProductList);
     }
 
     /**
@@ -76,9 +87,9 @@ class ProductServiceTests {
         setMockDatabaseData(Collections.emptyList());
         Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
         //Act
-        testProductList = productService.displayAllProducts();
+        actualProductList = productService.displayAllProducts();
         //Assert
-        Assertions.assertFalse(testProductList.size() > 0);
+        Assertions.assertTrue(actualProductList.isEmpty());
     }
 
 
@@ -107,13 +118,8 @@ class ProductServiceTests {
 //		return getProductList();
 //	}
 
-    /*
-    Tests for success:
-    - Tests that genre case returns a list of products with the given genre
-    - Tests that platform case returns a list of products with the given platform
-    - Tests that rating case returns a list of products with the given rating
-    - Tests that the method maintains sorting direction
-     */
+    //Tests for success:
+
     /**
      * Tests that genre case returns a list of products with the given genre
      */
@@ -154,14 +160,7 @@ class ProductServiceTests {
         //Assert
     }
 
-    /*
-    Tests for failure:
-    - Tests that the genre case returns an empty list if there is no matching value in the mock database
-    - Tests that platform case returns an empty list if there is no matching value in the mock database
-    - Tests that rating case returns an empty list if there is no matching value in the mock database
-    - Tests that the method returns the mockDatabase list if none of the cases are selected
-    - Tests that the sorting direction is reset if the sorting direction = "None"
-     */
+    //Tests for failure:
 
     /**
      * Tests that the genre case returns an empty list if there is no matching value in the mock database
@@ -217,15 +216,6 @@ class ProductServiceTests {
 
     //Tests for the sortedProductList method
 
-    /*
-    Tests for success:
-    - Tests that the list is sorted from the lowest price to the highest price when the sortingDirection = "lowest"
-    - Tests that the list is sorted from the lowest price to the highest price when the sortingDirection = "highest"
-    - Tests that the sortDirection variable is set equal to the sortingDirection
-    Tests for failure:
-    - Tests that an unsorted list is returned if the sorting direction is not a valid value
-    - Tests that the sortDirection variable is not set equal to the sortingDirection if the sortingDirection is invalid
-     */
 
     //
 //	public List<Product> sortedProductList(String sortingDirection){
@@ -243,11 +233,65 @@ class ProductServiceTests {
 //		}
 //		return getProductList();
 //	}
-    @Test
-    public void Test_sortedProductList() {
 
+    //Tests for success:
+
+    /**
+     * Tests that the list is sorted from the lowest price to the highest price when the sortingDirection = "lowest"
+    */
+    @Test
+    public void Test_sortedProductListLowestToHighestSuccess() {
+        //Arrange
+        //Act
+        //Assert
     }
-//
+
+    /**
+     * Tests that the list is sorted from the highest price to the lowest price when the sortingDirection = "highest"
+     */
+    @Test
+    public void Test_sortedProductListHighestToLowestSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    /**
+     * Tests that the sortDirection variable is set equal to the sortingDirection
+     */
+    @Test
+    public void Test_sortedProductListSetSortDirectionSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    //Tests for failure:
+
+    /**
+     *Tests that an unsorted list is returned if the sorting direction is not a valid value
+     */
+    @Test
+    public void Test_sortedProductListSortingListFailure() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    /**
+     *Tests that the sortDirection variable is not set equal to the sortingDirection if the sortingDirection is invalid
+     */
+    @Test
+    public void Test_sortedProductListSetSortDirectionFailure() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    //Tests for the sortedProductList method above
+
+    //Test for the productRange method
+
 //	public List<Product> productRange(float rangeMin, float rangeMax){
 //		//Gets the list of products with prices between the given range and then updates the productList.
 //		setProductList(repo.findByPriceIsBetween(rangeMin,rangeMax));
@@ -263,5 +307,37 @@ class ProductServiceTests {
 
     @Test
     public void Test_productRange() {
+    }
+
+    //Test for the productRange method above
+
+    //Test for the getProductsContainingTitle method
+
+    //unit testing: want to know it's returning a list of products, look at individual products within the list
+//    public List<Product> getProductsContainingTitle(String search)
+//    {
+//        //Finds product(s) by their title and sets the productList equal to the results
+//        setProductList(repo.findByTitleContaining(search));
+//
+//        //Maintains sorting direction
+//        if(!getSortDirection().equals("None")){
+//            sortedProductList(getSortDirection());
+//        }
+//        return getProductList();
+//    }
+
+    //Test for the getProductsContainingTitle method above
+
+
+    /*
+    These are the getter and setter for the mock database. These are needed to ensure that this list is
+    populated before each test. There were issues trying to save data to this list, hence the getter and setter.
+     */
+    public List<Product> getMockDatabaseData() {
+        return mockDatabaseData;
+    }
+
+    public void setMockDatabaseData(List<Product> mockDatabaseData) {
+        this.mockDatabaseData = mockDatabaseData;
     }
 }
