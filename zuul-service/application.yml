@@ -1,0 +1,9 @@
+zuul:
+  routues:
+    product-service:
+      path: /product-service/**
+      url: http://18.212.102.32:8082/product-service/
+    user-service:
+      path: /user-service/**
+      url: http://18.212.102.32:8082/user-service/
+      
