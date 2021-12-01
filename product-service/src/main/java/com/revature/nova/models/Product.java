@@ -71,4 +71,15 @@ public class Product implements Serializable {
     private Integer quantity;
 
     */
+
+    public Product(Integer productId, String title, String genre, Float price, String rating, String endpoint, String platform, String imageUrl) {
+        this.productId = productId;
+        this.title = title;
+        this.genre = genre;
+        this.price = price;
+        this.rating = rating;
+        this.endpoint = endpoint;
+        this.platform = platform;
+        this.imageUrl = imageUrl;
+    }
 }
