@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/product-service/nova.iml" filepath="$PROJECT_DIR$/product-service/nova.iml" />
       <module fileurl="file://$PROJECT_DIR$/product-service/product-service.iml" filepath="$PROJECT_DIR$/product-service/product-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zuul-service/zuul-service.iml" filepath="$PROJECT_DIR$/zuul-service/zuul-service.iml" />
     </modules>
   </component>
 </project>

@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="product-service" />
         <module name="user-service" />
-        <module name="zuul-service" />
         <module name="discovery-service" />
       </profile>
     </annotationProcessing>

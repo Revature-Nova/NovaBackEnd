@@ -94,6 +94,7 @@ public class ProductController {
      *
      * @return Returns a list containing all products.
      */
+    @CrossOrigin
     @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> displayAll(){
