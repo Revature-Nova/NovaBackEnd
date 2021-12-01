@@ -16,12 +16,18 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "user_model")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfoModel"},
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfoModel", "cart"},
         ignoreUnknown = true)
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserModel implements Serializable {
+    @PostConstruct
+    private void init(){
+        userInfoModel = new UserInfoModel();
+        cart = new Cart();
+    }
+
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +42,7 @@ public class UserModel implements Serializable {
     private String lastName;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private UserInfoModel userInfoModel;
+    UserInfoModel userInfoModel;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
@@ -49,4 +55,5 @@ public class UserModel implements Serializable {
                 "  \"Username\": " + userInfoModel.getUsername() + "\n" +
                 '}';
     }
+
 }
