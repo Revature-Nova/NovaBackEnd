@@ -3,9 +3,7 @@ package com.revature.nova.services;
 import java.util.List;
 
 import com.revature.nova.DTOs.UserRegistrationDTO;
-import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,16 +12,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test class for UserModelService
+ *
+ * @Author Gregg Friedman, James Brown
+ * @Version 12/1/2021
+ */
 @SpringBootTest
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserModelServiceTest {
 
-    @Autowired
+//    @Autowired
     private final UserModelService userModelService;
 
-    @Autowired
+//    @Autowired
     private final UserInfoService userInfoService;
+
+    @Autowired
+    public UserModelServiceTest(UserModelService userModelService, UserInfoService userInfoService) {
+        this.userModelService = userModelService;
+        this.userInfoService = userInfoService;
+    }
 
     @BeforeAll
     public void beforeAll(){
