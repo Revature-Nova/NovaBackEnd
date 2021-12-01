@@ -5,6 +5,7 @@ import com.revature.nova.DTOs.UserRegistrationDTO;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,7 +17,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "user_model")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfoModel"},
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfoModel", "cart"},
         ignoreUnknown = true)
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
@@ -25,6 +26,13 @@ public class UserModel implements Serializable {
     public UserModel(UserRegistrationDTO regData) {
         this.firstName = regData.getFirstName();
         this.lastName = regData.getLastName();
+        cart = new Cart();
+    }
+
+    @PostConstruct
+    private void init(){
+        userInfoModel = new UserInfoModel();
+        cart = new Cart();
     }
 
     @Id
@@ -43,12 +51,15 @@ public class UserModel implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     UserInfoModel userInfoModel;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
+
     @Override
     public String toString() {
-        return "User {\\n" +
-                "  First Name: " + firstName + ",\\n" +
-                "  Last Name: " + lastName + ",\\n" +
-                "  Info: " + userInfoModel + ",\\n" +
+        return "{\n" +
+                "  \"First Name\" : " + firstName + ",\n" +
+                "  \"Last Name\" : " + lastName + ",\n" +
+                "  \"Username\": " + userInfoModel.getUsername() + "\n" +
                 '}';
     }
 

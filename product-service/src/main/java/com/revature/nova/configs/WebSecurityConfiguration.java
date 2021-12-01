@@ -1,4 +1,4 @@
-package com.revature.nova;
+package com.revature.nova.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +9,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers().antMatchers("/**");
+        http.csrf().disable()
+                .requestMatchers().antMatchers("/**");
     }
 }

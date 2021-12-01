@@ -1,8 +1,6 @@
 package com.revature.nova.controllers;
 
-import com.netflix.discovery.converters.Auto;
 import com.revature.nova.models.Cart;
-
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.CartRepo;
 import org.springframework.beans.factory.annotation.Autowired;
