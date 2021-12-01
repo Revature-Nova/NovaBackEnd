@@ -2,8 +2,8 @@ zuul:
   routues:
     product-service:
       path: /product-service/**
-      url: http://18.212.102.32:8090
+      url: http://18.212.102.32:8090/product-service
     user-service:
       path: /user-service/**
-      url: http://18.212.102.32:8089
-      
+      url: http://18.212.102.32:8089/user-service
+    
