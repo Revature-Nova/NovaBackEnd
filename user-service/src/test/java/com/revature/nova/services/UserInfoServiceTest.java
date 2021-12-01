@@ -39,12 +39,10 @@ public class UserInfoServiceTest {
     @Test
     public void UserProfileTest(){
         UserModel userModel;
-        userInfoService.setProfileInfo(new UserProfileDTO("Snoopy", "New York", "Role-Playing", "Hello"));
+        userInfoService.setProfileInfo(new UserProfileDTO("Snoopy", "pass@email.com","New York", "Role-Playing", "Hello"));
         userModel = userRepo.findByFirstName("Snoopy");
         assertEquals("New York", userModel.getUserInfoModel().getState());
         assertEquals("Role-Playing", userModel.getUserInfoModel().getFavoriteGenre());
         assertEquals("Hello", userModel.getUserInfoModel().getMessage());
     }
-
-
 }

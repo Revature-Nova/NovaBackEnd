@@ -89,6 +89,7 @@ public class UserInfoService implements UserDetailsService {
         return userInfoRepo.save(userInfoModel);
     }
 
+
     /**
      *
      * @author Gregg Friedman, Travis Hood
