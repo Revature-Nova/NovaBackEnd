@@ -1,11 +1,13 @@
 package com.revature.nova.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.revature.nova.DTOs.UserRegistrationDTO;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
@@ -14,8 +16,6 @@ import java.io.Serializable;
  * @date 11/22/2021
  * @author User-Feature Team, Erika Johnson
  */
-@Entity
-@Table(name = "user_infos")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userModel"},
         ignoreUnknown = true)
 @Getter @Setter
@@ -48,14 +48,7 @@ public class UserInfoModel implements Serializable {
     @Column
     private String message;
 
-    @OneToOne(mappedBy = "userInfoModel", cascade = CascadeType.ALL)
     private UserModel userModel;
-
-    public UserInfoModel(UserRegistrationDTO regData){
-        this.username = regData.getUsername();
-        this.password = regData.getPassword();
-        this.email = regData.getEmail();
-    }
 
     @Override
     public String toString() {

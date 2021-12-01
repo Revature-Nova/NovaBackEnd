@@ -9,11 +9,10 @@ import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
 /**
- * LoggerService
- * Handles logging error information to the database
+ * Handles logger repo queries
  *
  * @author Kollier Martin
- * @date 11/10/2021
+ * @date 11/22/2021
  */
 @Service
 @Transactional
@@ -26,7 +25,7 @@ public class LoggerService {
     }
 
     public void writeLog(String message, int level) {
-        Logger logger = new Logger(level, message, getCurrentDateTime());
+        Logger logger = new Logger(level, getCurrentDateTime(), message);
 
         repo.save(logger);
     }

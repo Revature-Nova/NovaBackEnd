@@ -15,8 +15,7 @@ import javax.persistence.Table;
  * @author User-Feature Team
  */
 
-@Entity
-@Table
+@Entity @Table
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
