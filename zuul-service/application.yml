@@ -4,7 +4,7 @@ management:
       exposure:
         include: routes,filters
 
-ribbon.eureka.enabled: true
+# ribbon.eureka.enabled: true
 zuul:
   ignoredServices: "*"
   routes:
