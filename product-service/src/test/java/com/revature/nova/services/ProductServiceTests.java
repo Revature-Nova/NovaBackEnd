@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +15,6 @@ import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 class ProductServiceTests {
     //This is the service that we are testing
     private ProductService productService;
@@ -75,10 +73,10 @@ class ProductServiceTests {
         type = null;
         value = null;
         sortingDirection = null;
-        actualProductList = null;
-        expectedProductList = null;
+        actualProductList.clear();
+        expectedProductList.clear();
+        mockDatabaseData.clear();
         productService = null;
-        mockDatabaseData = null;
     }
 
 
@@ -105,7 +103,7 @@ class ProductServiceTests {
     @Test
     public void Test_failToDisplayProductsDueToEmptyDatabase() {
         //Arrange
-        mockDatabaseData = Collections.emptyList();
+        mockDatabaseData.clear();
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
         actualProductList = productService.displayAllProducts();
@@ -188,25 +186,25 @@ class ProductServiceTests {
         System.out.println("\nTest for successfully filtering by rating:");
     }
 
-    //	public List<Product> filterProducts(String type, String value) {
-//
-//		if(!getSortDirection().equals("None")){
-//			sortedProductList(getSortDirection());
-//		}
-//		return getProductList();
-//	}
-
-
     //Tests for failure:
 
     /**
      * Tests that the genre case returns an empty list if there is no matching value in the mock database
+     * Able to get into the genre switch case, but returns an empty list there are not any genres that match
+     * the given value. Test that it does correctly return that empty list.
      */
     @Test
     public  void Test_filterProductsGenreCaseFailure(){
         //Arrange
+        type = "genre";
+        value = "Drama";
+        expectedProductList = Collections.emptyList();
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre:");
     }
 
     /**
@@ -327,7 +325,7 @@ class ProductServiceTests {
 
     //Tests for the sortedProductList method above
 
-    //Test for the productRange method
+    //Tests for the productRange method
 
 //	public List<Product> productRange(float rangeMin, float rangeMax){
 //		//Gets the list of products with prices between the given range and then updates the productList.
@@ -346,9 +344,9 @@ class ProductServiceTests {
     public void Test_productRange() {
     }
 
-    //Test for the productRange method above
+    //Tests for the productRange method above
 
-    //Test for the getProductsContainingTitle method
+    //Tests for the getProductsContainingTitle method
 
     //unit testing: want to know it's returning a list of products, look at individual products within the list
 //    public List<Product> getProductsContainingTitle(String search)
@@ -363,16 +361,16 @@ class ProductServiceTests {
 //        return getProductList();
 //    }
 
-    //Test for the getProductsContainingTitle method above
+    //Tests for the getProductsContainingTitle method above
 
-    //Test for getting a product by its id
+    //Tests for getting a product by its id
 
 //    public Product getProductById(Integer id)
 //    {
 //        return repo.getById(id);
 //    }
 
-    //Test for getting a product by its id above
+    //Tests for getting a product by its id above
 
     ////////////////////////  INTEGRATED TESTS    ////////////////////////
 
@@ -423,15 +421,17 @@ class ProductServiceTests {
     @Test
     public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessAsc() {
         //Arrange
+        mockDatabaseData.clear();
         sortingDirection = "lowest";
         type = "genre";
         value = "Adventure";
         Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
-        expectedProductList.add(product);
-        expectedProductList.add(product1);
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
-        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenre(value);
         //Act
         this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
@@ -448,6 +448,7 @@ class ProductServiceTests {
     @Test
     public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessDesc() {
         //Arrange
+        mockDatabaseData.clear();
         sortingDirection = "highest";
         type = "genre";
         value = "Adventure";
@@ -474,6 +475,7 @@ class ProductServiceTests {
     @Test
     public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccessAsc() {
         //Arrange
+        mockDatabaseData.clear();
         sortingDirection = "lowest";
         type = "platform";
         value = "Nintendo Switch";
@@ -500,6 +502,7 @@ class ProductServiceTests {
     @Test
     public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccessDesc() {
         //Arrange
+        mockDatabaseData.clear();
         sortingDirection = "highest";
         type = "platform";
         value = "Nintendo Switch";
@@ -526,6 +529,7 @@ class ProductServiceTests {
     @Test
     public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccessAsc() {
         //Arrange
+        mockDatabaseData.clear();
         sortingDirection = "lowest";
         type = "rating";
         value = "E10+";
@@ -556,6 +560,7 @@ class ProductServiceTests {
     @Test
     public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccessDesc() {
         //Arrange
+        mockDatabaseData.clear();
         sortingDirection = "highest";
         type = "rating";
         value = "E10+";
