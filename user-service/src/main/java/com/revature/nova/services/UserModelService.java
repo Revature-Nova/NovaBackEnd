@@ -76,4 +76,12 @@ public class UserModelService {
     public void deleteByFirstName(String firstName) {
         userRepo.deleteByFirstName(firstName);
     }
+
+    /**
+     * Helper method for tests that clears all users
+     *
+     * @Author James Brown
+     * @Version 12/2/2021
+     */
+    public void clearList(){userRepo.deleteAll();}
 }

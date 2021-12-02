@@ -2,15 +2,11 @@ package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.services.UserInfoService;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * This controller handles all User Information endpoint interactions
