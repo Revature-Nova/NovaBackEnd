@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter @Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cartList"})
 @NoArgsConstructor(onConstructor = @__(@Autowired))
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Product {
     @Id @NonNull
     private Integer productId;
