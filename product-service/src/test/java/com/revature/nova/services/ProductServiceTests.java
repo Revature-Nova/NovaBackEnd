@@ -2,67 +2,85 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
-import lombok.Getter;
-import lombok.Setter;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 class ProductServiceTests {
     //This is the service that we are testing
     private ProductService productService;
     //This is the actual product list that is returned by the method being tested
-    private List<Product> actualProductList;
+    private List<Product> actualProductList = new ArrayList<>();
+    //This is the list of products that each method should be returning
+    private List<Product> expectedProductList = new ArrayList<>();
     /*This list simulates the database and contains all necessary examples for testing
     the methods in the ProductService Class.
      */
-    private List<Product> mockDatabaseData;
-    //This is the list of products that each method should be returning
-    private List<Product> expectedProductList;
+    private List<Product> mockDatabaseData = new ArrayList<>();
+    //This is the string that determines which filter will be used
+    private String type;
+    //This is the string that determines the value that the products will be filtered by.
+    private String value;
+    //This is the sorting direction for the product list
+    private String sortingDirection;
 
     /*
-    This is the mock repo. If you don't define what this mock repo should return when specific methods are
-    called, then an empty list will be returned since no data is retrieved. This mock repo does not interact
-    with the real database.
-     */
+        This is the mock repo. If you don't define what this mock repo should return when specific methods are
+        called, then an empty list will be returned since no data is retrieved. This mock repo does not interact
+        with the real database.
+         */
     @Mock
     private ProductRepo mockProductRepo;
 
-    //Before each test, the mock database is populated
     @BeforeEach
     void setUp() {
         productService = new ProductService(mockProductRepo);
+
+        //Setting up mock database
         Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
         Product product1 = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
         Product product2 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
         Product product3 = new Product(122,"Thief", "Stealth", 21.27f, "Mature", "https://rawg.io/api/games/thief?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 3", "https://imgur.com/Z0EPE84");
         Product product4 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
-        List<Product> temp = new ArrayList<>();
-        temp.add(product);
-        temp.add(product1);
-        temp.add(product2);
-        temp.add(product3);
-        temp.add(product4);
-        setMockDatabaseData(temp);
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        mockDatabaseData.add(product2);
+        mockDatabaseData.add(product3);
+        mockDatabaseData.add(product4);
     }
 
     //Reset everything that is reused in each test to prevent any side effects
     @AfterEach
     void tearDown() {
-        expectedProductList = null;
-        setMockDatabaseData(null);
+        //Print out actualProductList so that you can make sure you are getting the correct results.
+        if(actualProductList.isEmpty()){
+            System.out.println(actualProductList);
+        }
+        for (Product p: actualProductList) {
+            System.out.println("Products: " + p.getProductId() + ", " + p.getTitle() + ", " + p.getGenre()
+                    + ", " + p.getPlatform() + ", " + p.getRating() + ", $" + p.getPrice());
+        }
+        //Reset all lists and the productService
+        type = null;
+        value = null;
+        sortingDirection = null;
+        actualProductList.clear();
+        expectedProductList.clear();
+        mockDatabaseData.clear();
         productService = null;
     }
+
+
+    ////////////////////////     UNIT TESTS     ////////////////////////
 
     //Tests for the displayAllProducts method in the ProductService class.
     /**
@@ -71,11 +89,12 @@ class ProductServiceTests {
     @Test
     public void Test_successfullyDisplayAllProducts() {
         //Arrange
-        Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
         actualProductList = this.productService.displayAllProducts();
         //Assert
-        Assertions.assertEquals(getMockDatabaseData(), actualProductList);
+        Assertions.assertEquals(mockDatabaseData, actualProductList);
+        System.out.println("\nTest for successfully displaying all products:");
     }
 
     /**
@@ -84,92 +103,108 @@ class ProductServiceTests {
     @Test
     public void Test_failToDisplayProductsDueToEmptyDatabase() {
         //Arrange
-        setMockDatabaseData(Collections.emptyList());
-        Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
+        mockDatabaseData.clear();
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
         actualProductList = productService.displayAllProducts();
         //Assert
         Assertions.assertTrue(actualProductList.isEmpty());
+        System.out.println("\nTest for failure to display products due to an empty database:");
     }
-
 
     //Tests for the displayAllProducts method above.
 
 
     //Tests for the filterProducts method.
 
-
-    //	public List<Product> filterProducts(String type, String value) {
-//		switch (type) {
-//			case "genre":
-//				setProductList(repo.findByGenre(value));
-//				break;
-//			case "platform":
-//				setProductList(repo.findByPlatform(value));
-//				break;
-//			case "rating":
-//				setProductList(repo.findByRating(value));
-//				break;
-//		}
-//
-//		if(!getSortDirection().equals("None")){
-//			sortedProductList(getSortDirection());
-//		}
-//		return getProductList();
-//	}
-
     //Tests for success:
 
     /**
-     * Tests that genre case returns a list of products with the given genre
+     * Tests that genre case returns a list of products with the given genre and that the method successfully routes
+     * to the correct case.
      */
     @Test
     public void Test_filterProductsGenreCaseSuccess() {
         //Arrange
+        type = "genre";
+        value = "Adventure";
+        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre:");
     }
 
     /**
-     * Tests that platform case returns a list of products with the given platform
+     * Tests that platform case returns a list of products with the given platform and that the method successfully routes
+     *      * to the correct case.
      */
     @Test
     public void Test_filterProductsPlatformCaseSuccess() {
         //Arrange
+        type = "platform";
+        value = "Nintendo Switch";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPlatform(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by platform:");
     }
 
     /**
-     * Tests that rating case returns a list of products with the given rating
+     * Tests that rating case returns a list of products with the given rating and that the method successfully routes
+     *      * to the correct case.
      */
     @Test
     public void Test_filterProductsRatingCaseSuccess() {
         //Arrange
+        type = "rating";
+        value = "E10+";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
+        Product product2 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product3 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        expectedProductList.add(product2);
+        expectedProductList.add(product3);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByRating(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
-    }
-
-    /**
-     * Tests that the method maintains sorting direction
-     */
-    @Test
-    public void Test_filterProductsMaintainSortingDirectionSuccess() {
-        //Arrange
-        //Act
-        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by rating:");
     }
 
     //Tests for failure:
 
     /**
      * Tests that the genre case returns an empty list if there is no matching value in the mock database
+     * Able to get into the genre switch case, but returns an empty list there are not any genres that match
+     * the given value. Test that it does correctly return that empty list.
      */
     @Test
     public  void Test_filterProductsGenreCaseFailure(){
         //Arrange
+        type = "genre";
+        value = "Drama";
+        expectedProductList = Collections.emptyList();
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre:");
     }
 
     /**
@@ -217,7 +252,9 @@ class ProductServiceTests {
     //Tests for the sortedProductList method
 
 
-    //
+
+
+//
 //	public List<Product> sortedProductList(String sortingDirection){
 //		boolean validSortingDirection = false;
 //
@@ -234,6 +271,10 @@ class ProductServiceTests {
 //		return getProductList();
 //	}
 
+
+
+
+    
     //Tests for success:
 
     /**
@@ -290,7 +331,7 @@ class ProductServiceTests {
 
     //Tests for the sortedProductList method above
 
-    //Test for the productRange method
+    //Tests for the productRange method
 
 //	public List<Product> productRange(float rangeMin, float rangeMax){
 //		//Gets the list of products with prices between the given range and then updates the productList.
@@ -309,9 +350,9 @@ class ProductServiceTests {
     public void Test_productRange() {
     }
 
-    //Test for the productRange method above
+    //Tests for the productRange method above
 
-    //Test for the getProductsContainingTitle method
+    //Tests for the getProductsContainingTitle method
 
     //unit testing: want to know it's returning a list of products, look at individual products within the list
 //    public List<Product> getProductsContainingTitle(String search)
@@ -326,18 +367,226 @@ class ProductServiceTests {
 //        return getProductList();
 //    }
 
-    //Test for the getProductsContainingTitle method above
+    //Tests for the getProductsContainingTitle method above
 
+    //Tests for getting a product by its id
 
-    /*
-    These are the getter and setter for the mock database. These are needed to ensure that this list is
-    populated before each test. There were issues trying to save data to this list, hence the getter and setter.
+//    public Product getProductById(Integer id)
+//    {
+//        return repo.getById(id);
+//    }
+
+    //Tests for getting a product by its id above
+
+    ////////////////////////  INTEGRATED TESTS    ////////////////////////
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database.
+     * Ascending order.
      */
-    public List<Product> getMockDatabaseData() {
-        return mockDatabaseData;
+    @Test
+    public void Test_filterProductsMaintainSortingDirectionSuccessAsc() {
+        //Arrange
+        sortingDirection = "lowest";
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
+        //Act
+        this.productService.displayAllProducts();
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.displayAllProducts();
+        //Assert
+        Assertions.assertEquals(expectedProductList, actualProductList);
+        System.out.println("\nIntegrated test for successfully displaying all products while maintaining ascending soring order:");
     }
 
-    public void setMockDatabaseData(List<Product> mockDatabaseData) {
-        this.mockDatabaseData = mockDatabaseData;
+    /**
+     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database.
+     * Descending order
+     */
+    @Test
+    public void Test_filterProductsMaintainSortingDirectionSuccessDesc() {
+        //Arrange
+        sortingDirection = "highest";
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
+        //Act
+        this.productService.displayAllProducts();
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.displayAllProducts();
+        //Assert
+        Assertions.assertEquals(expectedProductList, actualProductList);
+        System.out.println("\nTest for successfully displaying all products while maintaining descending soring order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the genre.
+     * Ascending order.
+     */
+    @Test
+    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessAsc() {
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "lowest";
+        type = "genre";
+        value = "Adventure";
+        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenre(value);
+        //Act
+        this.productService.filterProducts(type,value);
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre while maintaining ascending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the genre.
+     * Descending order.
+     */
+    @Test
+    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessDesc() {
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "highest";
+        type = "genre";
+        value = "Adventure";
+        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenre(value);
+        //Act
+        this.productService.filterProducts(type,value);
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre while maintaining descending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the platform case
+     * Ascending order
+     */
+    @Test
+    public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccessAsc() {
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "lowest";
+        type = "platform";
+        value = "Nintendo Switch";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPlatform(value);
+        //Act
+        this.productService.filterProducts(type,value);
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by platform while maintaining ascending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the platform case
+     * Descending order
+     */
+    @Test
+    public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccessDesc() {
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "highest";
+        type = "platform";
+        value = "Nintendo Switch";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPlatform(value);
+        //Act
+        this.productService.filterProducts(type,value);
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by platform while maintaining descending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the rating case
+     * Ascending order
+     */
+    @Test
+    public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccessAsc() {
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "lowest";
+        type = "rating";
+        value = "E10+";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
+        Product product2 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product3 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        mockDatabaseData.add(product2);
+        mockDatabaseData.add(product3);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByRating(value);
+        //Act
+        this.productService.filterProducts(type,value);
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by rating while maintaining ascending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the rating case
+     * Descending order
+     */
+    @Test
+    public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccessDesc() {
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "highest";
+        type = "rating";
+        value = "E10+";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
+        Product product2 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product3 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        mockDatabaseData.add(product2);
+        mockDatabaseData.add(product3);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByRating(value);
+        //Act
+        this.productService.filterProducts(type,value);
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by rating while maintaining descending sorting order:");
     }
 }
