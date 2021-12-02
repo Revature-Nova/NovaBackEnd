@@ -24,6 +24,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * The filter that validates a session token whenever a request is called
@@ -67,7 +73,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (!request.getRequestURI().equals("/Nova/login") && !request.getRequestURI().equals("/Nova/register")) {
             try {
                 parseToken(request);
-            } catch (NullPointerException e) {
+            } catch (AuthenticationException e) {
                 loggerService.writeLog(String.format("%s was thrown in method %s with message: %s",
                         e.getClass().getSimpleName(), e.getClass() + "." + e.getClass().getName(), e.getMessage()), 3);
             }
@@ -94,7 +100,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String tokenWithPrefix = httpRequest.getHeader(jwtUtil.getHeader().toLowerCase());
 
-        if (tokenWithPrefix != null && tokenWithPrefix.startsWith(jwtUtil.getPrefix())) {
+        if (tokenWithPrefix != null && (tokenWithPrefix.startsWith(jwtUtil.getPrefix()) || tokenWithPrefix.startsWith(jwtUtil.getPrefix().toLowerCase()))) {
             jwt = tokenWithPrefix.substring(jwtUtil.getPrefix().length());
 
             try {
