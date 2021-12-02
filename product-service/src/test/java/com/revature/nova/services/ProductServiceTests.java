@@ -32,6 +32,8 @@ class ProductServiceTests {
     private String type;
     //This is the string that determines the value that the products will be filtered by.
     private String value;
+    //This is the sorting direction for the product list
+    private String sortingDirection;
 
     /*
         This is the mock repo. If you don't define what this mock repo should return when specific methods are
@@ -72,11 +74,15 @@ class ProductServiceTests {
         //Reset all lists and the productService
         type = null;
         value = null;
+        sortingDirection = null;
         actualProductList = null;
         expectedProductList = null;
         productService = null;
         mockDatabaseData = null;
     }
+
+
+    ////////////////////////     UNIT TESTS     ////////////////////////
 
     //Tests for the displayAllProducts method in the ProductService class.
     /**
@@ -190,101 +196,6 @@ class ProductServiceTests {
 //		return getProductList();
 //	}
 
-    /**
-     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database.
-     * Ascending order.
-     */
-    @Test
-    public void Test_filterProductsMaintainSortingDirectionSuccessAsc() {
-        //Arrange
-        mockDatabaseData.sort(Comparator.comparing(Product::getPrice));
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
-        //Act
-        actualProductList = this.productService.displayAllProducts();
-        //Assert
-        Assertions.assertEquals(mockDatabaseData, actualProductList);
-        System.out.println("\nTest for successfully displaying all products while maintaining ascending soring order:");
-    }
-
-    /**
-     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database.
-     * Descending order
-     */
-    @Test
-    public void Test_filterProductsMaintainSortingDirectionSuccessDesc() {
-        //Arrange
-        mockDatabaseData.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
-        //Act
-        actualProductList = this.productService.displayAllProducts();
-        //Assert
-        Assertions.assertEquals(mockDatabaseData, actualProductList);
-        System.out.println("\nTest for successfully displaying all products while maintaining descending soring order:");
-    }
-
-    /**
-     * Tests that the method maintains sorting direction when it goes through the genre.
-     * Ascending order.
-     */
-    @Test
-    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessAsc() {
-        //Arrange
-        type = "genre";
-        value = "Adventure";
-        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
-        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
-        expectedProductList.add(product);
-        expectedProductList.add(product1);
-        expectedProductList.sort(Comparator.comparing(Product::getPrice));
-        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
-        //Act
-        actualProductList = this.productService.filterProducts(type,value);
-        //Assert
-        Assertions.assertEquals(expectedProductList,actualProductList);
-        System.out.println("\nTest for successfully filtering by genre while maintaining ascending sorting order:");
-        }
-
-    /**
-     * Tests that the method maintains sorting direction when it goes through the genre.
-     * Descending order.
-     */
-    @Test
-    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessDesc() {
-//Arrange
-        type = "genre";
-        value = "Adventure";
-        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
-        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
-        expectedProductList.add(product);
-        expectedProductList.add(product1);
-        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
-        //Act
-        actualProductList = this.productService.filterProducts(type,value);
-        //Assert
-        Assertions.assertEquals(expectedProductList,actualProductList);
-        System.out.println("\nTest for successfully filtering by genre while maintaining descending sorting order:");
-    }
-
-    /**
-     * Tests that the method maintains sorting direction when it goes through the platform case
-     */
-    @Test
-    public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccess() {
-        //Arrange
-        //Act
-        //Assert
-    }
-
-    /**
-     * Tests that the method maintains sorting direction when it goes through the rating case
-     */
-    @Test
-    public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccess() {
-        //Arrange
-        //Act
-        //Assert
-    }
 
     //Tests for failure:
 
@@ -453,4 +364,110 @@ class ProductServiceTests {
 //    }
 
     //Test for the getProductsContainingTitle method above
+
+    ////////////////////////  INTEGRATED TESTS    ////////////////////////
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database.
+     * Ascending order.
+     * Integration test.
+     */
+    @Test
+    public void Test_filterProductsMaintainSortingDirectionSuccessAsc() {
+        //Arrange
+        sortingDirection = "lowest";
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
+        //Act
+        this.productService.displayAllProducts();
+        productService.sortedProductList(sortingDirection);
+        actualProductList = this.productService.displayAllProducts();
+        //Assert
+        Assertions.assertEquals(expectedProductList, actualProductList);
+        System.out.println("\nIntegrated test for successfully displaying all products while maintaining ascending soring order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database.
+     * Descending order
+     * Integration test.
+     */
+    @Test
+    public void Test_filterProductsMaintainSortingDirectionSuccessDesc() {
+        //Arrange
+        sortingDirection = "highest";
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
+        //Act
+        actualProductList = this.productService.displayAllProducts();
+        //Assert
+        Assertions.assertEquals(expectedProductList, actualProductList);
+        System.out.println("\nTest for successfully displaying all products while maintaining descending soring order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the genre.
+     * Ascending order.
+     */
+    @Test
+    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessAsc() {
+        //Arrange
+        type = "genre";
+        value = "Adventure";
+        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
+        //Act
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre while maintaining ascending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the genre.
+     * Descending order.
+     */
+    @Test
+    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccessDesc() {
+//Arrange
+        type = "genre";
+        value = "Adventure";
+        Product product = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenre(value);
+        //Act
+        actualProductList = this.productService.filterProducts(type,value);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for successfully filtering by genre while maintaining descending sorting order:");
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the platform case
+     */
+    @Test
+    public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the rating case
+     */
+    @Test
+    public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
 }
