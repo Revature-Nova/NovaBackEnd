@@ -43,6 +43,7 @@ public class Product {
     @Column(columnDefinition = "varchar(1000)") @NonNull
     private String imageUrl;
 
+    // Test things out with this variable
     @Transient
     private Cart cart;
 }
