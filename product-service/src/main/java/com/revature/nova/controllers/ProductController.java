@@ -17,7 +17,7 @@ import java.util.List;
  * @date 11/22/21
  * Handles requests that deal with manipulating product data
  */
-@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+
 @RestController
 @RequestMapping(value = "/Nova")
 public class ProductController {
@@ -34,6 +34,8 @@ public class ProductController {
      * @param search term path variable
      * @return list of products that match
      */
+    
+    @CrossOrigin
     @GetMapping(value = "/title/{search}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> searchByTitle(@PathVariable String search)
@@ -53,6 +55,8 @@ public class ProductController {
      *              For rating: Mature, E10+, Teen, etc.
      * @return This method returns the filtered list.
      */
+    
+    @CrossOrigin
     @GetMapping(value = "/filter/{type}/{value}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> getFilteredList(@PathVariable String type, @PathVariable String value){
@@ -93,7 +97,8 @@ public class ProductController {
      *
      * @return Returns a list containing all products.
      */
-
+    
+    @CrossOrigin
     @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> displayAll(){
@@ -105,6 +110,8 @@ public class ProductController {
      * @param id for object
      * @return description for the specified object
      */
+    
+    @CrossOrigin
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public String gameDescription(@PathVariable Integer id)
