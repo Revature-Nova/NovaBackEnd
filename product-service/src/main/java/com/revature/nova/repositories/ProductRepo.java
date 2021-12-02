@@ -8,8 +8,13 @@ import java.util.List;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Integer> {
-    //abstract query that looks for products that contain the search query in the name
-    List<Product> findByTitleContaining(String name);
+    /**
+     * This method finds the rows in the database by title containing (ignore case)
+     *
+     * @param name to search by, as string
+     * @return Returns a list of the relevant games
+     */
+    List<Product> findByTitleContainingIgnoreCase(String name);
 
     /**
      * This method finds the rows in the database by the specified genre

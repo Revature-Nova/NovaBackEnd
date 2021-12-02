@@ -32,11 +32,15 @@ public class ProductService {
         this.repo = repo;
     }
 
-    //unit testing: want to know it's returning a list of products, look at individual products within the list
+    /**
+     * This method searches for a list of products containing the search parameter
+     * @param string with search term
+     * @return list of products
+     */
     public List<Product> getProductsContainingTitle(String search)
     {
         //Finds product(s) by their title and sets the productList equal to the results
-        setProductList(repo.findByTitleContaining(search));
+        setProductList(repo.findByTitleContainingIgnoreCase(search));
 
         //Maintains sorting direction
         if(!getSortDirection().equals("None")){
@@ -143,5 +147,15 @@ public class ProductService {
             sortedProductList(getSortDirection());
         }
         return getProductList();
+    }
+
+    /**
+     * Search our database for a product by ID
+     * @param id for object
+     * @return product with that id
+     */
+    public Product getProductById(Integer id)
+    {
+        return repo.getById(id);
     }
 }
