@@ -33,15 +33,15 @@ class ProductServiceTests {
     /**
      * This test checks if display all products returns a list that is not empty when the database is not empty.
      **/
-    @Test
-
-    public void Test_successfullyDisplayAllProducts() {
-        //Arrange: set up in constructor
-        //Act
-        testProductList = this.productService.displayAllProducts();
-        //Assert
-        Assertions.assertTrue(testProductList.size() > 0);
-    }
+//    @Test
+//
+//    public void Test_successfullyDisplayAllProducts() {
+//        //Arrange: set up in constructor
+//        //Act
+//        testProductList = this.productService.displayAllProducts();
+//        //Assert
+//        Assertions.assertTrue(testProductList.size() > 0);
+//    }
 
     /**
      * This test checks if display all products returns an empty list if the database is empty.
