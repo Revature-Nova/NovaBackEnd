@@ -50,7 +50,7 @@ public class AuthenticationController {
             UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
             token = jwtUtil.createJWT(userDetails);
 
-            jsonObj.put("Token", jwtUtil.getPrefix() + token);
+            jsonObj.put("token", jwtUtil.getPrefix() + token);
 
             return new ResponseEntity<>(jsonObj.toString(), HttpStatus.OK);
         } else {

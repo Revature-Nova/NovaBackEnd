@@ -22,13 +22,4 @@ public class UserModelServiceTest {
     private final UserRepo userRepo;
     private final UserInfoRepo userInfoRepo;
     private final UserInfoService userInfoService;
-    @Test
-    public void testSuccessfulRegistration() {
-//        UserModel newUser = new UserModel("Gregg", "Friedman");
-        UserRegistrationDTO newRegDTO = new UserRegistrationDTO("Gfr", "password", "email@dot.com", "first", "last");
-//        UserInfoModel newUserInfo = new UserInfoModel("Gfr", "123", "gregg@friedman.com");
-
-        assertNull(userInfoService.registerUser(newRegDTO));
-//        assertEquals(HttpStatus.CREATED, userInfoRepo.save(newUserInfo));
-    }
 }
