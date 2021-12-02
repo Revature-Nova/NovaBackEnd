@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
+/**
+ * Handles logger repo queries
+ *
+ * @author Kollier Martin
+ * @date 11/22/2021
+ */
 @Service
 @Transactional
 public class LoggerService {
