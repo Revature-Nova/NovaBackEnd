@@ -292,8 +292,14 @@ class ProductServiceTests {
     @Test
     public void Test_sortedProductListLowestToHighestSuccess() {
         //Arrange
+        sortingDirection = "lowest";
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        productService.setProductList(mockDatabaseData);
         //Act
+        actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     /**
@@ -302,8 +308,14 @@ class ProductServiceTests {
     @Test
     public void Test_sortedProductListHighestToLowestSuccess() {
         //Arrange
+        sortingDirection = "highest";
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        productService.setProductList(mockDatabaseData);
         //Act
+        actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     /**
@@ -312,8 +324,16 @@ class ProductServiceTests {
     @Test
     public void Test_sortedProductListSetSortDirectionSuccess() {
         //Arrange
+        String actualSortDirection;
+        sortingDirection = "lowest";
+        String expectedSortDirection = sortingDirection;
+        productService.setProductList(mockDatabaseData);
         //Act
+        productService.sortedProductList(sortingDirection);
+        actualSortDirection = productService.getSortDirection();
+        System.out.println("Actual sorting direction: " + actualSortDirection);
         //Assert
+        Assertions.assertEquals(expectedSortDirection,actualSortDirection);
     }
 
     //Tests for failure:
@@ -324,18 +344,52 @@ class ProductServiceTests {
     @Test
     public void Test_sortedProductListSortingListFailure() {
         //Arrange
+        sortingDirection = "starting from the middle";
+        expectedProductList = mockDatabaseData;
+        productService.setProductList(mockDatabaseData);
         //Act
+        actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     /**
-     *Tests that the sortDirection variable is not set equal to the sortingDirection if the sortingDirection is invalid
+     *Tests that the sortDirection variable is not set equal to the sortingDirection if the sortingDirection
+     * is invalid
      */
     @Test
     public void Test_sortedProductListSetSortDirectionFailure() {
-        //Arrange
+//Arrange
+        String actualSortDirection;
+        sortingDirection = "upper";
+        //This is what the sortingDirection will be if productService.getSortDirection() runs successfully and
+        //sorts the list.
+        String expectedSortDirection = sortingDirection;
+        productService.setProductList(mockDatabaseData);
         //Act
+        actualProductList = productService.sortedProductList(sortingDirection);
+        actualSortDirection = productService.getSortDirection();
+        System.out.println("Actual sorting direction: " + actualSortDirection);
         //Assert
+        Assertions.assertNotEquals(expectedSortDirection,actualSortDirection);
+        Assertions.assertEquals(mockDatabaseData,actualProductList);
+    }
+
+    /**
+     * Tests that an empty list is returned if the product list is empty. This would occur when there has not been
+     * any calls to the getProductsContainingTitle, displayAllProducts, or filterProducts methods, thus the
+     * product list has not been set.
+     */
+    @Test
+    public void Test_sortedProductReturnsAnEmptyListIfTheProductListIsEmpty(){
+        //Arrange
+        sortingDirection = "lowest";
+        expectedProductList = Collections.emptyList();
+        productService.setProductList(expectedProductList);
+        //Act
+        actualProductList = productService.sortedProductList(sortingDirection);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     //Tests for the sortedProductList method above
@@ -400,8 +454,8 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
+        productService.setProductList(mockDatabaseData);
         //Act
-        this.productService.displayAllProducts();
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.displayAllProducts();
         //Assert
@@ -420,8 +474,8 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
+        productService.setProductList(mockDatabaseData);
         //Act
-        this.productService.displayAllProducts();
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.displayAllProducts();
         //Assert
@@ -447,8 +501,8 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenre(value);
+        productService.setProductList(mockDatabaseData);
         //Act
-        this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -474,8 +528,9 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenre(value);
+        productService.setProductList(mockDatabaseData);
+
         //Act
-        this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -501,8 +556,8 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPlatform(value);
+        productService.setProductList(mockDatabaseData);
         //Act
-        this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -528,8 +583,8 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPlatform(value);
+        productService.setProductList(mockDatabaseData);
         //Act
-        this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -559,8 +614,8 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByRating(value);
+        productService.setProductList(mockDatabaseData);
         //Act
-        this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -590,6 +645,7 @@ class ProductServiceTests {
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByRating(value);
+        productService.setProductList(mockDatabaseData);
         //Act
         this.productService.filterProducts(type,value);
         productService.sortedProductList(sortingDirection);
