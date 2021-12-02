@@ -22,7 +22,7 @@ public class CORSFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws ServletException, IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, PATCH");
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Authentication");
+        resp.setHeader("Access-Control-Allow-Headers", "Response-Type, Content-Type, Authorization, authorization, Authentication");
         chain.doFilter(req, resp);
     }
 }

@@ -20,8 +20,8 @@ import java.util.List;
  * @date 11/26/2021
  * @author Kollier Martin
  */
-@FeignClient(name = "productFeignClient", url = "http://localhost:8082/product-service/")
+@FeignClient(name = "productFeignClient", url = "http://localhost:8082/product-service/Nova")
 public interface ProductClient {
-    @GetMapping("/Nova/title/{productTitle}")
+    @GetMapping("/title/{productTitle}")
     List<Product> getProduct(@PathVariable String productTitle);
 }
