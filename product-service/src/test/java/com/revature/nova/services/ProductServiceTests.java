@@ -217,7 +217,7 @@ class ProductServiceTests {
     //Tests for the sortedProductList method
 
 
-    //
+//
 //	public List<Product> sortedProductList(String sortingDirection){
 //		boolean validSortingDirection = false;
 //
