@@ -104,6 +104,7 @@ class ProductServiceTests {
     public void Test_failToDisplayProductsDueToEmptyDatabase() {
         //Arrange
         mockDatabaseData.clear();
+        mockDatabaseData = Collections.emptyList();
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
         actualProductList = productService.displayAllProducts();
@@ -204,47 +205,61 @@ class ProductServiceTests {
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
-        System.out.println("\nTest for successfully filtering by genre:");
+        System.out.println("\nTest for failing to filter by genre:");
     }
 
     /**
      *Tests that platform case returns an empty list if there is no matching value in the mock database
+     * Able to get into the platform switch case, but returns an empty list there are not any platforms that match
+     * the given value. Test that it does correctly return that empty list.
      */
     @Test
     public  void Test_filterProductsPlatformCaseFailure(){
         //Arrange
+        type = "platform";
+        value = "Book";
+        expectedProductList = Collections.emptyList();
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPlatform(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for failing to filter by platform:");
     }
 
     /**
      *Tests that rating case returns an empty list if there is no matching value in the mock database
+     * Able to get into the rating switch case, but returns an empty list there are not any platforms that match
+     * the given value. Test that it does correctly return that empty list.
      */
     @Test
     public  void Test_filterProductsRatingCaseFailure(){
         //Arrange
+        type = "rating";
+        value = "Bad";
+        expectedProductList = Collections.emptyList();
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByRating(value);
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for failing to filter by rating:");
     }
 
     /**
-     * Tests that the method returns the mockDatabase list if none of the cases are selected
+     * Tests that the method returns an empty list if none of the cases are selected
      */
     @Test
     public  void Test_filterProductsFailureDueToInvalidCaseType(){
         //Arrange
+        type = "year";
+        value = "2030";
+        expectedProductList = Collections.emptyList();
         //Act
+        actualProductList = this.productService.filterProducts(type,value);
         //Assert
-    }
-
-    /**
-     * Tests that the sorting direction is reset if the sorting direction = "None"
-     */
-    @Test
-    public  void Test_filterProductsMaintainSortingDirectionFailure(){
-        //Arrange
-        //Act
-        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("\nTest for failing to filter due to invalid case type:");
     }
 
     //Tests for the filterProducts method above

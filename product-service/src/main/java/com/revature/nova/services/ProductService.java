@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepo repo;
-    private List<Product> productList;
+    private List<Product> productList = Collections.emptyList();
     private String sortDirection = "None"; //Used to maintain the sorting direction.
 
     @Autowired
@@ -57,7 +58,6 @@ public class ProductService {
      */
     public List<Product> displayAllProducts(){
         setProductList(repo.findAll());
-        setSortDirection("None");
         return getProductList();
     }
 
