@@ -2,8 +2,6 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
-import lombok.Getter;
-import lombok.Setter;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -22,13 +20,13 @@ class ProductServiceTests {
     //This is the service that we are testing
     private ProductService productService;
     //This is the actual product list that is returned by the method being tested
-    private List<Product> actualProductList;
+    private List<Product> actualProductList = new ArrayList<>();
+    //This is the list of products that each method should be returning
+    private List<Product> expectedProductList = new ArrayList<>();
     /*This list simulates the database and contains all necessary examples for testing
     the methods in the ProductService Class.
      */
-    private List<Product> mockDatabaseData;
-    //This is the list of products that each method should be returning
-    private List<Product> expectedProductList;
+    private List<Product> mockDatabaseData = new ArrayList<>();
 
     /*
     This is the mock repo. If you don't define what this mock repo should return when specific methods are
@@ -38,30 +36,39 @@ class ProductServiceTests {
     @Mock
     private ProductRepo mockProductRepo;
 
-    //Before each test, the mock database is populated
     @BeforeEach
     void setUp() {
         productService = new ProductService(mockProductRepo);
+
+        //Setting up mock database
         Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
         Product product1 = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
         Product product2 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
         Product product3 = new Product(122,"Thief", "Stealth", 21.27f, "Mature", "https://rawg.io/api/games/thief?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 3", "https://imgur.com/Z0EPE84");
         Product product4 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
-        List<Product> temp = new ArrayList<>();
-        temp.add(product);
-        temp.add(product1);
-        temp.add(product2);
-        temp.add(product3);
-        temp.add(product4);
-        setMockDatabaseData(temp);
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        mockDatabaseData.add(product2);
+        mockDatabaseData.add(product3);
+        mockDatabaseData.add(product4);
     }
 
     //Reset everything that is reused in each test to prevent any side effects
     @AfterEach
     void tearDown() {
+        //Print out actualProductList so that you can make sure you are getting the correct results.
+        if(actualProductList.isEmpty()){
+            System.out.println(actualProductList);
+        }
+        for (Product p: actualProductList) {
+            System.out.println("Products: " + p.getProductId() + ", " + p.getTitle() + ", " + p.getGenre()
+                    + ", " + p.getPlatform() + ", " + p.getRating() + ", $" + p.getPrice());
+        }
+        //Reset all lists and the productService
+        actualProductList = null;
         expectedProductList = null;
-        setMockDatabaseData(null);
         productService = null;
+        mockDatabaseData = null;
     }
 
     //Tests for the displayAllProducts method in the ProductService class.
@@ -71,11 +78,12 @@ class ProductServiceTests {
     @Test
     public void Test_successfullyDisplayAllProducts() {
         //Arrange
-        Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
         actualProductList = this.productService.displayAllProducts();
         //Assert
-        Assertions.assertEquals(getMockDatabaseData(), actualProductList);
+        Assertions.assertEquals(mockDatabaseData, actualProductList);
+        System.out.println("\nTest for successfully displaying all products:");
     }
 
     /**
@@ -84,14 +92,15 @@ class ProductServiceTests {
     @Test
     public void Test_failToDisplayProductsDueToEmptyDatabase() {
         //Arrange
-        setMockDatabaseData(Collections.emptyList());
-        Mockito.doReturn(getMockDatabaseData()).when(mockProductRepo).findAll();
+        mockDatabaseData = Collections.emptyList();
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
         actualProductList = productService.displayAllProducts();
+        System.out.println(actualProductList);
         //Assert
         Assertions.assertTrue(actualProductList.isEmpty());
+        System.out.println("\nTest for failure to display products due to an empty database:");
     }
-
 
     //Tests for the displayAllProducts method above.
 
@@ -151,10 +160,39 @@ class ProductServiceTests {
     }
 
     /**
-     * Tests that the method maintains sorting direction
+     * Tests that the method maintains sorting direction when it goes through the unfiltered mock database
      */
     @Test
     public void Test_filterProductsMaintainSortingDirectionSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the genre
+     */
+    @Test
+    public void Test_filterProductsByGenreAndMaintainSortingDirectionSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
+    /**
+     * Tests that the method maintains sorting direction when it goes through the platform case
+     */
+    @Test
+    public void Test_filterProductsByPlatformAndMaintainSortingDirectionSuccess() {
+        //Arrange
+        //Act
+        //Assert
+    }
+
+    /**
+     * Tests that the method maintains sorting direction when it goes through the rating case
+     */
+    @Test
+    public void Test_filterProductsByRatingAndMaintainSortingDirectionSuccess() {
         //Arrange
         //Act
         //Assert
@@ -327,17 +365,4 @@ class ProductServiceTests {
 //    }
 
     //Test for the getProductsContainingTitle method above
-
-
-    /*
-    These are the getter and setter for the mock database. These are needed to ensure that this list is
-    populated before each test. There were issues trying to save data to this list, hence the getter and setter.
-     */
-    public List<Product> getMockDatabaseData() {
-        return mockDatabaseData;
-    }
-
-    public void setMockDatabaseData(List<Product> mockDatabaseData) {
-        this.mockDatabaseData = mockDatabaseData;
-    }
 }
