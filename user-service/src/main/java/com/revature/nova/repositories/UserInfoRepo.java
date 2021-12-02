@@ -18,5 +18,5 @@ public interface UserInfoRepo extends JpaRepository<UserInfoModel, Integer> {
     void deleteByUsername(String username);
 
     @Query("select username, email, state, favoriteGenre, message from UserInfoModel")
-    MultiValueMap getAllWithoutPassword();
+    ArrayList<String> getAllWithoutPassword();
 }

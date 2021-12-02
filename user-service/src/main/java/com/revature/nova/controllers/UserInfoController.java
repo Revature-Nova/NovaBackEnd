@@ -34,7 +34,7 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "/user/getProfiles", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAllProfiles(){
+    public ResponseEntity<String> getAllProfiles(){
         return new ResponseEntity<>(userInfoService.getAllProfiles(), HttpStatus.OK);
     }
 }
