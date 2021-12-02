@@ -218,6 +218,7 @@ class ProductServiceTests {
 
 
     
+
 //
 //	public List<Product> sortedProductList(String sortingDirection){
 //		boolean validSortingDirection = false;
