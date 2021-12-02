@@ -34,7 +34,7 @@ public class ProductService {
 
     /**
      * This method searches for a list of products containing the search parameter
-     * @param string with search term
+     * @param search with search term
      * @return list of products
      */
     public List<Product> getProductsContainingTitle(String search)
