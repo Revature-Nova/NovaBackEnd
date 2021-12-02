@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test class for UserModelService
  *
- * @Author James Brown, Gregg Friedman
- * @Version 12/1/2021
+ * @author James Brown, Gregg Friedman
+ * @version 12/1/2021
  */
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,7 +45,7 @@ public class UserModelServiceTest {
         List<UserModel> l = userModelService.allUsers();
 
         assertEquals(1, l.size());
-    }
+     }
 
     @Test
     public void testFindAndDeleteByID(){
@@ -67,8 +67,5 @@ public class UserModelServiceTest {
         assertThrows(UserDoesNotExistException.class,
                 () -> userModelService.findByID(3),"User with ID 3 does not exist.");
     }
-
-
-
 
 }
