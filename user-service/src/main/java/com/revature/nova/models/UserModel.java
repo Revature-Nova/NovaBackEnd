@@ -15,19 +15,13 @@ import java.io.Serializable;
  * @author User-Feature Team
  */
 @Entity
-@Table(name = "user_model")
+@Table(name = "user_models")
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userInfoModel"},
         ignoreUnknown = true)
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserModel implements Serializable {
-    public UserModel(UserRegistrationDTO regData) {
-        this.firstName = regData.getFirstName();
-        this.lastName = regData.getLastName();
-        cart = new Cart();
-    }
-
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,10 +36,12 @@ public class UserModel implements Serializable {
     private String lastName;
 
     @OneToOne(cascade = CascadeType.ALL)
-    UserInfoModel userInfoModel;
+    private UserInfoModel userInfoModel;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Cart cart;
+    public UserModel(UserRegistrationDTO regData) {
+        this.firstName = regData.getFirstName();
+        this.lastName = regData.getLastName();
+    }
 
     @Override
     public String toString() {
