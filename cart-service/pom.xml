@@ -144,7 +144,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>user-service</finalName>
+		<finalName>cart-service</finalName>
 	</build>
 
 </project>
