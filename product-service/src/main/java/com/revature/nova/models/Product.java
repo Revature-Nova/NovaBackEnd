@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter @Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cartList"})
 @NoArgsConstructor(onConstructor = @__(@Autowired))
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Product {
     @Id @NonNull
     private Integer productId;
@@ -43,6 +43,7 @@ public class Product {
     @Column(columnDefinition = "varchar(1000)") @NonNull
     private String imageUrl;
 
+    // Test things out with this variable
     @Transient
     private Cart cart;
 }

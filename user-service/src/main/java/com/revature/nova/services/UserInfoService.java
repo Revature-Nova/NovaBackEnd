@@ -7,6 +7,7 @@ import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
@@ -113,6 +116,23 @@ public class UserInfoService implements UserDetailsService {
         newUserInfo.setUserModel(newUser);
 
         return new RegisteredDataDTO(newUser, newUserInfo);
+    }
+
+    public String getAllProfiles(){
+        JSONObject jsonObject = new JSONObject();
+        List<UserInfoModel> profileData = userInfoRepo.findAll();
+        String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+
+        for (UserInfoModel profileDatum : profileData) {
+            jsonObject.put(dataName[0], profileDatum.getUsername());
+            jsonObject.put(dataName[1], profileDatum.getEmail());
+            jsonObject.put(dataName[2], profileDatum.getState());
+            jsonObject.put(dataName[3], profileDatum.getFavoriteGenre());
+            jsonObject.put(dataName[4], profileDatum.getMessage());
+        }
+
+
+        return jsonObject.toString();
     }
 }
 
