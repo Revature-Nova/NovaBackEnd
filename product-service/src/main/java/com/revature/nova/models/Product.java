@@ -1,75 +1,49 @@
 package com.revature.nova.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
  * This is a Model for a product to be displayed in the storefront.
  */
 
-@Entity //More specific than @Component; Tells hibernate to save this model as a table in the database
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) //Ignore Problem Fields
-@Getter //Lombok Getter for all variable fields; adds boilerplate getters at compile time
-@Setter //Lombok Setter for all variable fields; adds boilerplate setters at compile time
-@NoArgsConstructor(onConstructor = @__(@Autowired)) //Lombok boilerplate NoArgsConstructor created at compile time
-@AllArgsConstructor(onConstructor = @__(@Autowired)) //Lombok boilerplate ArgsConstructor created at compile time
-@Table(name = "Product_Table") //More specific annotation that sets the table name; acts like an alias for the
-// model in the relational database
-/**
- * This class defines the product model used throughout the project.
- */
+@Entity
+@Table(name = "products")
+@Getter @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cartList"})
+@NoArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Product {
-
-    @Id
-    //Ex/Re/Ie:  6 Digit Int? 3 Digit Int? 6 Letter Sequence? AlphaNumeric Sequence?
+    @Id @NonNull
     private Integer productId;
 
-    @Column
-    //Ex/Re/Ie: The Elder Scrolls V - Skyrim
+    @Column @NonNull
     private String title;
 
-    @Column
-    //Ex/Re/Ie: RPG
+    @Column @NonNull
     private String genre;
 
-    @Column
-    //Ex/Re/Ie: 19.49
+    @Column @NonNull
     private Float price;
 
-    @Column
-    //Ex/Re/Ie: M
+    @Column @NonNull
     private String rating;
 
-    @Column(columnDefinition = "varchar(1000)")
+    @Column(columnDefinition = "varchar(1000)") @NonNull
     private String endpoint;
 
-    @Column
-    //Ex/Re/Ie: PC
+    @Column @NonNull
     private String platform;
 
-    @Column(columnDefinition = "varchar(1000)")
+    @Column(columnDefinition = "varchar(1000)") @NonNull
     private String imageUrl;
 
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Cart> cartList;
-
-    /*
-    Stretch Goal:
-    @Column
-    private Integer quantity;
-
-    */
-
+    // Test things out with this variable
+    @Transient
+    private Cart cart;
 }

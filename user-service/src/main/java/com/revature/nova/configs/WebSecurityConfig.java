@@ -2,7 +2,6 @@ package com.revature.nova.configs;
 
 import com.revature.nova.filters.AuthenticationFilter;
 import com.revature.nova.services.UserInfoService;
-import com.revature.nova.services.UserModelService;
 import com.revature.nova.utils.AuthenticationEndPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

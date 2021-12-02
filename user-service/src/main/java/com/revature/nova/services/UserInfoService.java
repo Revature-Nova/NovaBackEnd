@@ -1,5 +1,6 @@
 package com.revature.nova.services;
 
+import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.models.UserInfoModel;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
@@ -91,20 +93,17 @@ public class UserInfoService implements UserDetailsService {
 
 
     /**
-     *
-     * @author Gregg Friedman, Travis Hood
-     * #date 11/23/2021
-     * @return The persisted User's information
-     *
      * Receives information to create a new user, saves it to postgreSQL
      * and returns the information in a string format
      *
      * During the registration process, the user password is encoded before persistence
+     *
+     * @author Gregg Friedman, Travis Hood, Kollier Martin
+     * @return JSONString with User information in it
      */
-    public String registerUser(UserRegistrationDTO userRegDTO) {
+    public RegisteredDataDTO registerUser(UserRegistrationDTO userRegDTO) {
         UserModel newUser = new UserModel(userRegDTO);
         UserInfoModel newUserInfo = new UserInfoModel(userRegDTO);
-        JSONObject jsonObject = new JSONObject();
 
         newUserInfo.setPassword(encoder.encode(newUserInfo.getPassword()));
 
@@ -116,7 +115,22 @@ public class UserInfoService implements UserDetailsService {
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
-        jsonObject.put("New User", newUser.toString());
+        return new RegisteredDataDTO(newUser, newUserInfo);
+    }
+
+    public String getAllProfiles(){
+        JSONObject jsonObject = new JSONObject();
+        List<UserInfoModel> profileData = userInfoRepo.findAll();
+        String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+
+        for (UserInfoModel profileDatum : profileData) {
+            jsonObject.put(dataName[0], profileDatum.getUsername());
+            jsonObject.put(dataName[1], profileDatum.getEmail());
+            jsonObject.put(dataName[2], profileDatum.getState());
+            jsonObject.put(dataName[3], profileDatum.getFavoriteGenre());
+            jsonObject.put(dataName[4], profileDatum.getMessage());
+        }
+
 
         return jsonObject.toString();
     }

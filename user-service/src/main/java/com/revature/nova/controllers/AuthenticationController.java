@@ -1,9 +1,9 @@
 package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.LoginCredentialsDTO;
+import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.AuthenticationException;
-import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserInfoService;
 import com.revature.nova.utils.JWTUtil;
 import org.json.JSONObject;
@@ -50,7 +50,7 @@ public class AuthenticationController {
             UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
             token = jwtUtil.createJWT(userDetails);
 
-            jsonObj.put("Token", jwtUtil.getPrefix() + token);
+            jsonObj.put("token", jwtUtil.getPrefix() + token);
 
             return new ResponseEntity<>(jsonObj.toString(), HttpStatus.OK);
         } else {
@@ -59,7 +59,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveUser(@RequestBody @Valid UserRegistrationDTO user) {
+    public ResponseEntity<RegisteredDataDTO> saveUser(@RequestBody @Valid UserRegistrationDTO user) {
         return new ResponseEntity<>(userInfoService.registerUser(user), HttpStatus.CREATED);
     }
 

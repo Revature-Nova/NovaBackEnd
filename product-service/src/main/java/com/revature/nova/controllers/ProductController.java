@@ -2,6 +2,7 @@ package com.revature.nova.controllers;
 
 
 import com.revature.nova.models.Product;
+import com.revature.nova.rawg.DescriptionInfo;
 import com.revature.nova.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,11 @@ import java.util.List;
  * @date 11/22/21
  * Handles requests that deal with manipulating product data
  */
-
+@CrossOrigin(methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping(value = "/Nova")
 public class ProductController {
-
+    // Add CartClient here
     private final ProductService productService;
 
     @Autowired
@@ -37,7 +38,6 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<Product> searchByTitle(@PathVariable String search)
     {
-        //the search is case-sensitive, I am going to, by default, convert the first letter to uppercase to help the search
         //query our database for products containing search param string
         return productService.getProductsContainingTitle(search);
     }
@@ -58,7 +58,6 @@ public class ProductController {
     public List<Product> getFilteredList(@PathVariable String type, @PathVariable String value){
         return productService.filterProducts(type, value);
     }
-
 
     /**
      *This method handles the get request for sorting the movie list.
@@ -94,9 +93,25 @@ public class ProductController {
      *
      * @return Returns a list containing all products.
      */
+
     @GetMapping(value = "/display", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public List<Product> displayAll(){
         return productService.displayAllProducts();
+    }
+
+    /**
+     * Search our database for something matching title
+     * @param id for object
+     * @return description for the specified object
+     */
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public String gameDescription(@PathVariable Integer id)
+    {
+        //get product from database
+        Product currentProduct = productService.getProductById(id);
+
+        return DescriptionInfo.getDescription(currentProduct);
     }
 }

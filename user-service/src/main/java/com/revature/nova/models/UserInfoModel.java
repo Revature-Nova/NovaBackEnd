@@ -15,19 +15,13 @@ import java.io.Serializable;
  * @author User-Feature Team, Erika Johnson
  */
 @Entity
-@Table(name = "user_info")
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "user"},
+@Table(name = "user_infos")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "userModel"},
         ignoreUnknown = true)
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserInfoModel implements Serializable {
-    public UserInfoModel(UserRegistrationDTO regData){
-        this.username = regData.getUsername();
-        this.password = regData.getPassword();
-        this.email = regData.getEmail();
-    }
-
     @Id
     @Column(name = "userinfo_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,17 +48,23 @@ public class UserInfoModel implements Serializable {
     @Column
     private String message;
 
-    @OneToOne(mappedBy = "userInfoModel")
-    UserModel userModel;
+    @OneToOne(mappedBy = "userInfoModel", cascade = CascadeType.ALL)
+    private UserModel userModel;
+
+    public UserInfoModel(UserRegistrationDTO regData){
+        this.username = regData.getUsername();
+        this.password = regData.getPassword();
+        this.email = regData.getEmail();
+    }
 
     @Override
     public String toString() {
-        return "User Info {\\n" +
-                "  Username: " + username + ",\\n" +
-                "  Email: " + email + ",\\n" +
-                "  State: " + state + ",\\n" +
-                "  Favorite Genre: " + favoriteGenre + ",\\n" +
-                "  Profile Message: " + message + ",\\n" +
-                '}';
+        return "{\n" +
+                "  \"Username\": " + username + ",\n" +
+                "  \"Email\": " + email + ",\n" +
+                "  \"State\": " + state + ",\n" +
+                "  \"Favorite Genre\": " + favoriteGenre + ",\n" +
+                "  \"Profile Message\": " + message + "\n" +
+                "}";
     }
 }
