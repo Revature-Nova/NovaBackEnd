@@ -217,7 +217,7 @@ class ProductServiceTests {
     //Tests for the sortedProductList method
 
 
-    
+
 
 //
 //	public List<Product> sortedProductList(String sortingDirection){
@@ -238,6 +238,8 @@ class ProductServiceTests {
 
 
 
+
+    
     //Tests for success:
 
     /**
