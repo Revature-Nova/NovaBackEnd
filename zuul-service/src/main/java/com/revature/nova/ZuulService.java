@@ -18,6 +18,7 @@ public class ZuulService {
 		SpringApplication.run(ZuulService.class, args);
 		corsFilter();
 	}
+
 	
 @Bean
 public static CorsFilter corsFilter() {
