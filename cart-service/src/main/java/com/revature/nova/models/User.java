@@ -1,7 +1,10 @@
 package com.revature.nova.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -19,7 +22,7 @@ public class User {
     @Column
     private String username;
 
-    @Transient
+    @Column
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

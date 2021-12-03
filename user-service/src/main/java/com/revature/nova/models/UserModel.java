@@ -2,11 +2,9 @@ package com.revature.nova.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.revature.nova.DTOs.UserRegistrationDTO;
-import com.revature.nova.clients.CartClient;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -56,5 +54,4 @@ public class UserModel implements Serializable {
                 "  \"Username\": " + userInfoModel.getUsername() + "\n" +
                 '}';
     }
-
 }

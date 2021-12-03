@@ -7,6 +7,7 @@ import com.revature.nova.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -30,22 +31,21 @@ public class CartController {
         return new ResponseEntity<>(cartService.createCart(), HttpStatus.CREATED);
     }
 
-    @PutMapping("/cart/add")
-    public ResponseEntity<Cart> addToCart(Cart cart, @RequestBody Product product){
+    @PutMapping("/cart/add/{id}")
+    public ResponseEntity<Cart> addToCart(@PathVariable int id, @RequestBody Product product){
+        Cart cart = cartService.getCartByID(id);
         return new ResponseEntity<>(cartService.addToCart(cart, product), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/cart/{id}")
+    public ResponseEntity<Cart> getCartByID(@PathVariable int id){
+        return new ResponseEntity<>(cartService.getCartByID(id), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/cart/{id}")
     public ResponseEntity<?> deleteCart(@PathVariable int id){
         cartService.deleteCartByID(id);
 
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/cart/byCart")
-    public ResponseEntity<?> deleteCart(@RequestBody Cart cart){
-        cartService.deleteCart(cart);
-
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Deleted");
     }
 }

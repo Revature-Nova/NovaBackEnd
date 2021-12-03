@@ -26,13 +26,13 @@ public class LoggerAspect {
     }
 
     @Pointcut("within(com.revature.nova.*..*) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*) " +
-            "!execution(public !void org.springframework.data.repository.Repository+.*(..))")
+            "&& !this(org.springframework.data.repository.Repository)")
     public void logAll() {
 
     }
 
     @Around("within(com.revature.nova.*..*) && !within(com.revature.nova.filters..*) && !within(com.revature.nova.configs..*) " +
-            "!execution(public !void org.springframework.data.repository.Repository+.*(..))")
+            "&& !this(org.springframework.data.repository.Repository)")
     public void logAroundAll(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             joinPoint.proceed();

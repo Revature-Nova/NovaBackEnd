@@ -3,9 +3,6 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
-import com.revature.nova.DTOs.UserToCartDTO;
-import com.revature.nova.clients.CartClient;
-import com.revature.nova.models.Cart;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
@@ -22,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +35,9 @@ public class UserInfoService implements UserDetailsService {
     private final UserInfoRepo userInfoRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder encoder;
-    private final CartClient cartClient;
 
     @Autowired
-    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo, CartClient cartClient) {
-        this.cartClient = cartClient;
+    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo) {
         this.userRepo = userRepo;
         this.userInfoRepo = userInfoRepo;
         this.encoder = new BCryptPasswordEncoder();
@@ -61,25 +55,8 @@ public class UserInfoService implements UserDetailsService {
         }
     }
 
-    // TODO: Test method for cart
-    public void getCart(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserModel model = findByUsername((String) auth.getPrincipal()).getUserModel();
-
-        userRepo.save(model);
-    }
-
-    // TODO
     public UserInfoModel findByUsername(String username){
         return userInfoRepo.findByUsername(username);
-    }
-
-    // TODO
-    public UserToCartDTO send(UserInfoModel userInfoModel){
-        UserToCartDTO dto = new UserToCartDTO();
-        dto.setUsername(userInfoModel.getUsername());
-
-        return dto;
     }
 
     /**
@@ -114,6 +91,7 @@ public class UserInfoService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserInfoModel userInfoModel = userInfoRepo.findByUsername((String) auth.getPrincipal());
 
+        userInfoModel.setEmail(userProfileDTO.getEmail());
         userInfoModel.setMessage(userProfileDTO.getMessage());
         userInfoModel.setState(userProfileDTO.getState());
         userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());

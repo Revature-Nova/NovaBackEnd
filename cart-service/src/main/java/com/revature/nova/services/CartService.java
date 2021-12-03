@@ -1,11 +1,15 @@
 package com.revature.nova.services;
 
+import com.revature.nova.exceptions.EmptyCartException;
 import com.revature.nova.models.Cart;
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.CartRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,8 +31,14 @@ public class CartService {
         return cartRepo.save(cart);
     }
 
-    public void deleteCart(Cart cart){
-        cartRepo.delete(cart);
+    public Cart getCartByID(int id){
+        Optional<Cart> cart = cartRepo.findById(id);
+
+        if (cart.isPresent()){
+            return cart.get();
+        } else {
+            throw new EmptyCartException("Cart does not exist!");
+        }
     }
 
     public void deleteCartByID(int id){

@@ -1,18 +1,12 @@
 package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.UserProfileDTO;
-import com.revature.nova.DTOs.UserToCartDTO;
 import com.revature.nova.services.UserInfoService;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-
-import javax.ws.rs.GET;
-import java.util.List;
 
 /**
  * This controller handles all User Information endpoint interactions
@@ -38,11 +32,5 @@ public class UserInfoController {
     @GetMapping(value = "/user/getProfiles", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getAllProfiles(){
         return new ResponseEntity<>(userInfoService.getAllProfiles(), HttpStatus.OK);
-    }
-
-    @GetMapping("/user/{username}")
-    public ResponseEntity<UserToCartDTO> getByUsername(@PathVariable String username) {
-        return ResponseEntity.ok()
-                .body(userInfoService.send(userInfoService.findByUsername(username)));
     }
 }
