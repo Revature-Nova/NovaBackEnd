@@ -1,5 +1,7 @@
 package com.revature.nova.services;
 
+import com.revature.nova.clients.CartClient;
+import com.revature.nova.models.Cart;
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
 import lombok.Getter;
@@ -22,19 +24,29 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductService {
-
+    private CartClient cartClient;
     private final ProductRepo repo;
     private List<Product> productList;
     private String sortDirection = "None"; //Used to maintain the sorting direction.
 
     @Autowired
+    public ProductService(CartClient cartClient, ProductRepo repo) {
+        this.cartClient = cartClient;
+        this.repo = repo;
+    }
+
     public ProductService(ProductRepo repo) {
         this.repo = repo;
     }
 
+    // TODO: Test method for cart
+    public Cart addProductToCart(Product product){
+        return cartClient.addToCart(product);
+    }
+
     /**
      * This method searches for a list of products containing the search parameter
-     * @param string with search term
+     * @param search with search term
      * @return list of products
      */
     public List<Product> getProductsContainingTitle(String search)

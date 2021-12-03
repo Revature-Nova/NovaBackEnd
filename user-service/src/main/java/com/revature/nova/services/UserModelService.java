@@ -1,9 +1,14 @@
 package com.revature.nova.services;
 
+import com.revature.nova.clients.CartClient;
 import com.revature.nova.exceptions.UserDoesNotExistException;
+import com.revature.nova.models.Cart;
+import com.revature.nova.models.Product;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

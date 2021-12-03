@@ -8,10 +8,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +19,11 @@ import java.util.List;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class Cart {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartId;
 
     @Transient
     private List<Product> productList;
-
-    @Transient
-    private UserModel userModel;
 
     @PostConstruct
     private void init(){

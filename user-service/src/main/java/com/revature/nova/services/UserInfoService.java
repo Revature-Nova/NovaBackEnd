@@ -3,12 +3,16 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.clients.CartClient;
+import com.revature.nova.models.Cart;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,9 +38,11 @@ public class UserInfoService implements UserDetailsService {
     private final UserInfoRepo userInfoRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder encoder;
+    private final CartClient cartClient;
 
     @Autowired
-    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo) {
+    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo, CartClient cartClient) {
+        this.cartClient = cartClient;
         this.userRepo = userRepo;
         this.userInfoRepo = userInfoRepo;
         this.encoder = new BCryptPasswordEncoder();
@@ -52,6 +58,20 @@ public class UserInfoService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
+    }
+
+    // TODO: Test method for cart
+    public void getCart(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserModel model = findByUsername((String) auth.getPrincipal()).getUserModel();
+
+        model.setCart(cartClient.getCart());
+        userRepo.save(model);
+    }
+
+    // Find by username
+    public UserInfoModel findByUsername(String username){
+        return userInfoRepo.findByUsername(username);
     }
 
     /**
@@ -83,7 +103,8 @@ public class UserInfoService implements UserDetailsService {
      * @return User Info Model with updated user profile information
      */
     public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername((String) auth.getPrincipal());
 
         userInfoModel.setMessage(userProfileDTO.getMessage());
         userInfoModel.setState(userProfileDTO.getState());
