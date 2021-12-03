@@ -43,6 +43,15 @@ public class UserInfoService implements UserDetailsService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
+    /**
+     * Overridden Spring security method for loading Users
+     *
+     * @Author Kollier Martin, James Brown
+     * @Version 12/2/21
+     * @param username username provided by client for login
+     * @return UserDetails used to generate JWT
+     * @throws UsernameNotFoundException if findByUsername returns null
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfoModel userModel = userInfoRepo.findByUsername(username);
@@ -68,16 +77,6 @@ public class UserInfoService implements UserDetailsService {
      */
     public UserInfoModel save (UserInfoModel userInfo){
         return userInfoRepo.save(userInfo);
-    }
-
-    /**
-     * Deletes a user and their information
-     *
-     * @author Erika Johnson
-     * @param userInfo The model to delete
-     */
-    public void deleteUserInfo(UserInfoModel userInfo){
-        userInfoRepo.delete(userInfo);
     }
 
     /**
@@ -125,6 +124,12 @@ public class UserInfoService implements UserDetailsService {
         return new RegisteredDataDTO(newUser, newUserInfo);
     }
 
+    /**
+     * Retrieves all available user info for user profiles
+     *
+     * @Author Kollier Martin
+     * @return String of generated JSON Object
+     */
     public String getAllProfiles(){
         JSONObject jsonObject = new JSONObject();
         List<UserInfoModel> profileData = userInfoRepo.findAll();
@@ -137,7 +142,6 @@ public class UserInfoService implements UserDetailsService {
             jsonObject.put(dataName[3], profileDatum.getFavoriteGenre());
             jsonObject.put(dataName[4], profileDatum.getMessage());
         }
-
 
         return jsonObject.toString();
     }
