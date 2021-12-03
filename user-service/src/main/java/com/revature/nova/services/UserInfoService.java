@@ -9,6 +9,8 @@ import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -62,6 +64,10 @@ public class UserInfoService implements UserDetailsService {
         }
     }
 
+    public UserInfoModel findByUsername(String username){
+        return userInfoRepo.findByUsername(username);
+    }
+
     /**
      * Saves a user's information
      *
@@ -81,8 +87,10 @@ public class UserInfoService implements UserDetailsService {
      * @return User Info Model with updated user profile information
      */
     public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername((String) auth.getPrincipal());
 
+        userInfoModel.setEmail(userProfileDTO.getEmail());
         userInfoModel.setMessage(userProfileDTO.getMessage());
         userInfoModel.setState(userProfileDTO.getState());
         userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
