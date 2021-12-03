@@ -615,7 +615,7 @@ class ProductServiceTests {
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
@@ -640,7 +640,7 @@ class ProductServiceTests {
         mockDatabaseData.add(product2);
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         productService.setSortDirection(sortingDirection);
         //Act
         actualProductList = productService.productRange(min,max);
@@ -666,7 +666,7 @@ class ProductServiceTests {
         mockDatabaseData.add(product2);
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         productService.setSortDirection(sortingDirection);
         //Act
         actualProductList = productService.productRange(min,max);
@@ -685,7 +685,7 @@ class ProductServiceTests {
         float min = 60f;
         float max = 70f;
         expectedProductList = Collections.emptyList();
-        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetween(min,max);
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert

@@ -139,7 +139,7 @@ public class ProductService {
      */
     public List<Product> productRange(float rangeMin, float rangeMax){
         //Gets the list of products with prices between the given range and then updates the productList.
-        setProductList(repo.findByPriceIsBetweenIgnoreCase(rangeMin,rangeMax));
+        setProductList(repo.findByPriceIsBetween(rangeMin,rangeMax));
 
         /*Checks if a sorting option has been chosen and then sorts the new list so that the user does not have
         to resort the product list.
