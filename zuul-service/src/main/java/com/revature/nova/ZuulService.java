@@ -19,7 +19,7 @@ public class ZuulService {
 		corsFilter();
 	}
 
-	
+
 @Bean
 public static CorsFilter corsFilter() {
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
