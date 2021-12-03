@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,40 +15,39 @@ import java.util.List;
  * This is a Model for a product to be displayed in the storefront.
  */
 
+@Entity @Table
 @Getter @Setter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cartList"})
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId;
 
-    @NonNull
+    @NonNull @Column
     private String title;
 
-    @NonNull
+    @NonNull @Column
     private String genre;
 
-    @NonNull
+    @NonNull @Column
     private Float price;
 
-    @NonNull
+    @NonNull @Column
     private String rating;
 
-    @NonNull
+    @NonNull @Column
     private String endpoint;
 
-    @NonNull
+    @NonNull @Column
     private String platform;
 
-    @NonNull
+    @NonNull @Column
     private String imageUrl;
 
-    private List<Cart> cartList;
-
-    @PostConstruct
-    private void init() {
-        cartList = new ArrayList<>();
-    }
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Cart cartList;
 
     @Override
     public String toString() {

@@ -6,12 +6,12 @@ package com.revature.nova.exceptions;
  * @date 11/22/2021
  * @author User-Feature Team
  */
-public class NullCartException extends RuntimeException {
-    public NullCartException() {
+public class EmptyCartException extends RuntimeException {
+    public EmptyCartException() {
         super();
     }
 
-    public NullCartException(String message) {
+    public EmptyCartException(String message) {
         super(message);
     }
 }

@@ -3,6 +3,7 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.DTOs.UserToCartDTO;
 import com.revature.nova.clients.CartClient;
 import com.revature.nova.models.Cart;
 import com.revature.nova.models.UserInfoModel;
@@ -65,13 +66,20 @@ public class UserInfoService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserModel model = findByUsername((String) auth.getPrincipal()).getUserModel();
 
-        model.setCart(cartClient.getCart());
         userRepo.save(model);
     }
 
-    // Find by username
+    // TODO
     public UserInfoModel findByUsername(String username){
         return userInfoRepo.findByUsername(username);
+    }
+
+    // TODO
+    public UserToCartDTO send(UserInfoModel userInfoModel){
+        UserToCartDTO dto = new UserToCartDTO();
+        dto.setUsername(userInfoModel.getUsername());
+
+        return dto;
     }
 
     /**

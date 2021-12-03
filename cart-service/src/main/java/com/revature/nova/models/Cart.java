@@ -16,13 +16,15 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "productList"})
 @Getter @Setter
 @NoArgsConstructor(onConstructor = @__(@Autowired))
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartId;
 
-    @Transient
+    @OneToOne
+    private User user;
+
+    @OneToMany(mappedBy = "cartList", cascade = CascadeType.ALL)
     private List<Product> productList;
 
     @PostConstruct
