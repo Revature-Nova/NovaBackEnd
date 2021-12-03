@@ -25,6 +25,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepo repo;
+    //Initializing this list as an empty list prevents NullPointerExceptions
     private List<Product> productList = Collections.emptyList();
     private String sortDirection = "None"; //Used to maintain the sorting direction.
 
@@ -78,13 +79,13 @@ public class ProductService {
     public List<Product> filterProducts(String type, String value) {
         switch (type) {
             case "genre":
-                setProductList(repo.findByGenre(value));
+                setProductList(repo.findByGenreIgnoreCase(value));
                 break;
             case "platform":
-                setProductList(repo.findByPlatform(value));
+                setProductList(repo.findByPlatformIgnoreCase(value));
                 break;
             case "rating":
-                setProductList(repo.findByRating(value));
+                setProductList(repo.findByRatingIgnoreCase(value));
                 break;
         }
 
@@ -138,7 +139,7 @@ public class ProductService {
      */
     public List<Product> productRange(float rangeMin, float rangeMax){
         //Gets the list of products with prices between the given range and then updates the productList.
-        setProductList(repo.findByPriceIsBetween(rangeMin,rangeMax));
+        setProductList(repo.findByPriceIsBetweenIgnoreCase(rangeMin,rangeMax));
 
         /*Checks if a sorting option has been chosen and then sorts the new list so that the user does not have
         to resort the product list.
