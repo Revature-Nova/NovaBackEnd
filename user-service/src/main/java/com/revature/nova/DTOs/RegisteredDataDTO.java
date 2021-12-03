@@ -18,7 +18,10 @@ import lombok.*;
 @ToString
 public class RegisteredDataDTO {
     public RegisteredDataDTO(UserModel userModel, UserInfoModel userInfoModel) {
-        this.status = "Successfully Registered!";
+        if (userInfoModel.getUsername().length() > 5){
+        this.status = "Successfully Registered!";} else{
+            this.status = "Not Registered";
+        }
         this.firstName = userModel.getFirstName();
         this.lastName = userModel.getLastName();
         this.username = userInfoModel.getUsername();
