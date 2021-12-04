@@ -68,6 +68,8 @@ public class UserInfoService implements UserDetailsService {
         return userInfoRepo.findByUsername(username);
     }
 
+
+    public UserInfoModel findUserById(int id ){ return userInfoRepo.getById(id);}
     /**
      * Saves a user's information
      *

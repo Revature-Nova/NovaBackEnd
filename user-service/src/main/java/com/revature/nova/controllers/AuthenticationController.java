@@ -2,8 +2,10 @@ package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.LoginCredentialsDTO;
 import com.revature.nova.DTOs.RegisteredDataDTO;
+import com.revature.nova.DTOs.ResponseLogin;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.AuthenticationException;
+import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.services.UserInfoService;
 import com.revature.nova.utils.JWTUtil;
 import org.json.JSONObject;
@@ -42,19 +44,27 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) throws Exception {
+    public ResponseEntity<ResponseLogin> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) throws Exception {
         String token = "";
         JSONObject jsonObj = new JSONObject();
+        ResponseLogin test = new ResponseLogin();
 
         if (authenticate(loginDTO.getUsername(), loginDTO.getPassword())) {
-            UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
-            token = jwtUtil.createJWT(userDetails);
+//            UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
+            UserInfoModel user = userInfoService.findByUsername(loginDTO.getUsername());
 
-            jsonObj.put("token", jwtUtil.getPrefix() + token);
+            test.setId(user.getUserModel().getUserID());
+            test.setUsername(user.getUsername());
+            test.setEmail(user.getEmail());
+            test.setFirstName(user.getUserModel().getFirstName());
+            test.setLastName(user.getUserModel().getLastName());
+//            token = jwtUtil.createJWT(userDetails);
 
-            return new ResponseEntity<>(jsonObj.toString(), HttpStatus.OK);
+//            jsonObj.put("token", jwtUtil.getPrefix() + token);
+
+            return new ResponseEntity<>(test, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(token, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(test, HttpStatus.NO_CONTENT);
         }
     }
 
