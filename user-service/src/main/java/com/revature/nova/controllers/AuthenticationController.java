@@ -46,7 +46,7 @@ public class AuthenticationController {
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseLogin> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) throws Exception {
         String token = "";
-//        JSONObject jsonObj = new JSONObject();
+        JSONObject jsonObj = new JSONObject();
         ResponseLogin test = new ResponseLogin();
 
         if (authenticate(loginDTO.getUsername(), loginDTO.getPassword())) {
@@ -63,7 +63,7 @@ public class AuthenticationController {
             test.setEmail(user.getEmail());
             test.setFirstName(user.getUserModel().getFirstName());
             test.setLastName(user.getUserModel().getLastName());
-            test.setToken(token);
+            test.setToken(jwtUtil.getPrefix() + token);
 
             return new ResponseEntity<>(test, HttpStatus.OK);
         } else {
