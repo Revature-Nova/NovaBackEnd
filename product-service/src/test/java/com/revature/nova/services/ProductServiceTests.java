@@ -2,12 +2,17 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
+import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,9 +46,12 @@ class ProductServiceTests {
     @Mock
     private ProductRepo mockProductRepo;
 
+    @Mock
+    private LoggerService mockLoggerService;
+
     @BeforeEach
     void setUp() {
-        productService = new ProductService(mockProductRepo);
+        productService = new ProductService(mockProductRepo, mockLoggerService);
 
         //Setting up mock database
         Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
@@ -605,17 +613,16 @@ class ProductServiceTests {
     @Test
     public void Test_productRangeSuccess() {
         //Arrange
-        mockDatabaseData.clear();
         sortingDirection = "lowest";
         float min = 10f;
         float max = 30f;
         Product product = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
         Product product1 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
         Product product2= new Product(122,"Thief", "Stealth", 21.27f, "Mature", "https://rawg.io/api/games/thief?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 3", "https://imgur.com/Z0EPE84");
-        mockDatabaseData.add(product);
-        mockDatabaseData.add(product1);
-        mockDatabaseData.add(product2);
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        expectedProductList.add(product2);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetween(min,max);
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
@@ -828,18 +835,35 @@ class ProductServiceTests {
 
     //Test for failure
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     /**
-     * Tests that getProductById returns null if there is not matching id.
+     * Tests that getProductById throws an exception if there is not matching id.
      */
-    @Test /////////Double check this one when I can access the database again so that I can check what it should return
+    @Test
     public void Test_failsToReturnsAProductWithMatchingID(){
         //Arrange
         int id = 1000;
-        Mockito.doReturn(null).when(mockProductRepo).getById(id);
+        //Act
+        productService.getProductById(id);
+        //Assert
+        exception.expect(EntityNotFoundException.class);
+        exception.expectMessage("Product id does not exist in the database");
+    }
+
+    /**
+     * Tests that getProductById returns null if there is not matching id.
+     */
+    @Test
+    public void Test_failsToReturnsAProductWithMatchingIDCatch(){
+        //Arrange
+        int id = 1000;
+        Mockito.doThrow(EntityNotFoundException.class).when(mockProductRepo).getById(id);
         //Act
         Product actualProduct = productService.getProductById(id);
         //Assert
-        Assertions.assertEquals(null,actualProduct);
+        Mockito.verify(mockLoggerService).writeLog("Product id does not exist in the database", 3);
+        Assertions.assertEquals(null, actualProduct.getProductId());
     }
     //Tests for getting a product by its id above
 }

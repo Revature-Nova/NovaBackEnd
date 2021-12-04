@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,10 +29,18 @@ public class ProductService {
     //Initializing this list as an empty list prevents NullPointerExceptions
     private List<Product> productList = Collections.emptyList();
     private String sortDirection = "None"; //Used to maintain the sorting direction.
+    Product product = new Product();
+    LoggerService loggerService;
 
     @Autowired
     public ProductService(ProductRepo repo) {
         this.repo = repo;
+    }
+
+    @Autowired
+    public ProductService(ProductRepo repo, LoggerService loggerService) {
+        this.repo = repo;
+        this.loggerService = loggerService;
     }
 
     /**
@@ -155,8 +164,12 @@ public class ProductService {
      * @param id for object
      * @return product with that id
      */
-    public Product getProductById(Integer id)
-    {
-        return repo.getById(id);
+    public Product getProductById(Integer id) {
+        try{
+            product = repo.getById(id);
+        } catch (EntityNotFoundException exception){
+            loggerService.writeLog("Product id does not exist in the database",3);
+        }
+        return product;
     }
 }
