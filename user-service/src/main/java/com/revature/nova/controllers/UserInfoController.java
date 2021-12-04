@@ -24,6 +24,13 @@ public class UserInfoController {
         this.userInfoService = userInfoService;
     }
 
+
+    @GetMapping(value = "/ping")
+    public  ResponseEntity<String> ping() {
+        return new ResponseEntity<>("pong", HttpStatus.OK);
+    }
+
+
     @PostMapping(value = "/user/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {
         return new ResponseEntity<>(userInfoService.setProfileInfo(userProfileDTO), HttpStatus.ACCEPTED);
