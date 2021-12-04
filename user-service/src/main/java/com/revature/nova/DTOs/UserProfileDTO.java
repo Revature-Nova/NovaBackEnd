@@ -16,6 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class UserProfileDTO {
+    private String username;
     private String email;
     private String state;
     private String favoriteGenre;

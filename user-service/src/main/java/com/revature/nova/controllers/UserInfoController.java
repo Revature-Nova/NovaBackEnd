@@ -1,7 +1,9 @@
 package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.UserProfileDTO;
+import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserInfoService;
+import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/Nova")
 public class UserInfoController {
     private final UserInfoService userInfoService;
+    private final UserModelService userModelService;
 
     @Autowired
-    public UserInfoController(UserInfoService userInfoService) {
+    public UserInfoController(UserInfoService userInfoService, UserModelService userModelService) {
         this.userInfoService = userInfoService;
+        this.userModelService = userModelService;
     }
 
 
@@ -31,9 +35,10 @@ public class UserInfoController {
     }
 
 
-    @GetMapping(value = "user/userProfile/{id}")
-    public ResponseEntity<?> getUserProfile(@PathVariable Integer id){
-        return new ResponseEntity<>(userInfoService.getProfile(id), HttpStatus.OK);
+    @PostMapping(value = "user/profile")
+    public ResponseEntity<?> getUserProfile( @RequestBody UserProfileDTO userProfileDTO){
+        
+        return new ResponseEntity<>(userInfoService.setProfileInfoWithOutAuth(userProfileDTO), HttpStatus.OK);
     }
 
     @PostMapping(value = "/user/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

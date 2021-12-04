@@ -100,6 +100,25 @@ public class UserInfoService implements UserDetailsService {
 
         return userInfoRepo.save(userInfoModel);
     }
+    public UserInfoModel setProfileInfoWithOutAuth(UserProfileDTO userProfileDTO) {
+
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+
+        userInfoModel.setEmail(userProfileDTO.getEmail());
+        userInfoModel.setMessage(userProfileDTO.getMessage());
+        userInfoModel.setState(userProfileDTO.getState());
+        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+        userInfoRepo.save(userInfoModel);
+
+        UserInfoModel responseModel = new UserInfoModel();
+        responseModel.setUsername(userInfoModel.getUsername());
+        responseModel.setEmail(userProfileDTO.getEmail());
+        responseModel.setMessage(userProfileDTO.getMessage());
+        responseModel.setState(userProfileDTO.getState());
+        responseModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+
+        return responseModel;
+    }
 
     public UserInfoModel getProfile(Integer id){
         return userInfoRepo.getById(id);
