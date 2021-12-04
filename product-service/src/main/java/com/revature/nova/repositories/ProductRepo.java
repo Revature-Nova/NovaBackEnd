@@ -47,5 +47,5 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
      * @param rangeMax This is the higher end of the range
      * @return Returns a list of the games with prices within the given range
      */
-    List<Product> findByPriceIsBetweenIgnoreCase(float rangeMin, float rangeMax);
+    List<Product> findByPriceIsBetween(float rangeMin, float rangeMax);
 }

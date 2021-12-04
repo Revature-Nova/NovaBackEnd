@@ -2,12 +2,17 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
+import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,9 +46,12 @@ class ProductServiceTests {
     @Mock
     private ProductRepo mockProductRepo;
 
+    @Mock
+    private LoggerService mockLoggerService;
+
     @BeforeEach
     void setUp() {
-        productService = new ProductService(mockProductRepo);
+        productService = new ProductService(mockProductRepo, mockLoggerService);
 
         //Setting up mock database
         Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
@@ -605,17 +613,16 @@ class ProductServiceTests {
     @Test
     public void Test_productRangeSuccess() {
         //Arrange
-        mockDatabaseData.clear();
         sortingDirection = "lowest";
         float min = 10f;
         float max = 30f;
         Product product = new Product(120, "Subnautica", "Adventure", 29.99f, "E10+", "https://rawg.io/api/games/subnautica?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 4", "https://imgur.com/JkX9r1e");
         Product product1 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
         Product product2= new Product(122,"Thief", "Stealth", 21.27f, "Mature", "https://rawg.io/api/games/thief?key=87ad23cdc737468884eb0216a7ba8df9", "PlayStation 3", "https://imgur.com/Z0EPE84");
-        mockDatabaseData.add(product);
-        mockDatabaseData.add(product1);
-        mockDatabaseData.add(product2);
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        expectedProductList.add(product);
+        expectedProductList.add(product1);
+        expectedProductList.add(product2);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetween(min,max);
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
@@ -639,8 +646,8 @@ class ProductServiceTests {
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
         expectedProductList = mockDatabaseData;
-        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         productService.setSortDirection(sortingDirection);
         //Act
         actualProductList = productService.productRange(min,max);
@@ -665,8 +672,8 @@ class ProductServiceTests {
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
         expectedProductList = mockDatabaseData;
-        expectedProductList.sort(Comparator.comparing(Product::getPrice));
-        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         productService.setSortDirection(sortingDirection);
         //Act
         actualProductList = productService.productRange(min,max);
@@ -685,7 +692,7 @@ class ProductServiceTests {
         float min = 60f;
         float max = 70f;
         expectedProductList = Collections.emptyList();
-        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetweenIgnoreCase(min,max);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetween(min,max);
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
@@ -696,76 +703,108 @@ class ProductServiceTests {
 
     //Tests for the getProductsContainingTitle method
 
-    //unit testing: want to know it's returning a list of products, look at individual products within the list
-//    public List<Product> getProductsContainingTitle(String search)
-//    {
-//        //Finds product(s) by their title and sets the productList equal to the results
-//        setProductList(repo.findByTitleContaining(search));
-//
-//        //Maintains sorting direction
-//        if(!getSortDirection().equals("None")){
-//            sortedProductList(getSortDirection());
-//        }
-//        return getProductList();
-//    }
-
     //Tests for success
+
     /**
-     *  Tests that this method returns a list that includes all products that contain the search string.
+     *  Tests that getProductsContainingTitle returns a list that includes all products that contain the search string.
      */
     @Test
     public void Test_searchSuccessfullyReturnsAListOfProductsThatContainTheSearchStringMultiple(){
         //Arrange
-        String name = "The Legend of Zelda";
+        String title = "The Legend of Zelda";
         Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
         Product product1 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
         Product product2 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         expectedProductList.add(product);
         expectedProductList.add(product1);
         expectedProductList.add(product2);
-        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByTitleContainingIgnoreCase(name);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
         //Act
+        actualProductList = productService.getProductsContainingTitle(title);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
-    //Tests for success
     /**
-     *  Tests that this method returns a list that includes the product that contains the search string.
+     *  Tests that getProductsContainingTitle returns a list that includes the product that contains the search string.
      */
     @Test
     public void Test_searchSuccessfullyReturnsAListOfProductsThatContainTheSearchStringSingle(){
         //Arrange
+        String title = "The Legend of Zelda: Breath of the Wild";
         Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
-
+        expectedProductList.add(product);
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
         //Act
+        actualProductList = productService.getProductsContainingTitle(title);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     /**
-     * Tests that this method maintains the sorting direction when it is called. Ascending order.
+     * Tests that getProductsContainingTitle maintains the sorting direction when it is called. Ascending order.
      */
     @Test
     public void Test_searchMethodMaintainsSortingDirectionAsc(){
-
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "lowest";
+        String title = "The Legend of Zelda";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product2 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        mockDatabaseData.add(product2);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
+        productService.setSortDirection(sortingDirection);
+        //Act
+        actualProductList = productService.getProductsContainingTitle(title);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     /**
-     * Tests that this method maintains the sorting direction when it is called. Descending order.
+     * Tests that getProductsContainingTitle maintains the sorting direction when it is called. Descending order.
      */
     @Test
     public void Test_searchMethodMaintainsSortingDirectionDesc(){
-
+        //Arrange
+        mockDatabaseData.clear();
+        sortingDirection = "highest";
+        String title = "The Legend of Zelda";
+        Product product = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        Product product1 = new Product(121, "The Legend of Zelda: Skyward Sword", "Adventure", 19.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Wii", "https://imgur.com/VvU45oV");
+        Product product2 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
+        mockDatabaseData.add(product);
+        mockDatabaseData.add(product1);
+        mockDatabaseData.add(product2);
+        expectedProductList = mockDatabaseData;
+        expectedProductList.sort(Comparator.comparing(Product::getPrice));
+        Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
+        productService.setSortDirection(sortingDirection);
+        //Act
+        actualProductList = productService.getProductsContainingTitle(title);
+        //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
 
     //Tests for failure
     /**
-     * Tests that this method returns an empty list if there are not any products that contain the search string.
+     * Tests that getProductsContainingTitle returns an empty list if there are not any products that contain the search string.
      */
     @Test
     public void Test_searchReturnsAnEmptyListIfThereAreNoMatchingProducts(){
         //Arrange
+        String title = "Twilight Princess";
+        expectedProductList = Collections.emptyList();
+        Mockito.doReturn(expectedProductList).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
         //Act
+        actualProductList = productService.getProductsContainingTitle(title);
         //Assert
+        Assertions.assertEquals(expectedProductList,actualProductList);
     }
     //Tests for the getProductsContainingTitle method above
 
@@ -776,5 +815,55 @@ class ProductServiceTests {
 //        return repo.getById(id);
 //    }
 
+    //Test for success
+
+    /**
+     * Tests that getProductById returns a single product that is associated with the given ID.
+     */
+    @Test
+    public void Test_successfullyReturnsAProductWithMatchingID(){
+        //Arrange
+        Product expectedProduct = new Product(119,"The Legend of Zelda: Breath of the Wild", "RPG", 59.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-breath-of-the-wild?key=87ad23cdc737468884eb0216a7ba8df9:", "Nintendo Switch", "https://imgur.com/onC0oCn");
+        int id = expectedProduct.getProductId();
+        Mockito.doReturn(expectedProduct).when(mockProductRepo).getById(id);
+        //Act
+        Product actualProduct = productService.getProductById(id);
+        System.out.println(actualProduct.getProductId() + ", " + actualProduct.getTitle());
+        //Assert
+        Assertions.assertEquals(expectedProduct,actualProduct);
+    }
+
+    //Test for failure
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+    /**
+     * Tests that getProductById throws an exception if there is not matching id.
+     */
+    @Test
+    public void Test_failsToReturnsAProductWithMatchingID(){
+        //Arrange
+        int id = 1000;
+        //Act
+        productService.getProductById(id);
+        //Assert
+        exception.expect(EntityNotFoundException.class);
+        exception.expectMessage("Product id does not exist in the database");
+    }
+
+    /**
+     * Tests that getProductById returns null if there is not matching id.
+     */
+    @Test
+    public void Test_failsToReturnsAProductWithMatchingIDCatch(){
+        //Arrange
+        int id = 1000;
+        Mockito.doThrow(EntityNotFoundException.class).when(mockProductRepo).getById(id);
+        //Act
+        Product actualProduct = productService.getProductById(id);
+        //Assert
+        Mockito.verify(mockLoggerService).writeLog("Product id does not exist in the database", 3);
+        Assertions.assertEquals(null, actualProduct.getProductId());
+    }
     //Tests for getting a product by its id above
 }
