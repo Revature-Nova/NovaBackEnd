@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class ResponseLogin {
+    private String token;
     private Integer id;
     private String username;
     private String email;

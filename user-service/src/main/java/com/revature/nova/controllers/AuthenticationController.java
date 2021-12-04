@@ -46,11 +46,16 @@ public class AuthenticationController {
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseLogin> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) throws Exception {
         String token = "";
-        JSONObject jsonObj = new JSONObject();
+//        JSONObject jsonObj = new JSONObject();
         ResponseLogin test = new ResponseLogin();
 
         if (authenticate(loginDTO.getUsername(), loginDTO.getPassword())) {
-//            UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
+            UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
+            token = jwtUtil.createJWT(userDetails);
+
+//            jsonObj.put("token", jwtUtil.getPrefix() + token);
+
+
             UserInfoModel user = userInfoService.findByUsername(loginDTO.getUsername());
 
             test.setId(user.getUserModel().getUserID());
@@ -58,9 +63,7 @@ public class AuthenticationController {
             test.setEmail(user.getEmail());
             test.setFirstName(user.getUserModel().getFirstName());
             test.setLastName(user.getUserModel().getLastName());
-//            token = jwtUtil.createJWT(userDetails);
-
-//            jsonObj.put("token", jwtUtil.getPrefix() + token);
+            test.setToken(token);
 
             return new ResponseEntity<>(test, HttpStatus.OK);
         } else {
