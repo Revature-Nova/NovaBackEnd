@@ -31,7 +31,10 @@ public class UserInfoController {
     }
 
 
-
+    @GetMapping(value = "user/userProfile/{id}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Integer id){
+        return new ResponseEntity<>(userInfoService.getProfile(id), HttpStatus.OK);
+    }
 
     @PostMapping(value = "/user/userProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {

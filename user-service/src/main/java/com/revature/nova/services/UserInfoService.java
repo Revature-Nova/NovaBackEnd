@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +99,10 @@ public class UserInfoService implements UserDetailsService {
         userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
 
         return userInfoRepo.save(userInfoModel);
+    }
+
+    public UserInfoModel getProfile(Integer id){
+        return userInfoRepo.getById(id);
     }
 
     /**
