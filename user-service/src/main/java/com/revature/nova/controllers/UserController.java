@@ -23,12 +23,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/Nova")
 public class UserController {
     private final UserModelService userService;
-    private final ProductClient productClient;
 
     @Autowired
-    public UserController(UserModelService userService, ProductClient productClient) {
+    public UserController(UserModelService userService) {
         this.userService = userService;
-        this.productClient = productClient;
     }
 
     @GetMapping("/user/all")
@@ -52,25 +50,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteByID(@PathVariable int id) {
-        userService.deleteByID(id);
-        return ResponseEntity.ok()
-                .body("User successfully deleted.");
-    }
-
     @DeleteMapping("/user/{firstName}")
     public ResponseEntity<?> deleteByFirstName(@PathVariable String firstName) {
         userService.deleteByFirstName(firstName);
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
-    }
-
-    @GetMapping(value = "/product/{title}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> getProduct(@PathVariable String title){
-        List<Product> list = productClient.getProduct(title);
-
-        return ResponseEntity.ok()
-                .body(list);
     }
 }

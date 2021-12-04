@@ -70,11 +70,15 @@ public class JWTUtil {
     }
 
     public Claims parseJWT(String token) throws AuthenticationException {
-        return Jwts.parserBuilder()
+        try {
+            return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+        } catch (Exception e){
+            throw new AuthenticationException("Invalid Token");
+        }
     }
 
     public String getUsernameFromToken(String token) {

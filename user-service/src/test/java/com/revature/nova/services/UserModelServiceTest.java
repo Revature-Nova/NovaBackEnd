@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Test class for UserModelService
+ * Spring Test for UserModelService
  *
  * @author James Brown, Gregg Friedman
  * @version 12/1/2021

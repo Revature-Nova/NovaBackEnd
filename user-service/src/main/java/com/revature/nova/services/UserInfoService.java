@@ -24,8 +24,8 @@ import java.util.List;
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
  *
- * @date 11/23/2021
- * @author Erika Johnson, Gregg Friedman, Travis Hood, Kollier Martin
+ * @version 12/3/2021
+ * @author User-Service Team
  */
 @Service
 @Transactional
@@ -44,8 +44,7 @@ public class UserInfoService implements UserDetailsService {
     /**
      * Overridden Spring security method for loading Users
      *
-     * @Author Kollier Martin, James Brown
-     * @Version 12/2/21
+     * @author Kollier Martin, James Brown
      * @param username username provided by client for login
      * @return UserDetails used to generate JWT
      * @throws UsernameNotFoundException if findByUsername returns null
@@ -91,7 +90,7 @@ public class UserInfoService implements UserDetailsService {
     }
 
     /**
-     * Receives information to create a new user, saves it to postgreSQL
+     * Receives information to create a new user, saves it to Postgres
      * and returns the information in a string format
      *
      * During the registration process, the user password is encoded before persistence
@@ -119,7 +118,7 @@ public class UserInfoService implements UserDetailsService {
     /**
      * Retrieves all available user info for user profiles
      *
-     * @Author Kollier Martin
+     * @author Kollier Martin
      * @return String of generated JSON Object
      */
     public String getAllProfiles(){
