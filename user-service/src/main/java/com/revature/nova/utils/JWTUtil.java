@@ -1,11 +1,11 @@
 package com.revature.nova.utils;
 
-import com.revature.nova.exceptions.AuthenticationException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.revature.nova.exceptions.MalformedTokenException;
+import com.revature.nova.exceptions.MissingTokenException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +63,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public Claims parseJWT(String token) throws AuthenticationException {
+    public Claims parseJWT(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -82,6 +82,20 @@ public class JWTUtil {
     private Boolean isTokenExpired(String token) {
         Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
+    }
+
+    public void validateToken(final String token) throws MalformedTokenException, MissingTokenException {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        } catch (MalformedJwtException ex) {
+            throw new MalformedTokenException("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            throw new MalformedTokenException("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            throw new MalformedTokenException("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            throw new MissingTokenException("JWT claims string is empty.");
+        }
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

@@ -7,7 +7,6 @@ import com.revature.nova.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,9 +25,9 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/cart")
-    public ResponseEntity<Cart> getNewCart(){
-        return new ResponseEntity<>(cartService.createCart(), HttpStatus.CREATED);
+    @PostMapping("/cart")
+    public ResponseEntity<Cart> getNewCart(@RequestHeader String Authorization, @RequestBody String key){
+        return new ResponseEntity<>(cartService.createCart(Authorization, key), HttpStatus.CREATED);
     }
 
     @PutMapping("/cart/add/{id}")

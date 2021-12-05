@@ -4,6 +4,7 @@ import com.revature.nova.DTOs.LoginCredentialsDTO;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.AuthenticationException;
+import com.revature.nova.helper.Token;
 import com.revature.nova.services.UserInfoService;
 import com.revature.nova.utils.JWTUtil;
 import org.json.JSONObject;
@@ -43,18 +44,19 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) throws Exception {
-        String token = "";
+        String token = jwtUtil.getPrefix() + "";
         JSONObject jsonObj = new JSONObject();
 
         if (authenticate(loginDTO.getUsername(), loginDTO.getPassword())) {
             UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
-            token = jwtUtil.createJWT(userDetails);
+            token += jwtUtil.createJWT(userDetails);
 
-            jsonObj.put("token", jwtUtil.getPrefix() + token);
+            Token.setToken(token);
+            jsonObj.put("token", token);
 
             return new ResponseEntity<>(jsonObj.toString(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(token, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("User does not exist.", HttpStatus.NO_CONTENT);
         }
     }
 

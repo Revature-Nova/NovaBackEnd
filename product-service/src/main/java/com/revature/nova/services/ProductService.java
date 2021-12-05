@@ -7,6 +7,7 @@ import com.revature.nova.repositories.ProductRepo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,8 +41,8 @@ public class ProductService {
     }
 
     // TODO: Test method for cart
-    public Cart addProductToCart(Product product){
-        return cartClient.addToCart(product);
+    public ResponseEntity<Cart> addProductToCart(Product product){
+        return ResponseEntity.ok(cartClient.addToCart(product, 1));
     }
 
     /**

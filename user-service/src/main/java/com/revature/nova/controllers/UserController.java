@@ -2,7 +2,7 @@ package com.revature.nova.controllers;
 
 
 import com.revature.nova.clients.CartClient;
-import com.revature.nova.models.Cart;
+import com.revature.nova.helper.Token;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * This controller handles all User endpoint interactions
@@ -66,11 +64,12 @@ public class UserController {
                 .body("User successfully deleted.");
     }
 
-    @GetMapping(value = "/user/cart", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Cart> getCart(){
-        Cart cart = cartClient.getCart();
+    @PostMapping(value = "/user/cart")
+    public ResponseEntity<Object> getCart(){
+        Object obj = cartClient.getCart();
+        System.out.println(obj);
 
         return ResponseEntity.ok()
-                .body(cart);
+                .body(obj);
     }
 }

@@ -1,8 +1,11 @@
 package com.revature.nova.clients;
 
+import com.revature.nova.helper.Token;
 import com.revature.nova.models.Cart;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * This client handles requests to the product service
@@ -10,8 +13,22 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @date 12/2/2021
  * @author Kollier Martin
  */
-@FeignClient(name = "cartFeignClient", url = "http://localhost:8082/cart-service/Nova")
-public interface CartClient {
-    @GetMapping("/cart")
-    Cart getCart();
+@Service
+public class CartClient {
+    private final WebClient client;
+
+    @Autowired
+    public CartClient() {
+        client = WebClient.create("http://localhost:8082/cart-service/Nova");
+    }
+
+    public Cart getCart() {
+        return client
+                .post()
+                .uri("/cart")
+                .header("Authorization", Token.getToken())
+                .retrieve()
+                .bodyToMono(Cart.class)
+                .block();
+    }
 }

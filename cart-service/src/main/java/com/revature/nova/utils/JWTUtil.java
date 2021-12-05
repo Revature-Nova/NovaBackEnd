@@ -3,16 +3,12 @@ package com.revature.nova.utils;
 import com.revature.nova.exceptions.AuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +24,6 @@ import java.util.Map;
  * @author Kollier Martin, James Brown, Emmanuel Tejeda
  */
 
-@Component
 @Getter @Setter
 public class JWTUtil {
     @Value("${jwt.header}")
@@ -42,13 +37,7 @@ public class JWTUtil {
 
     private Key key;
 
-    @Autowired
     public JWTUtil() {
-    }
-
-    @PostConstruct
-    private void createKey() {
-        key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
     public String createJWT(UserDetails userDetails) {
@@ -87,5 +76,9 @@ public class JWTUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public void byteToKey(byte[] keyEncode, String algorithm){
+        this.key = new SecretKeySpec(keyEncode, algorithm);
     }
 }

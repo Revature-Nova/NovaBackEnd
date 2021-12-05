@@ -1,10 +1,12 @@
 package com.revature.nova.clients;
 
+import com.revature.nova.helpers.Token;
 import com.revature.nova.models.User;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import static org.springframework.web.reactive.function.client.WebClient.create;
 
 /**
  * This client handles requests to the user service
@@ -13,15 +15,32 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @date 11/26/2021
  * @author Kollier Martin
  */
-@FeignClient(name = "userFeignClient", url = "http://localhost:8082/user-service/Nova")
-public interface UserClient {
-    @GetMapping("/user/{id}")
-    ResponseEntity<User> getUserByID(@PathVariable int id);
+@Service
+public class UserClient {
+    private final WebClient client;
 
-    @GetMapping("/user/{username}")
-    ResponseEntity<User> getUserByUsername(@PathVariable String username);
+    @Autowired
+    public UserClient() {
+        client = create("http://localhost:8082/user-service/Nova");
+    }
 
-    // Method to retrieve User's cart
+    public User getUserByID(int id) {
+        return client
+                .get()
+                .uri("/cart")
+                .header("Authorization", Token.getToken())
+                .retrieve()
+                .bodyToMono(User.class)
+                .block();
+    }
 
-    // Method to add to User's cart
+    public User getUserByUsername(String username) {
+        return client
+                .get()
+                .uri("/user/" + username)
+                .header("Authorization", Token.getToken())
+                .retrieve()
+                .bodyToMono(User.class)
+                .block();
+    }
 }

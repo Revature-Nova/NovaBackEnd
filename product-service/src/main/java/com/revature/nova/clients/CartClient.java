@@ -1,29 +1,48 @@
 package com.revature.nova.clients;
 
+import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Cart;
 import com.revature.nova.models.Product;
-import com.revature.nova.models.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.security.Key;
+
 /**
- * This client handles requests to the user service
- * Every request requires the session token to be in the headers
+ * This client handles requests to the product service
  *
- * @date 11/26/2021
+ * @date 12/2/2021
  * @author Kollier Martin
  */
-@FeignClient(name = "cartFeignClient", url = "http://localhost:8082/cart-service/Nova")
-public interface CartClient {
-    // Method to add to cart
-    @PostMapping("/cart/add")
-    Cart addToCart(Product product);
+@Service
+public class CartClient {
+    private final WebClient client;
 
-    // Method to retrieve cart
+    @Autowired
+    public CartClient() {
+        client = WebClient.create("http://localhost:8082/cart-service/Nova");
+    }
 
+    public Cart getCart(String token, Key key) {
+        return client
+                .post()
+                .uri("/cart")
+                .body(key, Key.class)
+                .header("Authorization", token)
+                .retrieve()
+                .bodyToMono(Cart.class)
+                .block();
+    }
+
+    public Cart addToCart(Product product, int id) {
+        return client
+                .post()
+                .uri("/cart/add/" + id)
+                .body(product, Product.class)
+                .header("Authorization", Token.getToken())
+                .retrieve()
+                .bodyToMono(Cart.class)
+                .block();
+    }
 }
