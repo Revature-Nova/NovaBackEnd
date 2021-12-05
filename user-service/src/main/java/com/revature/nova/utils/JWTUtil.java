@@ -51,6 +51,12 @@ public class JWTUtil {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
+    /**
+     * Generates a new JWT based on username
+     *
+     * @param userDetails identifies user by username
+     * @return JWT that is valid for 1 day
+     */
     public String createJWT(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
