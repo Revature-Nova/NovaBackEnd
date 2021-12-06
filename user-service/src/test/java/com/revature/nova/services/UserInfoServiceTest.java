@@ -20,6 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+/**
+ * Mockito Test using JUnit 5 for UserInfoService
+ *
+ * @author James Brown
+ * @version 12/2/2021
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserInfoServiceTest {
 
@@ -67,7 +73,7 @@ public class UserInfoServiceTest {
 
     @Test
     void testSetProfileInfo(){
-        UserProfileDTO upDTO = new UserProfileDTO("jimbo", "email@email.com", "NC",
+        UserProfileDTO upDTO = new UserProfileDTO("jimbo","email@email.com", "NC",
                 "Simulation", "Hello");
         UserInfoModel uim = new UserInfoModel(regDTO);
         uim.setMessage("Hello");

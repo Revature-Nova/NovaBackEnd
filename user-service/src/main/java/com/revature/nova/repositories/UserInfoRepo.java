@@ -11,7 +11,4 @@ import java.util.ArrayList;
 public interface UserInfoRepo extends JpaRepository<UserInfoModel, Integer> {
     UserInfoModel findByUsername(String username);
     void deleteByUsername(String username);
-
-    @Query("select username, email, state, favoriteGenre, message from UserInfoModel")
-    ArrayList<String> getAllWithoutPassword();
 }

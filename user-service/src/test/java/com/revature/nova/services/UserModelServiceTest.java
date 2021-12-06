@@ -1,5 +1,7 @@
 package com.revature.nova.services;
 
+import java.util.List;
+
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.UserDoesNotExistException;
 import com.revature.nova.models.UserModel;
@@ -7,13 +9,11 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Test class for UserModelService
+ * Spring Test for UserModelService
  *
  * @author James Brown, Gregg Friedman
  * @version 12/1/2021
