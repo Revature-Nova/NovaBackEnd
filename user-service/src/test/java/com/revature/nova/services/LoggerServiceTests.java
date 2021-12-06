@@ -43,8 +43,8 @@ public class LoggerServiceTests {
 
         assertEquals(year,"2021");
         assertEquals(month,"12");
-        assertEquals(day,"05");
-        assertEquals(fullDate,"2021-12-05");
+        assertEquals(day,"06");
+        assertEquals(fullDate,"2021-12-06");
     }
 
     /**
@@ -77,11 +77,11 @@ public class LoggerServiceTests {
         int checkLevel2 = log2.getWarningLevel();
         int checkLevel3 = log3.getWarningLevel();
 
-        String checkMessage1 = log1.getDateTime();
-        String checkMessage2 = log2.getDateTime();
-        String checkMessage3 = log3.getDateTime();
+        String checkMessage1 = log1.getMessage();
+        String checkMessage2 = log2.getMessage();
+        String checkMessage3 = log3.getMessage();
 
-        String checkDateTime1 = log1.getMessage();
+        String checkDateTime1 = log1.getDateTime();
 
         /*
          * Checks if message and level are written correctly
@@ -102,7 +102,7 @@ public class LoggerServiceTests {
         assertEquals(-15,checkLevel3);
 
         /*
-         * Show that message and dateTime are switched in the H2 with lombok getters.
+         * Show that message and dateTime are not identical.
          */
         assertNotEquals(checkMessage1,checkDateTime1);
     }
