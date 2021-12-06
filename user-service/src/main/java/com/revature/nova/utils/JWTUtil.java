@@ -1,9 +1,8 @@
 package com.revature.nova.utils;
 
-import com.revature.nova.exceptions.AuthenticationException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.revature.nova.exceptions.MalformedTokenException;
+import com.revature.nova.exceptions.MissingTokenException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +50,12 @@ public class JWTUtil {
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
+    /**
+     * Generates a new JWT based on username
+     *
+     * @param userDetails identifies user by username
+     * @return JWT that is valid for 1 day
+     */
     public String createJWT(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
@@ -63,7 +68,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public Claims parseJWT(String token) throws AuthenticationException {
+    public Claims parseJWT(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -84,6 +89,38 @@ public class JWTUtil {
         return expiration.before(new Date());
     }
 
+    /**
+     * Validates a token's authenticity
+     *
+     * @param token to parse for user information
+     * @throws MalformedTokenException token was not created in this session or by this application
+     * @throws MissingTokenException token claims are empty
+     */
+    public void validateToken(String token) throws MalformedTokenException, MissingTokenException {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+
+        } catch (MalformedJwtException ex) {
+            throw new MalformedTokenException("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            throw new MalformedTokenException("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            throw new MalformedTokenException("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            throw new MissingTokenException("JWT claims string is empty.");
+        }
+    }
+
+    /**
+     * Validates a user's presence in the database and if the token is expired
+     *
+     * @param token to parse for user information
+     * @param userDetails details to parse
+     * @return true on valid, false on not valid
+     */
     public Boolean validateToken(String token, UserDetails userDetails) {
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));

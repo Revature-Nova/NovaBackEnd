@@ -3,10 +3,7 @@ package com.revature.nova.models;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * POJO used for logging error data to the database
@@ -22,6 +19,7 @@ import javax.persistence.Table;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Logger {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @NonNull
@@ -33,6 +31,6 @@ public class Logger {
     private String dateTime;
 
     @NonNull
-    @Column
+    @Column(name = "message")
     private String message;
 }

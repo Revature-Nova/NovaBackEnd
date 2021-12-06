@@ -38,6 +38,9 @@ public class UserModel implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfoModel userInfoModel;
 
+    @Transient
+    private Cart cart;
+
     public UserModel(UserRegistrationDTO regData) {
         this.firstName = regData.getFirstName();
         this.lastName = regData.getLastName();
@@ -51,5 +54,4 @@ public class UserModel implements Serializable {
                 "  \"Username\": " + userInfoModel.getUsername() + "\n" +
                 '}';
     }
-
 }

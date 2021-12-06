@@ -67,7 +67,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (!request.getRequestURI().equals("/Nova/login") && !request.getRequestURI().equals("/Nova/register")) {
             try {
                 parseToken(request);
-            } catch (NullPointerException e) {
+            } catch (AuthenticationException e) {
                 loggerService.writeLog(String.format("%s was thrown in method %s with message: %s",
                         e.getClass().getSimpleName(), e.getClass() + "." + e.getClass().getName(), e.getMessage()), 3);
             }
@@ -94,15 +94,18 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String tokenWithPrefix = httpRequest.getHeader(jwtUtil.getHeader().toLowerCase());
 
-        if (tokenWithPrefix != null && tokenWithPrefix.startsWith(jwtUtil.getPrefix())) {
+        if (tokenWithPrefix != null && (tokenWithPrefix.startsWith(jwtUtil.getPrefix()) || tokenWithPrefix.startsWith(jwtUtil.getPrefix().toLowerCase()))) {
             jwt = tokenWithPrefix.substring(jwtUtil.getPrefix().length());
 
             try {
+                jwtUtil.validateToken(jwt);
                 username = jwtUtil.getUsernameFromToken(jwt);
             } catch (IllegalArgumentException e) {
                 throw new AuthenticationException("This JWT is not valid.");
             } catch (ExpiredJwtException e) {
                 throw new AuthenticationException("JWT Token has expired.");
+            } catch (Exception e) {
+                throw new AuthenticationException("This token has expired.");
             }
         } else {
             throw new AuthenticationException("Unauthorized prefix detected! Denied.");
