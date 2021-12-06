@@ -22,7 +22,7 @@ public class CartClient {
         client = WebClient.create("http://localhost:8082/cart-service/Nova");
     }
 
-    public Cart getCart() {
+    public Cart getNewCart() {
         return client
                 .post()
                 .uri("/cart")

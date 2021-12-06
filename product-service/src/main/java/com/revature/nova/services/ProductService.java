@@ -1,18 +1,18 @@
 package com.revature.nova.services;
 
-import com.revature.nova.clients.CartClient;
-import com.revature.nova.models.Cart;
+import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
+import com.revature.nova.utils.JWTUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This service bean is used to talk to its designated repository and handle data retrieval for 'Product'
@@ -25,24 +25,19 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductService {
-    private CartClient cartClient;
+    private JWTUtil jwtUtil;
     private final ProductRepo repo;
     private List<Product> productList;
     private String sortDirection = "None"; //Used to maintain the sorting direction.
 
     @Autowired
-    public ProductService(CartClient cartClient, ProductRepo repo) {
-        this.cartClient = cartClient;
+    public ProductService(JWTUtil jwtUtil, ProductRepo repo) {
+        this.jwtUtil = jwtUtil;
         this.repo = repo;
     }
 
     public ProductService(ProductRepo repo) {
         this.repo = repo;
-    }
-
-    // TODO: Test method for cart
-    public ResponseEntity<Cart> addProductToCart(Product product){
-        return ResponseEntity.ok(cartClient.addToCart(product, 1));
     }
 
     /**
@@ -170,5 +165,20 @@ public class ProductService {
     public Product getProductById(Integer id)
     {
         return repo.getById(id);
+    }
+
+    public Product findProductByTitleAndPlatform(String token, String title, String platform) {
+        Token.setToken(token);
+        String prefix = token.substring(0, jwtUtil.getPrefix().length());
+        Optional<Product> product = repo.findProductByTitleAndPlatform(title, platform);
+
+        if (prefix.equals(jwtUtil.getPrefix())) {
+            if (product.isPresent()){
+                return product
+                        .get();
+            }
+        }
+
+        return null;
     }
 }

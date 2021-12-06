@@ -4,6 +4,7 @@ import com.revature.nova.DTOs.LoginCredentialsDTO;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.AuthenticationException;
+import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.helpers.Token;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.services.UserInfoService;
@@ -14,11 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -74,5 +73,14 @@ public class AuthenticationController {
         } catch (BadCredentialsException e) {
             throw new AuthenticationException("These credentials are wrong! Have you tried caps lock?");
         }
+    }
+
+    @PutMapping(value = "/logout")
+    public ResponseEntity<String> logout(){
+        CurrentUser.setUser(null);
+        CurrentUser.setCart(null);
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok("Successful Logout");
     }
 }

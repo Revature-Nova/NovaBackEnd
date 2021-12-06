@@ -70,8 +70,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/user/cart")
-    public ResponseEntity<Cart> getCart(){
-        CurrentUser.setCart(cartClient.getCart());
+    public ResponseEntity<Cart> getNewCart(){
+        CurrentUser.setCart(cartClient.getNewCart());
 
         return ResponseEntity.ok()
                 .body(CurrentUser.getCart());
@@ -79,7 +79,12 @@ public class UserController {
 
     @PutMapping("/cart/add/{productTitle}/{platform}")
     public ResponseEntity<Cart> addToCart(@PathVariable String productTitle, @PathVariable String platform){
-        CurrentUser.getCart().getProductList().add(productClient.getProduct(productTitle));
+        CurrentUser.getCartProducts().add(productClient.getProduct(productTitle, platform));
         return new ResponseEntity<>(CurrentUser.getCart(), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/user/cart")
+    public ResponseEntity<Cart> getCurrentCart(){
+        return ResponseEntity.ok(CurrentUser.getCart());
     }
 }

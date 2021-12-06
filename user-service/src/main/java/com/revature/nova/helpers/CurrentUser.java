@@ -1,9 +1,13 @@
 package com.revature.nova.helpers;
 
 import com.revature.nova.models.Cart;
+import com.revature.nova.models.Product;
 import com.revature.nova.models.UserInfoModel;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper class with static variables to keep session data
@@ -20,4 +24,12 @@ public class CurrentUser {
 
     @Getter @Setter
     public static Cart cart;
+
+    public static List<Product> getCartProducts() {
+        if (cart.getProductList() == null){
+            cart.setProductList(new ArrayList<>());
+        }
+
+        return cart.getProductList();
+    }
 }

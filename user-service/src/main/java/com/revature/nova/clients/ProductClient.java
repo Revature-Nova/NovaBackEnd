@@ -23,10 +23,10 @@ public class ProductClient {
         client = create("http://localhost:8082/product-service/Nova");
     }
 
-    public Product getProduct(String productTitle) {
+    public Product getProduct(String productTitle, String platform) {
         return client
                 .get()
-                .uri("/title/" + productTitle)
+                .uri(String.format("/product/%s/%s", productTitle, platform))
                 .header("Authorization", Token.getToken())
                 .retrieve()
                 .bodyToMono(Product.class)
