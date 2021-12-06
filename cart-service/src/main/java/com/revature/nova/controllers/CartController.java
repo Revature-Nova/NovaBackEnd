@@ -1,20 +1,13 @@
 package com.revature.nova.controllers;
 
 
-import com.revature.nova.clients.ProductClient;
-import com.revature.nova.clients.UserClient;
-import com.revature.nova.models.Product;
-import com.revature.nova.models.UserModel;
+import com.revature.nova.models.Cart;
+import com.revature.nova.models.User;
+import com.revature.nova.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * This controller handles all User endpoint interactions
@@ -25,30 +18,27 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "/Nova")
 public class CartController {
-    private final UserClient userClient;
-    private final ProductClient productClient;
+    private final CartService cartService;
 
     @Autowired
-    public CartController(UserClient userClient, ProductClient productClient) {
-        this.userClient = userClient;
-        this.productClient = productClient;
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
     }
 
-    @GetMapping(value = "/user/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> getUserByID(@PathVariable int id) {
-        UserModel user = userClient.getUserByID(id);
-
-        if(user == null) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(user);
+    @PostMapping("/cart")
+    public ResponseEntity<Cart> getNewCart(@RequestHeader String authorization, @RequestBody User user){
+        return new ResponseEntity<>(cartService.createCart(authorization, user), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/product/{title}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> getProduct(@PathVariable String title){
-        List<Product> list = productClient.getProduct(title);
+    @GetMapping("/cart/{id}")
+    public ResponseEntity<Cart> getCartByID(@PathVariable int id){
+        return new ResponseEntity<>(cartService.getCartByID(id), HttpStatus.CREATED);
+    }
 
-        return ResponseEntity.ok(list);
+    @DeleteMapping("/cart/{id}")
+    public ResponseEntity<?> deleteCart(@PathVariable int id){
+        cartService.deleteCartByID(id);
+
+        return ResponseEntity.ok("Deleted");
     }
 }

@@ -5,17 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * This is a Model for a product to be displayed in the storefront.
+ * POJO used to store information about a product
+ *
+ * @date 11/22/2021
+ * @author Product-Feature Team
  */
-
 @Getter @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cartList"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Product {
@@ -42,13 +40,6 @@ public class Product {
     @NonNull
     private String imageUrl;
 
-    private List<Cart> cartList;
-
-    @PostConstruct
-    private void init() {
-        cartList = new ArrayList<>();
-    }
-
     @Override
     public String toString() {
         return "Product {\n" +
@@ -60,7 +51,6 @@ public class Product {
                 "endpoint: " + endpoint + ",\n" +
                 "platform: " + platform + ",\n" +
                 "imageUrl: " + imageUrl + ",\n" +
-                "cartList: " + cartList + ",\n" +
                 '}';
     }
 }
