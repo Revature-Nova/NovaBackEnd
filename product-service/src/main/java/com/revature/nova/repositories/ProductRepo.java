@@ -23,7 +23,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
      * @param genre Requires the genre that the user wants to filter by
      * @return Returns a list of the filtered games
      */
-    List<Product> findByGenre(String genre);
+    List<Product> findByGenreIgnoreCase(String genre);
 
     /**
      * This method finds the rows in the database by the specified rating
@@ -31,7 +31,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
      * @param rating Requires the rating that the user wants to filter by
      * @return Returns a list of the filtered games
      */
-    List<Product> findByRating(String rating);
+    List<Product> findByRatingIgnoreCase(String rating);
 
     /**
      * This method finds the rows in the database by the specified platform
@@ -39,7 +39,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
      * @param platform Requires the platform that the user wants to filter by
      * @return Returns a list of the filtered games
      */
-    List<Product> findByPlatform(String platform);
+    List<Product> findByPlatformIgnoreCase(String platform);
 
     /**
      * This method finds the games that are between the given price range.
