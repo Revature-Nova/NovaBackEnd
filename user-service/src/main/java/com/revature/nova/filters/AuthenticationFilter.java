@@ -24,12 +24,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * The filter that validates a session token whenever a request is called
@@ -104,11 +98,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             jwt = tokenWithPrefix.substring(jwtUtil.getPrefix().length());
 
             try {
+                jwtUtil.validateToken(jwt);
                 username = jwtUtil.getUsernameFromToken(jwt);
             } catch (IllegalArgumentException e) {
                 throw new AuthenticationException("This JWT is not valid.");
             } catch (ExpiredJwtException e) {
                 throw new AuthenticationException("JWT Token has expired.");
+            } catch (Exception e) {
+                throw new AuthenticationException("This token has expired.");
             }
         } else {
             throw new AuthenticationException("Unauthorized prefix detected! Denied.");

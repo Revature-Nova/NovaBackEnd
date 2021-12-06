@@ -1,7 +1,9 @@
 package com.revature.nova.services;
 
+import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
+import com.revature.nova.utils.JWTUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This service bean is used to talk to its designated repository and handle data retrieval for 'Product'
@@ -24,7 +27,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductService {
-
+    private JWTUtil jwtUtil;
     private final ProductRepo repo;
     //Initializing this list as an empty list prevents NullPointerExceptions
     private List<Product> productList = Collections.emptyList();
@@ -33,6 +36,11 @@ public class ProductService {
     LoggerService loggerService;
 
     @Autowired
+    public ProductService(JWTUtil jwtUtil, ProductRepo repo) {
+        this.jwtUtil = jwtUtil;
+        this.repo = repo;
+    }
+
     public ProductService(ProductRepo repo) {
         this.repo = repo;
     }
@@ -50,10 +58,8 @@ public class ProductService {
      */
     public List<Product> getProductsContainingTitle(String search)
     {
-        //Finds product(s) by their title and sets the productList equal to the results
         setProductList(repo.findByTitleContainingIgnoreCase(search));
 
-        //Maintains sorting direction
         if(!getSortDirection().equals("None")){
             sortedProductList(getSortDirection());
         }
@@ -115,7 +121,7 @@ public class ProductService {
      *                         the highest price is returned.
      *                         If the sortingDirection = "highest", then a list sorted by the highest to the
      *                         lowest price is returned.
-     * @return
+     * @return list of products
      */
     public List<Product> sortedProductList(String sortingDirection){
         boolean validSortingDirection = false;
@@ -171,5 +177,21 @@ public class ProductService {
             loggerService.writeLog("Product id does not exist in the database",3);
         }
         return product;
+    }
+
+    //TODO: Comment here
+    public Product findProductByTitleAndPlatform(String token, String title, String platform) {
+        Token.setToken(token);
+        String prefix = token.substring(0, jwtUtil.getPrefix().length());
+        Optional<Product> product = repo.findProductByTitleAndPlatform(title, platform);
+
+        if (prefix.equals(jwtUtil.getPrefix())) {
+            if (product.isPresent()){
+                return product
+                        .get();
+            }
+        }
+
+        return null;
     }
 }

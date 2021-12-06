@@ -526,7 +526,7 @@ class ProductServiceTests {
 
     /**
      * Tests that the list is sorted from the lowest price to the highest price when the sortingDirection = "lowest"
-    */
+     */
     @Test
     public void Test_sortedProductListLowestToHighestSuccess() {
         //Arrange
