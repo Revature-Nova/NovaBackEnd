@@ -44,7 +44,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserInfoModel> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) throws Exception {
+    public ResponseEntity<UserInfoModel> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) {
         String token = jwtUtil.getPrefix() + "";
 
         if (authenticate(loginDTO.getUsername(), loginDTO.getPassword())) {

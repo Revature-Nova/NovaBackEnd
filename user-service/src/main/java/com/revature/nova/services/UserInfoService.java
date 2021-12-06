@@ -3,16 +3,14 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.exceptions.UserDoesNotExistException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +58,8 @@ public class UserInfoService implements UserDetailsService {
 
         if (userModel != null) {
             CurrentUser.setUser(userModel);
+            CurrentUser.setUsername(userModel.getUsername());
+
             return new User(userModel.getUsername(), userModel.getPassword(),
                     new ArrayList<>());
         } else {
@@ -68,6 +67,13 @@ public class UserInfoService implements UserDetailsService {
         }
     }
 
+    /**
+     * Return a user by username
+     *
+     * @author Kollier Martin
+     * @param username username to query with
+     * @return user from database
+     */
     public UserInfoModel findByUsername(String username){
         return userInfoRepo.findByUsername(username);
     }
@@ -93,8 +99,7 @@ public class UserInfoService implements UserDetailsService {
      * @return User Info Model with updated user profile information
      */
     public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername((String) auth.getPrincipal());
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(CurrentUser.getUsername());
 
         userInfoModel.setEmail(userProfileDTO.getEmail());
         userInfoModel.setMessage(userProfileDTO.getMessage());
@@ -142,11 +147,9 @@ public class UserInfoService implements UserDetailsService {
 
         newUserInfo.setPassword(encoder.encode(newUserInfo.getPassword()));
 
-        // Save User Info, then set it in User
         newUserInfo = userInfoRepo.save(newUserInfo);
         newUser.setUserInfoModel(newUserInfo);
 
-        // Save User after persisting the User Info
         newUser = userRepo.save(newUser);
         newUserInfo.setUserModel(newUser);
 
@@ -159,17 +162,22 @@ public class UserInfoService implements UserDetailsService {
      * @author Kollier Martin, James Brown
      * @return String of generated JSON Object
      */
-    public String getAllProfiles(){
+    public String getAllProfiles() throws UserDoesNotExistException {
         JSONObject jsonObject = new JSONObject();
         List<UserInfoModel> profileDatum = userInfoRepo.findAll();
-        String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
 
-        for (UserInfoModel profileData : profileDatum) {
-            jsonObject.append(dataName[0], profileData.getUsername());
-            jsonObject.append(dataName[1], profileData.getEmail());
-            jsonObject.append(dataName[2], profileData.getState());
-            jsonObject.append(dataName[3], profileData.getFavoriteGenre());
-            jsonObject.append(dataName[4], profileData.getMessage());
+        if (!profileDatum.isEmpty()) {
+            String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+
+            for (UserInfoModel profileData : profileDatum) {
+                jsonObject.append(dataName[0], profileData.getUsername());
+                jsonObject.append(dataName[1], profileData.getEmail());
+                jsonObject.append(dataName[2], profileData.getState());
+                jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+                jsonObject.append(dataName[4], profileData.getMessage());
+            }
+        } else {
+            throw new UserDoesNotExistException("There are no users currently in this repository!");
         }
 
         return jsonObject.toString();
@@ -181,19 +189,24 @@ public class UserInfoService implements UserDetailsService {
      * @author Kollier Martin
      * @return String of generated JSON Object
      */
-    public String getCurrentProfile(){
+    public String getCurrentProfile() throws UserDoesNotExistException {
         JSONObject jsonObject = new JSONObject();
         List<UserInfoModel> profileDatum = userInfoRepo.findAll();
-        String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
 
-        for (UserInfoModel profileData : profileDatum) {
-            if (profileData.getUsername().equals(CurrentUser.getUser().getUsername())) {
-                jsonObject.append(dataName[0], profileData.getUsername());
-                jsonObject.append(dataName[1], profileData.getEmail());
-                jsonObject.append(dataName[2], profileData.getState());
-                jsonObject.append(dataName[3], profileData.getFavoriteGenre());
-                jsonObject.append(dataName[4], profileData.getMessage());
+        if (!profileDatum.isEmpty()) {
+            String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+
+            for (UserInfoModel profileData : profileDatum) {
+                if (profileData.getUsername().equals(CurrentUser.getUser().getUsername())) {
+                    jsonObject.append(dataName[0], profileData.getUsername());
+                    jsonObject.append(dataName[1], profileData.getEmail());
+                    jsonObject.append(dataName[2], profileData.getState());
+                    jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+                    jsonObject.append(dataName[4], profileData.getMessage());
+                }
             }
+        } else {
+            throw new UserDoesNotExistException("There are no users currently in this repository!");
         }
 
         return jsonObject.toString();

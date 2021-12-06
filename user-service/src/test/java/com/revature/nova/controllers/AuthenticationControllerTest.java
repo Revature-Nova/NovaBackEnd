@@ -1,6 +1,8 @@
 package com.revature.nova.controllers;
 
+import com.netflix.discovery.converters.Auto;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.services.UserInfoService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -26,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @version 12/3/21
  */
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc()
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AuthenticationControllerTest {
 
@@ -38,6 +44,7 @@ class AuthenticationControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
 
     @BeforeAll
     void setUpAll(){
@@ -53,6 +60,9 @@ class AuthenticationControllerTest {
 
     @Test
     void testCreateAuthenticationToken() throws Exception{
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("walter", "white"));
+
         mockMvc.perform(post("http://localhost:8089/Nova/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content("{" +
