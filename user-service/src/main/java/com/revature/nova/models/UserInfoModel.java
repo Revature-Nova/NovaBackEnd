@@ -56,15 +56,4 @@ public class UserInfoModel implements Serializable {
         this.password = regData.getPassword();
         this.email = regData.getEmail();
     }
-
-    @Override
-    public String toString() {
-        return "{\n" +
-                "  \"Username\": " + username + ",\n" +
-                "  \"Email\": " + email + ",\n" +
-                "  \"State\": " + state + ",\n" +
-                "  \"Favorite Genre\": " + favoriteGenre + ",\n" +
-                "  \"Profile Message\": " + message + "\n" +
-                "}";
-    }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_ADDITIONAL_VM_OPTIONS" value="-Djps.track.ap.dependencies=false" />
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -17,6 +18,7 @@
     <bytecodeTargetLevel>
       <module name="cart-service" target="1.8" />
       <module name="discovery-service" target="1.8" />
+      <module name="oauth-service" target="1.8" />
       <module name="product-service" target="1.8" />
       <module name="user-service" target="1.8" />
       <module name="zuul-service" target="1.8" />
@@ -26,6 +28,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="cart-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
+      <module name="oauth-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
       <module name="zuul-service" options="-parameters" />

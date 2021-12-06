@@ -5,11 +5,13 @@
     <option name="recentlyUsedProfiles">
       <list>
         <option value="profile:default" />
+        <option value="profile:p3-access" />
       </list>
     </option>
     <option name="recentlyUsedRegions">
       <list>
         <option value="us-east-1" />
+        <option value="us-east-2" />
       </list>
     </option>
   </component>

@@ -27,11 +27,10 @@ public class LoggerService {
 
     public void writeLog(String message, int level) {
         Logger logger = new Logger(level, message, getCurrentDateTime());
-
         repo.save(logger);
     }
 
-    private String getCurrentDateTime() {
+    String getCurrentDateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formatter.format(System.currentTimeMillis());
     }
