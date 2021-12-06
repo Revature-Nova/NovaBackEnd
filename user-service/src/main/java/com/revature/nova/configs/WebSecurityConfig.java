@@ -52,19 +52,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .addFilterAfter(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/user-service/Nova/login", "/user-service/Nova/register")
+                .antMatchers("/Nova/login", "/Nova/register")
                     .permitAll()
+                .and()
+                    .authorizeRequests()
+                    .anyRequest()
+                    .authenticated()
                 .and()
                     .exceptionHandling().authenticationEntryPoint(endPoint())
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/Nova/login", "/Nova/register");
     }
 
     @Bean
