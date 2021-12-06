@@ -45,8 +45,7 @@ public class ProductService {
         this.repo = repo;
     }
 
-    @Autowired
-    public ProductService(ProductRepo repo, LoggerService loggerService) {
+    public ProductService(ProductRepo repo, @Autowired LoggerService loggerService) {
         this.repo = repo;
         this.loggerService = loggerService;
     }
