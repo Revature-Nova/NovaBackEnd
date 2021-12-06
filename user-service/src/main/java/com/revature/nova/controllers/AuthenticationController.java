@@ -3,7 +3,6 @@ package com.revature.nova.controllers;
 import com.revature.nova.DTOs.LoginCredentialsDTO;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
-import com.revature.nova.clients.CartClient;
 import com.revature.nova.exceptions.AuthenticationException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.helpers.Token;
@@ -36,10 +35,8 @@ public class AuthenticationController {
     private final UserInfoService userInfoService;
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final CartClient cartClient;
 
-    public AuthenticationController(CartClient cartClient, JWTUtil jwtUtil, AuthenticationManager authenticationManager, UserInfoService userInfoService){
-        this.cartClient = cartClient;
+    public AuthenticationController(JWTUtil jwtUtil, AuthenticationManager authenticationManager, UserInfoService userInfoService){
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
         this.userInfoService = userInfoService;
@@ -54,7 +51,6 @@ public class AuthenticationController {
             token += jwtUtil.createJWT(userDetails);
 
             Token.setToken(token);
-            CurrentUser.setCart(cartClient.getNewCart());
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", token);
@@ -81,7 +77,6 @@ public class AuthenticationController {
 
     @PutMapping(value = "/logout")
     public ResponseEntity<String> logout(){
-        cartClient.persistCart();
         CurrentUser.setUser(null);
         CurrentUser.setCart(null);
         SecurityContextHolder.clearContext();
