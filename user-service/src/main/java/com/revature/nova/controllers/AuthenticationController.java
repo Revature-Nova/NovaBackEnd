@@ -2,6 +2,7 @@ package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.LoginCredentialsDTO;
 import com.revature.nova.DTOs.RegisteredDataDTO;
+import com.revature.nova.DTOs.ResponseLogin;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.exceptions.AuthenticationException;
 import com.revature.nova.helpers.CurrentUser;

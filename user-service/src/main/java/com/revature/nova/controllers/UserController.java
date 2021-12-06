@@ -61,13 +61,14 @@ public class UserController {
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
-
+  
     @DeleteMapping("/user/{firstName}")
     public ResponseEntity<String> deleteByFirstName(@PathVariable String firstName) {
         userService.deleteByFirstName(firstName);
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
+
 
     @PostMapping(value = "/user/cart")
     public ResponseEntity<Cart> getNewCart(){

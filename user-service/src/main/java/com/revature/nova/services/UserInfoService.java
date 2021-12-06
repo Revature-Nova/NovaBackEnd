@@ -22,14 +22,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
  *
- * @date 11/23/2021
- * @author Erika Johnson, Gregg Friedman, Travis Hood, Kollier Martin
+ * @version 12/3/2021
+ * @author User-Service Team
  */
 @Service
 @Transactional
@@ -71,6 +72,8 @@ public class UserInfoService implements UserDetailsService {
         return userInfoRepo.findByUsername(username);
     }
 
+
+    public UserInfoModel findUserById(int id ){ return userInfoRepo.getById(id);}
     /**
      * Saves a user's information
      *
@@ -100,10 +103,33 @@ public class UserInfoService implements UserDetailsService {
 
         return userInfoRepo.save(userInfoModel);
     }
+    public UserInfoModel setProfileInfoWithOutAuth(UserProfileDTO userProfileDTO) {
+
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+
+        userInfoModel.setEmail(userProfileDTO.getEmail());
+        userInfoModel.setMessage(userProfileDTO.getMessage());
+        userInfoModel.setState(userProfileDTO.getState());
+        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+        userInfoRepo.save(userInfoModel);
+
+        UserInfoModel responseModel = new UserInfoModel();
+        responseModel.setUsername(userInfoModel.getUsername());
+        responseModel.setEmail(userProfileDTO.getEmail());
+        responseModel.setMessage(userProfileDTO.getMessage());
+        responseModel.setState(userProfileDTO.getState());
+        responseModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+
+        return responseModel;
+    }
+
+    public UserInfoModel getProfile(Integer id){
+        return userInfoRepo.getById(id);
+    }
 
 
     /**
-     * Receives information to create a new user, saves it to postgreSQL
+     * Receives information to create a new user, saves it to Postgres
      * and returns the information in a string format
      *
      * During the registration process, the user password is encoded before persistence

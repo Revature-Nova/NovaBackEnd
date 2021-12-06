@@ -68,6 +68,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+/**
+ * Mockito Test using JUnit 5 for UserInfoService
+ *
+ * @author James Brown
+ * @version 12/2/2021
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserInfoServiceTest {
 

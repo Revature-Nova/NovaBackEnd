@@ -7,10 +7,6 @@ package com.revature.nova.exceptions;
  * @author User-Feature Team
  */
 public class UserDoesNotExistException extends RuntimeException {
-    public UserDoesNotExistException() {
-        super();
-    }
-
     public UserDoesNotExistException(String message) {
         super(message);
     }
