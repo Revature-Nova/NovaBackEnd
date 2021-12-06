@@ -22,7 +22,7 @@ public class LoggerAspect {
         this.loggerService = loggerService;
     }
 
-    @AfterThrowing(pointcut = "execution(* com.revature.nova.*..*(..))", throwing = "e")
+    @AfterThrowing(pointcut = "execution(* com.revature.nova.*..*(..)) || within(com.revature.nova.helpers..*)", throwing = "e")
     public void logMethodException(JoinPoint jp, Throwable e) {
         String methodSig = extractMethodSignature(jp);
         loggerService.writeLog(String.format("%s was thrown in method %s with message: %s", e.getClass().getSimpleName(), methodSig, e.getMessage()), 3);

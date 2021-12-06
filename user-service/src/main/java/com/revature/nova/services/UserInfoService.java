@@ -130,7 +130,7 @@ public class UserInfoService implements UserDetailsService {
     /**
      * Retrieves all available user info for user profiles
      *
-     * @author Kollier Martin
+     * @author Kollier Martin, James Brown
      * @return String of generated JSON Object
      */
     public String getAllProfiles(){
@@ -144,6 +144,30 @@ public class UserInfoService implements UserDetailsService {
             jsonObject.append(dataName[2], profileData.getState());
             jsonObject.append(dataName[3], profileData.getFavoriteGenre());
             jsonObject.append(dataName[4], profileData.getMessage());
+        }
+
+        return jsonObject.toString();
+    }
+
+    /**
+     * Retrieves current user info for user profiles
+     *
+     * @author Kollier Martin
+     * @return String of generated JSON Object
+     */
+    public String getCurrentProfile(){
+        JSONObject jsonObject = new JSONObject();
+        List<UserInfoModel> profileDatum = userInfoRepo.findAll();
+        String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+
+        for (UserInfoModel profileData : profileDatum) {
+            if (profileData.getUsername().equals(CurrentUser.getUser().getUsername())) {
+                jsonObject.append(dataName[0], profileData.getUsername());
+                jsonObject.append(dataName[1], profileData.getEmail());
+                jsonObject.append(dataName[2], profileData.getState());
+                jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+                jsonObject.append(dataName[4], profileData.getMessage());
+            }
         }
 
         return jsonObject.toString();

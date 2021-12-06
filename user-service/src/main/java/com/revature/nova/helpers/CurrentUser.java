@@ -1,5 +1,7 @@
 package com.revature.nova.helpers;
 
+import com.revature.nova.exceptions.AuthenticationException;
+import com.revature.nova.exceptions.FailedSaveException;
 import com.revature.nova.models.Cart;
 import com.revature.nova.models.Product;
 import com.revature.nova.models.UserInfoModel;
@@ -19,10 +21,10 @@ import java.util.List;
  * @author Kollier Martin
  */
 public class CurrentUser {
-    @Getter @Setter
+    @Setter
     public static UserInfoModel user;
 
-    @Getter @Setter
+    @Setter
     public static Cart cart;
 
     public static List<Product> getCartProducts() {
@@ -31,5 +33,21 @@ public class CurrentUser {
         }
 
         return cart.getProductList();
+    }
+
+    public static UserInfoModel getUser(){
+        if (user == null){
+            throw new AuthenticationException("There is no user currently logged in!");
+        } else {
+            return user;
+        }
+    }
+
+    public static Cart getCart() {
+        if (cart == null) {
+            throw new FailedSaveException("Cart was not properly saved!");
+        } else {
+            return cart;
+        }
     }
 }

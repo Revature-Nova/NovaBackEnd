@@ -77,7 +77,7 @@ public class UserController {
                 .body(CurrentUser.getCart());
     }
 
-    @PutMapping("/cart/add/{productTitle}/{platform}")
+    @PutMapping("/user/cart/add/{productTitle}/{platform}")
     public ResponseEntity<Cart> addToCart(@PathVariable String productTitle, @PathVariable String platform){
         CurrentUser.getCartProducts().add(productClient.getProduct(productTitle, platform));
         return new ResponseEntity<>(CurrentUser.getCart(), HttpStatus.ACCEPTED);

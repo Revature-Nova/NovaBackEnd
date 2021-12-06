@@ -5,7 +5,6 @@ import com.revature.nova.exceptions.EmptyCartException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Cart;
-import com.revature.nova.models.Product;
 import com.revature.nova.models.User;
 import com.revature.nova.repositories.CartRepo;
 import com.revature.nova.repositories.UserRepo;
@@ -59,12 +58,6 @@ public class CartService {
         } else {
             throw new AuthenticationException("This token is not valid!");
         }
-    }
-
-    public Cart addToCart(Cart cart, Product product){
-        cart.getProductList().add(product);
-
-        return cartRepo.save(cart);
     }
 
     public Cart getCartByID(int id){
