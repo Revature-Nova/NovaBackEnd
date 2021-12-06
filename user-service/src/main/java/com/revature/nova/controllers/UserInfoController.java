@@ -37,7 +37,7 @@ public class UserInfoController {
 
     @PostMapping(value = "user/profile")
     public ResponseEntity<?> getUserProfile( @RequestBody UserProfileDTO userProfileDTO){
-        
+
         return new ResponseEntity<>(userInfoService.setProfileInfoWithOutAuth(userProfileDTO), HttpStatus.OK);
     }
 
