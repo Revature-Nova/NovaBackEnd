@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,8 @@ public class UserInfoService implements UserDetailsService {
         return userInfoRepo.findByUsername(username);
     }
 
+
+    public UserInfoModel findUserById(int id ){ return userInfoRepo.getById(id);}
     /**
      * Saves a user's information
      *
@@ -99,6 +102,29 @@ public class UserInfoService implements UserDetailsService {
         userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
 
         return userInfoRepo.save(userInfoModel);
+    }
+    public UserInfoModel setProfileInfoWithOutAuth(UserProfileDTO userProfileDTO) {
+
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
+
+        userInfoModel.setEmail(userProfileDTO.getEmail());
+        userInfoModel.setMessage(userProfileDTO.getMessage());
+        userInfoModel.setState(userProfileDTO.getState());
+        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+        userInfoRepo.save(userInfoModel);
+
+        UserInfoModel responseModel = new UserInfoModel();
+        responseModel.setUsername(userInfoModel.getUsername());
+        responseModel.setEmail(userProfileDTO.getEmail());
+        responseModel.setMessage(userProfileDTO.getMessage());
+        responseModel.setState(userProfileDTO.getState());
+        responseModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
+
+        return responseModel;
+    }
+
+    public UserInfoModel getProfile(Integer id){
+        return userInfoRepo.getById(id);
     }
 
     /**
