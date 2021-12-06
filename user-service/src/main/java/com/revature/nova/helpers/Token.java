@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Stores the current token for client communication
+ * Stores the current token for use in requests to other services
  *
- * @author Kollier Martin
  * @date 12/3/2021
+ * @author Kollier Martin
  */
 public class Token {
     @Getter @Setter

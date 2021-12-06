@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .addFilterAfter(new AuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/Nova/login", "/Nova/register")
+                .antMatchers("/user-service/Nova/login", "/user-service/Nova/register")
                     .permitAll()
                 .and()
                     .exceptionHandling().authenticationEntryPoint(endPoint())

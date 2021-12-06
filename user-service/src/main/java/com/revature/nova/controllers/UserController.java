@@ -2,10 +2,13 @@ package com.revature.nova.controllers;
 
 
 import com.revature.nova.clients.CartClient;
-import com.revature.nova.helper.Token;
+import com.revature.nova.clients.ProductClient;
+import com.revature.nova.helpers.CurrentUser;
+import com.revature.nova.models.Cart;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +25,13 @@ import java.util.List;
 public class UserController {
     private final UserModelService userService;
     private final CartClient cartClient;
+    private final ProductClient productClient;
 
     @Autowired
-    public UserController(UserModelService userService, CartClient cartClient) {
+    public UserController(UserModelService userService, CartClient cartClient, ProductClient productClient) {
         this.userService = userService;
         this.cartClient = cartClient;
+        this.productClient = productClient;
     }
 
     @GetMapping("/user/all")
@@ -51,25 +56,30 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteByID(@PathVariable int id) {
+    public ResponseEntity<String> deleteByID(@PathVariable int id) {
         userService.deleteByID(id);
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
 
     @DeleteMapping("/user/{firstName}")
-    public ResponseEntity<?> deleteByFirstName(@PathVariable String firstName) {
+    public ResponseEntity<String> deleteByFirstName(@PathVariable String firstName) {
         userService.deleteByFirstName(firstName);
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
 
     @PostMapping(value = "/user/cart")
-    public ResponseEntity<Object> getCart(){
-        Object obj = cartClient.getCart();
-        System.out.println(obj);
+    public ResponseEntity<Cart> getCart(){
+        CurrentUser.setCart(cartClient.getCart());
 
         return ResponseEntity.ok()
-                .body(obj);
+                .body(CurrentUser.getCart());
+    }
+
+    @PutMapping("/cart/add/{productTitle}/{platform}")
+    public ResponseEntity<Cart> addToCart(@PathVariable String productTitle, @PathVariable String platform){
+        CurrentUser.getCart().getProductList().add(productClient.getProduct(productTitle));
+        return new ResponseEntity<>(CurrentUser.getCart(), HttpStatus.ACCEPTED);
     }
 }

@@ -3,6 +3,7 @@ package com.revature.nova.controllers;
 
 import com.revature.nova.models.Cart;
 import com.revature.nova.models.Product;
+import com.revature.nova.models.User;
 import com.revature.nova.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,8 @@ public class CartController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<Cart> getNewCart(@RequestHeader String Authorization, @RequestBody String key){
-        return new ResponseEntity<>(cartService.createCart(Authorization, key), HttpStatus.CREATED);
+    public ResponseEntity<Cart> getNewCart(@RequestHeader String authorization, @RequestBody User user){
+        return new ResponseEntity<>(cartService.createCart(authorization, user), HttpStatus.CREATED);
     }
 
     @PutMapping("/cart/add/{id}")

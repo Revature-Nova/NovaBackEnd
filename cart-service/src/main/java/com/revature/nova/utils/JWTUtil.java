@@ -5,8 +5,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -24,6 +26,7 @@ import java.util.Map;
  * @author Kollier Martin, James Brown, Emmanuel Tejeda
  */
 
+@Component
 @Getter @Setter
 public class JWTUtil {
     @Value("${jwt.header}")
@@ -37,6 +40,7 @@ public class JWTUtil {
 
     private Key key;
 
+    @Autowired
     public JWTUtil() {
     }
 

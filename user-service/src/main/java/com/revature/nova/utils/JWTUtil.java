@@ -5,7 +5,6 @@ import com.revature.nova.exceptions.MissingTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,9 +89,20 @@ public class JWTUtil {
         return expiration.before(new Date());
     }
 
-    public void validateToken(final String token) throws MalformedTokenException, MissingTokenException {
+    /**
+     * Validates a token's authenticity
+     *
+     * @param token to parse for user information
+     * @throws MalformedTokenException token was not created in this session or by this application
+     * @throws MissingTokenException token claims are empty
+     */
+    public void validateToken(String token) throws MalformedTokenException, MissingTokenException {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+
         } catch (MalformedJwtException ex) {
             throw new MalformedTokenException("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
@@ -104,6 +114,13 @@ public class JWTUtil {
         }
     }
 
+    /**
+     * Validates a user's presence in the database and if the token is expired
+     *
+     * @param token to parse for user information
+     * @param userDetails details to parse
+     * @return true on valid, false on not valid
+     */
     public Boolean validateToken(String token, UserDetails userDetails) {
         String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));

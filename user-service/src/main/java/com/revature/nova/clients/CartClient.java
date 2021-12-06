@@ -1,8 +1,8 @@
 package com.revature.nova.clients;
 
-import com.revature.nova.helper.Token;
+import com.revature.nova.helpers.CurrentUser;
+import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Cart;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,6 +27,7 @@ public class CartClient {
                 .post()
                 .uri("/cart")
                 .header("Authorization", Token.getToken())
+                .bodyValue(CurrentUser.getUser())
                 .retrieve()
                 .bodyToMono(Cart.class)
                 .block();
