@@ -80,7 +80,7 @@ public class AuthenticationController {
         }
     }
 
-    @PutMapping(value = "/logout")
+    @GetMapping(value = "/logout")
     public ResponseEntity<String> logout(){
         cartClient.persistCart();
         CurrentUser.setUser(null);
