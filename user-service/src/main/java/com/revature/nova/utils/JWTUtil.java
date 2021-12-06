@@ -74,6 +74,9 @@ public class JWTUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+        } catch (Exception e){
+            throw new AuthenticationException("Invalid Token");
+        }
     }
 
     public String getUsernameFromToken(String token) {

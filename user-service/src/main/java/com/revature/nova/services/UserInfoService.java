@@ -29,8 +29,8 @@ import java.util.List;
 /**
  * Service used that communicates and queries the database for the storing and retrieving User Information
  *
- * @date 11/23/2021
- * @author Erika Johnson, Gregg Friedman, Travis Hood, Kollier Martin
+ * @version 12/3/2021
+ * @author User-Service Team
  */
 @Service
 @Transactional
@@ -128,7 +128,7 @@ public class UserInfoService implements UserDetailsService {
     }
 
     /**
-     * Receives information to create a new user, saves it to postgreSQL
+     * Receives information to create a new user, saves it to Postgres
      * and returns the information in a string format
      *
      * During the registration process, the user password is encoded before persistence
