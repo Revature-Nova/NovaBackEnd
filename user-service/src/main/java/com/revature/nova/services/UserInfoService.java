@@ -3,10 +3,12 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -47,8 +49,8 @@ public class UserInfoService implements UserDetailsService {
     /**
      * Overridden Spring security method for loading Users
      *
-     * @Author Kollier Martin, James Brown
-     * @Version 12/2/21
+     * @author Kollier Martin, James Brown
+     * @date 12/2/21
      * @param username username provided by client for login
      * @return UserDetails used to generate JWT
      * @throws UsernameNotFoundException if findByUsername returns null
@@ -58,6 +60,7 @@ public class UserInfoService implements UserDetailsService {
         UserInfoModel userModel = userInfoRepo.findByUsername(username);
 
         if (userModel != null) {
+            CurrentUser.setUser(userModel);
             return new User(userModel.getUsername(), userModel.getPassword(),
                     new ArrayList<>());
         } else {
@@ -153,20 +156,44 @@ public class UserInfoService implements UserDetailsService {
     /**
      * Retrieves all available user info for user profiles
      *
-     * @Author Kollier Martin
+     * @author Kollier Martin, James Brown
      * @return String of generated JSON Object
      */
     public String getAllProfiles(){
         JSONObject jsonObject = new JSONObject();
-        List<UserInfoModel> profileData = userInfoRepo.findAll();
+        List<UserInfoModel> profileDatum = userInfoRepo.findAll();
         String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
 
-        for (UserInfoModel profileDatum : profileData) {
-            jsonObject.put(dataName[0], profileDatum.getUsername());
-            jsonObject.put(dataName[1], profileDatum.getEmail());
-            jsonObject.put(dataName[2], profileDatum.getState());
-            jsonObject.put(dataName[3], profileDatum.getFavoriteGenre());
-            jsonObject.put(dataName[4], profileDatum.getMessage());
+        for (UserInfoModel profileData : profileDatum) {
+            jsonObject.append(dataName[0], profileData.getUsername());
+            jsonObject.append(dataName[1], profileData.getEmail());
+            jsonObject.append(dataName[2], profileData.getState());
+            jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+            jsonObject.append(dataName[4], profileData.getMessage());
+        }
+
+        return jsonObject.toString();
+    }
+
+    /**
+     * Retrieves current user info for user profiles
+     *
+     * @author Kollier Martin
+     * @return String of generated JSON Object
+     */
+    public String getCurrentProfile(){
+        JSONObject jsonObject = new JSONObject();
+        List<UserInfoModel> profileDatum = userInfoRepo.findAll();
+        String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+
+        for (UserInfoModel profileData : profileDatum) {
+            if (profileData.getUsername().equals(CurrentUser.getUser().getUsername())) {
+                jsonObject.append(dataName[0], profileData.getUsername());
+                jsonObject.append(dataName[1], profileData.getEmail());
+                jsonObject.append(dataName[2], profileData.getState());
+                jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+                jsonObject.append(dataName[4], profileData.getMessage());
+            }
         }
 
         return jsonObject.toString();

@@ -2,16 +2,17 @@ package com.revature.nova.controllers;
 
 
 import com.revature.nova.clients.CartClient;
+import com.revature.nova.clients.ProductClient;
+import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.Cart;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * This controller handles all User endpoint interactions
@@ -24,11 +25,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController {
     private final UserModelService userService;
     private final CartClient cartClient;
+    private final ProductClient productClient;
 
     @Autowired
-    public UserController(UserModelService userService, CartClient cartClient) {
+    public UserController(UserModelService userService, CartClient cartClient, ProductClient productClient) {
         this.userService = userService;
         this.cartClient = cartClient;
+        this.productClient = productClient;
     }
 
     @GetMapping("/user/all")
@@ -53,24 +56,35 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteByID(@PathVariable int id) {
+    public ResponseEntity<String> deleteByID(@PathVariable int id) {
         userService.deleteByID(id);
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
 
     @DeleteMapping("/user/{firstName}")
-    public ResponseEntity<?> deleteByFirstName(@PathVariable String firstName) {
+    public ResponseEntity<String> deleteByFirstName(@PathVariable String firstName) {
         userService.deleteByFirstName(firstName);
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
 
-    @GetMapping(value = "/user/cart", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Cart> getCart(){
-        Cart cart = cartClient.getCart();
+    @PostMapping(value = "/user/cart")
+    public ResponseEntity<Cart> getNewCart(){
+        CurrentUser.setCart(cartClient.getNewCart());
 
         return ResponseEntity.ok()
-                .body(cart);
+                .body(CurrentUser.getCart());
+    }
+
+    @PutMapping("/user/cart/add/{productTitle}/{platform}")
+    public ResponseEntity<Cart> addToCart(@PathVariable String productTitle, @PathVariable String platform){
+        CurrentUser.getCartProducts().add(productClient.getProduct(productTitle, platform));
+        return new ResponseEntity<>(CurrentUser.getCart(), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/user/cart")
+    public ResponseEntity<Cart> getCurrentCart(){
+        return ResponseEntity.ok(CurrentUser.getCart());
     }
 }

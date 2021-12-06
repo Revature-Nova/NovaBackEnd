@@ -31,6 +31,6 @@ public class Logger {
     private String dateTime;
 
     @NonNull
-    @Column
+    @Column(name = "message")
     private String message;
 }

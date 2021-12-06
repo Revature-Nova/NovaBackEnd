@@ -65,24 +65,24 @@ public class UserInfoServiceTest {
                 userInfoService.getAllProfiles());
     }
 
-//    @Test
-//    void testSetProfileInfo(){
-//        UserProfileDTO upDTO = new UserProfileDTO("jimbo", "email@email.com", "NC",
-//                "Simulation", "Hello");
-//        UserInfoModel uim = new UserInfoModel(regDTO);
-//        uim.setMessage("Hello");
-//        uim.setFavoriteGenre("Simulation");
-//        uim.setState("NC");
-//
-//        when(userInfoRepo.findByUsername("jimbo")).thenReturn(new UserInfoModel(regDTO));
-//        when(userInfoService.setProfileInfo(upDTO)).thenReturn(uim);
-//
-//        UserInfoModel uim2 = userInfoService.setProfileInfo(upDTO);
-//
-//        assertEquals("Hello", uim2.getMessage());
-//        assertEquals("Simulation", uim2.getFavoriteGenre());
-//        assertEquals("NC", uim2.getState());
-//    }
+    @Test
+    void testSetProfileInfo(){
+        UserProfileDTO upDTO = new UserProfileDTO("jimbo","email@email.com", "NC",
+                "Simulation", "Hello");
+        UserInfoModel uim = new UserInfoModel(regDTO);
+        uim.setMessage("Hello");
+        uim.setFavoriteGenre("Simulation");
+        uim.setState("NC");
+
+        when(userInfoRepo.findByUsername("jimbo")).thenReturn(new UserInfoModel(regDTO));
+        when(userInfoService.setProfileInfo(upDTO)).thenReturn(uim);
+
+        UserInfoModel uim2 = userInfoService.setProfileInfo(upDTO);
+
+        assertEquals("Hello", uim2.getMessage());
+        assertEquals("Simulation", uim2.getFavoriteGenre());
+        assertEquals("NC", uim2.getState());
+    }
 
     @Test
     void testConstructor(){

@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * This is a Model for a product to be displayed in the storefront.
+ * POJO used to store information about a product
+ *
+ * @date 11/22/2021
+ * @author Product-Feature Team
  */
-
 @Getter @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cartList"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor(onConstructor = @__(@Autowired))
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Product {
