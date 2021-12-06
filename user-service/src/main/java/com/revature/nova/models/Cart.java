@@ -1,24 +1,26 @@
 package com.revature.nova.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * POJO used to store information about a product
+ *
+ * @date 11/30/2021
+ * @author Kollier Martin
+ */
 @Getter @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "productList"})
-@NoArgsConstructor(onConstructor = @__(@Autowired))
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor(onConstructor = @__(@Autowired))
 public class Cart {
     private Integer cartId;
-
     private List<Product> productList;
-
-    @PostConstruct
-    private void init(){
-        productList = new ArrayList<>();
-    }
+    private String dateTime;
 }

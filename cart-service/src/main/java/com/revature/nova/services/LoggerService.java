@@ -30,7 +30,7 @@ public class LoggerService {
         repo.save(logger);
     }
 
-    private String getCurrentDateTime() {
+    String getCurrentDateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formatter.format(System.currentTimeMillis());
     }

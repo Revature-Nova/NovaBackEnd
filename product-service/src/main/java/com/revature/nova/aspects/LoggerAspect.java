@@ -2,19 +2,17 @@ package com.revature.nova.aspects;
 
 import com.revature.nova.services.LoggerService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
- * DO NOT POINTCUT A CONFIG CLASS
+ * This class provides error catching and logging advice to all functional methods
+ * Excludes: configs and filters
  *
- *
+ * @date 11/22/2021
+ * @author Kollier Martin
  */
-
 @Aspect
 @Component
 public class LoggerAspect {
@@ -24,23 +22,7 @@ public class LoggerAspect {
         this.loggerService = loggerService;
     }
 
-    // TODO: This is an error
-    // Navigate into every package using the '*' wildcard
-    @Pointcut("within(com.revature.nova.*.*.*)")
-    public void logAll() {
-
-    }
-
-    @Around("within(com.revature.nova.*.*.*)")
-    public void logAroundAll(ProceedingJoinPoint joinPoint) throws Throwable {
-        try {
-            joinPoint.proceed();
-        } catch (Exception ignored){
-
-        }
-    }
-
-    @AfterThrowing(pointcut = "logAll()", throwing = "e")
+    @AfterThrowing(pointcut = "execution(* com.revature.nova.*..*(..))", throwing = "e")
     public void logMethodException(JoinPoint jp, Throwable e) {
         String methodSig = extractMethodSignature(jp);
         loggerService.writeLog(String.format("%s was thrown in method %s with message: %s", e.getClass().getSimpleName(), methodSig, e.getMessage()), 3);
