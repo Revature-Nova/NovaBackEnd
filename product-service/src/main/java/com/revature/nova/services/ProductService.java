@@ -47,10 +47,8 @@ public class ProductService {
      */
     public List<Product> getProductsContainingTitle(String search)
     {
-        //Finds product(s) by their title and sets the productList equal to the results
         setProductList(repo.findByTitleContainingIgnoreCase(search));
 
-        //Maintains sorting direction
         if(!getSortDirection().equals("None")){
             sortedProductList(getSortDirection());
         }
@@ -113,7 +111,7 @@ public class ProductService {
      *                         the highest price is returned.
      *                         If the sortingDirection = "highest", then a list sorted by the highest to the
      *                         lowest price is returned.
-     * @return
+     * @return list of products
      */
     public List<Product> sortedProductList(String sortingDirection){
         boolean validSortingDirection = false;
@@ -167,6 +165,7 @@ public class ProductService {
         return repo.getById(id);
     }
 
+    //TODO: Comment here
     public Product findProductByTitleAndPlatform(String token, String title, String platform) {
         Token.setToken(token);
         String prefix = token.substring(0, jwtUtil.getPrefix().length());
