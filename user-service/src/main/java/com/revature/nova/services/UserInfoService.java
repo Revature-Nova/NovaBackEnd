@@ -8,6 +8,7 @@ import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -134,15 +135,15 @@ public class UserInfoService implements UserDetailsService {
      */
     public String getAllProfiles(){
         JSONObject jsonObject = new JSONObject();
-        List<UserInfoModel> profileData = userInfoRepo.findAll();
+        List<UserInfoModel> profileDatum = userInfoRepo.findAll();
         String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
 
-        for (UserInfoModel profileDatum : profileData) {
-            jsonObject.put(dataName[0], profileDatum.getUsername());
-            jsonObject.put(dataName[1], profileDatum.getEmail());
-            jsonObject.put(dataName[2], profileDatum.getState());
-            jsonObject.put(dataName[3], profileDatum.getFavoriteGenre());
-            jsonObject.put(dataName[4], profileDatum.getMessage());
+        for (UserInfoModel profileData : profileDatum) {
+            jsonObject.append(dataName[0], profileData.getUsername());
+            jsonObject.append(dataName[1], profileData.getEmail());
+            jsonObject.append(dataName[2], profileData.getState());
+            jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+            jsonObject.append(dataName[4], profileData.getMessage());
         }
 
         return jsonObject.toString();

@@ -67,7 +67,7 @@ public class UserInfoServiceTest {
 
     @Test
     void testSetProfileInfo(){
-        UserProfileDTO upDTO = new UserProfileDTO("email@email.com", "NC",
+        UserProfileDTO upDTO = new UserProfileDTO("jimbo","email@email.com", "NC",
                 "Simulation", "Hello");
         UserInfoModel uim = new UserInfoModel(regDTO);
         uim.setMessage("Hello");

@@ -53,7 +53,7 @@ public class AuthenticationController {
             Token.setToken(token);
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", token);
+            headers.set("Authorization", token);
 
             return new ResponseEntity<>(userInfoService.findByUsername(loginDTO.getUsername()), headers, HttpStatus.OK);
         } else {

@@ -12,6 +12,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * The spring security config for web security
@@ -24,12 +25,14 @@ import java.util.Arrays;
 public class WebConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> corsConfigurationSource().getCorsConfiguration(request));
+        http.cors();
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**")
-                .permitAll();
+                .antMatchers("**/register/**","**/login/**")
+                    .permitAll()
+                .antMatchers("/Nova/**")
+                    .authenticated();
     }
 
     @Bean
@@ -42,6 +45,8 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
+        config.setExposedHeaders(Arrays.asList("Response-Type", "Content-Type", "Authorization", "authorization", "Authentication"));
+        config.setAllowedOrigins(Collections.singletonList("*"));
         config.setAllowedHeaders(Arrays.asList("Response-Type", "Content-Type", "Authorization", "authorization", "Authentication"));
         config.setAllowedMethods(Arrays.asList("POST", "GET", "OPTIONS", "DELETE", "PUT", "PATCH"));
 
