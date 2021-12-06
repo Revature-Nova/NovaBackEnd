@@ -22,7 +22,7 @@ public class CartClient {
 
     @Autowired
     public CartClient() {
-        client = WebClient.create("http://localhost:8082/cart-service/Nova");
+        client = WebClient.create("http://18.212.102.32:8082/cart-service/Nova");
     }
 
     public Cart getNewCart() throws AuthenticationException {

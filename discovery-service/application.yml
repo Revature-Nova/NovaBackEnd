@@ -13,6 +13,6 @@ eureka:
     enable-self-preservation: false
     waitTimeInMsWhenSyncEmpty: 0
   instance:
-    hostname: localhost
+    hostname: 18.212.102.32
     lease-expiration-duration-in-seconds: 15
     lease-renewal-interval-in-seconds: 5
