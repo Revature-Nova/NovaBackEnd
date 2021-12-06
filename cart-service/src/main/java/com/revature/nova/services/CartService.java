@@ -15,6 +15,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * This service handles Cart repo queries
+ *
+ * @author Kollier Martin
+ * @date 12/1/2021
+ */
 @Service
 public class CartService {
     private final JWTUtil jwtUtil;
@@ -72,5 +78,16 @@ public class CartService {
 
     public void deleteCartByID(int id){
         cartRepo.deleteById(id);
+    }
+
+    public Cart save(String token, Cart cart) {
+        Token.setToken(token);
+        String prefix = token.substring(0, jwtUtil.getPrefix().length());
+
+        if (prefix.equals(jwtUtil.getPrefix())) {
+            return cartRepo.save(cart);
+        } else {
+            throw new AuthenticationException("This token is not valid!");
+        }
     }
 }
