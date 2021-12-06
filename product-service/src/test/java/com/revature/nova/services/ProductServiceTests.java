@@ -2,11 +2,9 @@ package com.revature.nova.services;
 
 import com.revature.nova.models.Product;
 import com.revature.nova.repositories.ProductRepo;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -46,9 +44,15 @@ class ProductServiceTests {
     @Mock
     private ProductRepo mockProductRepo;
 
+    /*
+    This is the mock logger service for testing the catch block in the getProductById method.
+     */
     @Mock
     private LoggerService mockLoggerService;
 
+    /*
+    Sets up the mock database and the productService before each test.
+     */
     @BeforeEach
     void setUp() {
         productService = new ProductService(mockProductRepo, mockLoggerService);
@@ -66,7 +70,7 @@ class ProductServiceTests {
         mockDatabaseData.add(product4);
     }
 
-    //Reset everything that is reused in each test to prevent any side effects
+    //Resets everything that is reused in each test to prevent any side effects
     @AfterEach
     void tearDown() {
         //Print out actualProductList so that you can make sure you are getting the correct results.
@@ -77,18 +81,19 @@ class ProductServiceTests {
             System.out.println("Products: " + p.getProductId() + ", " + p.getTitle() + ", " + p.getGenre()
                     + ", " + p.getPlatform() + ", " + p.getRating() + ", $" + p.getPrice());
         }
-        //Reset all lists and the productService
+
+        //Reset all lists and the productService. Setting all the variables to null and clearing the lists.
         type = null;
         value = null;
         sortingDirection = null;
         actualProductList.clear();
         expectedProductList.clear();
         mockDatabaseData.clear();
+        //Clear the product list to make sure there isn't any residual data from a previous test.
+        productService.setProductList(Collections.emptyList());
         productService = null;
     }
 
-
-    ////////////////////////     UNIT TESTS     ////////////////////////
 
     //Tests for the displayAllProducts method in the ProductService class.
     /**
@@ -97,10 +102,12 @@ class ProductServiceTests {
     @Test
     public void Test_successfullyDisplayAllProducts() {
         //Arrange
+        //Returns the mock database when mockProductRepo.findAll is called
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
+        //This is the list that the method returns
         actualProductList = this.productService.displayAllProducts();
-        //Assert
+        //Asserts that the mock database and the actual list returned by the method match.
         Assertions.assertEquals(mockDatabaseData, actualProductList);
         System.out.println("\nTest for successfully displaying all products:");
     }
@@ -112,6 +119,8 @@ class ProductServiceTests {
     public void Test_failToDisplayProductsDueToEmptyDatabase() {
         //Arrange
         mockDatabaseData.clear();
+        //Set the mock database equal to an empty list because this is what the actual method should return when there
+        //is nothing in the database.
         mockDatabaseData = Collections.emptyList();
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         //Act
@@ -141,7 +150,9 @@ class ProductServiceTests {
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         expectedProductList.add(product);
         expectedProductList.add(product1);
+        //The method should return the expectedProductList if it successfully reaches the genre switch case.
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByGenreIgnoreCase(value);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -162,7 +173,9 @@ class ProductServiceTests {
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         expectedProductList.add(product);
         expectedProductList.add(product1);
+        //The method should return the expectedProductList if it successfully reaches the platform switch case.
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPlatformIgnoreCase(value);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -187,7 +200,9 @@ class ProductServiceTests {
         expectedProductList.add(product1);
         expectedProductList.add(product2);
         expectedProductList.add(product3);
+        //The method should return the expectedProductList if it successfully reaches the rating switch case.
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByRatingIgnoreCase(value);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -207,11 +222,12 @@ class ProductServiceTests {
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.displayAllProducts();
         //Assert
         Assertions.assertEquals(expectedProductList, actualProductList);
-        System.out.println("\nIntegrated test for successfully displaying all products while maintaining ascending soring order:");
+        System.out.println("\nTest for successfully displaying all products while maintaining ascending soring order:");
     }
 
     /**
@@ -226,6 +242,7 @@ class ProductServiceTests {
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findAll();
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.displayAllProducts();
         //Assert
@@ -248,10 +265,12 @@ class ProductServiceTests {
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenreIgnoreCase(value);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -274,10 +293,12 @@ class ProductServiceTests {
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByGenreIgnoreCase(value);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -300,10 +321,12 @@ class ProductServiceTests {
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPlatformIgnoreCase(value);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -326,10 +349,12 @@ class ProductServiceTests {
         Product product1 = new Product(123, "The Legend of Zelda: Skyward Sword", "Adventure", 39.99f, "E10+", "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9", "Nintendo Switch", "https://imgur.com/VvU45oV");
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPlatformIgnoreCase(value);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -356,10 +381,12 @@ class ProductServiceTests {
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
         mockDatabaseData.add(product3);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByRatingIgnoreCase(value);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -386,10 +413,12 @@ class ProductServiceTests {
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
         mockDatabaseData.add(product3);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByRatingIgnoreCase(value);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = this.productService.filterProducts(type,value);
         //Assert
@@ -486,7 +515,7 @@ class ProductServiceTests {
         actualProductList = this.productService.displayAllProducts();
         //Assert
         Assertions.assertEquals(expectedProductList, actualProductList);
-        System.out.println("\nIntegrated test for successfully displaying all products while maintaining ascending soring order:");
+        System.out.println("\nTest for failure to maintain sorting direction:");
     }
 
     //Tests for the filterProducts method above
@@ -509,6 +538,7 @@ class ProductServiceTests {
         actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully sorting the list from lowest to highest:");
     }
 
     /**
@@ -525,6 +555,7 @@ class ProductServiceTests {
         actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully sorting the list from highest to lowest:");
     }
 
     /**
@@ -543,6 +574,7 @@ class ProductServiceTests {
         System.out.println("Actual sorting direction: " + actualSortDirection);
         //Assert
         Assertions.assertEquals(expectedSortDirection,actualSortDirection);
+        System.out.println("Test for successfully setting the sortDirection variable in the ProductService class:");
     }
 
     //Tests for failure:
@@ -560,6 +592,7 @@ class ProductServiceTests {
         actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for failing to sort the list due to an invalid sorting direction:");
     }
 
     /**
@@ -582,6 +615,7 @@ class ProductServiceTests {
         //Assert
         Assertions.assertNotEquals(expectedSortDirection,actualSortDirection);
         Assertions.assertEquals(mockDatabaseData,actualProductList);
+        System.out.println("Test for failure to set the sortDirection variable:");
     }
 
     /**
@@ -599,6 +633,7 @@ class ProductServiceTests {
         actualProductList = productService.sortedProductList(sortingDirection);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for returning an empty list when there is nothing in the productList to sort:");
     }
 
     //Tests for the sortedProductList method above
@@ -623,10 +658,12 @@ class ProductServiceTests {
         expectedProductList.add(product1);
         expectedProductList.add(product2);
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByPriceIsBetween(min,max);
+
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully obtaining a list of products within the given range:");
     }
 
     /**
@@ -645,14 +682,17 @@ class ProductServiceTests {
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully maintaining the ascending sorting order when the range method is called:");
     }
 
     /**
@@ -671,14 +711,17 @@ class ProductServiceTests {
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort((o1, o2) -> o2.getPrice().compareTo(o1.getPrice()));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByPriceIsBetween(min,max);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = productService.productRange(min,max);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully maintaining the descending sorting order when the range method is called:");
     }
 
     //Tests for failure:
@@ -697,6 +740,7 @@ class ProductServiceTests {
         actualProductList = productService.productRange(min,max);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for returning an empty list when there are no existing products within the given range:");
     }
 
     //Tests for the productRange method above
@@ -719,10 +763,12 @@ class ProductServiceTests {
         expectedProductList.add(product1);
         expectedProductList.add(product2);
         Mockito.doReturn(expectedProductList).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
+
         //Act
         actualProductList = productService.getProductsContainingTitle(title);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for returning a list of products that contain the search string:");
     }
 
     /**
@@ -739,6 +785,7 @@ class ProductServiceTests {
         actualProductList = productService.getProductsContainingTitle(title);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for returning a single product that contains the search string:");
     }
 
     /**
@@ -756,14 +803,17 @@ class ProductServiceTests {
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = productService.getProductsContainingTitle(title);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully maintaining the ascending sorting direction when the search method is called:");
     }
 
     /**
@@ -781,14 +831,17 @@ class ProductServiceTests {
         mockDatabaseData.add(product);
         mockDatabaseData.add(product1);
         mockDatabaseData.add(product2);
+
         expectedProductList = mockDatabaseData;
         expectedProductList.sort(Comparator.comparing(Product::getPrice));
         Mockito.doReturn(mockDatabaseData).when(mockProductRepo).findByTitleContainingIgnoreCase(title);
         productService.setSortDirection(sortingDirection);
+
         //Act
         actualProductList = productService.getProductsContainingTitle(title);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for successfully maintaining the descending sorting direction when the search method is called:");
     }
 
     //Tests for failure
@@ -805,15 +858,9 @@ class ProductServiceTests {
         actualProductList = productService.getProductsContainingTitle(title);
         //Assert
         Assertions.assertEquals(expectedProductList,actualProductList);
+        System.out.println("Test for returning an empty list if there are no products that contain the search string");
     }
     //Tests for the getProductsContainingTitle method above
-
-    //Tests for getting a product by its id
-
-//    public Product getProductById(Integer id)
-//    {
-//        return repo.getById(id);
-//    }
 
     //Test for success
 
@@ -831,6 +878,7 @@ class ProductServiceTests {
         System.out.println(actualProduct.getProductId() + ", " + actualProduct.getTitle());
         //Assert
         Assertions.assertEquals(expectedProduct,actualProduct);
+        System.out.println("Test for successfully returning a product using the product id:");
     }
 
     //Test for failure
@@ -849,6 +897,7 @@ class ProductServiceTests {
         //Assert
         exception.expect(EntityNotFoundException.class);
         exception.expectMessage("Product id does not exist in the database");
+        System.out.println("Test for failing to return a product when the id does not exist in the database:");
     }
 
     /**
@@ -864,6 +913,14 @@ class ProductServiceTests {
         //Assert
         Mockito.verify(mockLoggerService).writeLog("Product id does not exist in the database", 3);
         Assertions.assertEquals(null, actualProduct.getProductId());
+        Assertions.assertEquals(null, actualProduct.getTitle());
+        Assertions.assertEquals(null, actualProduct.getGenre());
+        Assertions.assertEquals(null, actualProduct.getPlatform());
+        Assertions.assertEquals(null, actualProduct.getRating());
+        Assertions.assertEquals(null, actualProduct.getEndpoint());
+        Assertions.assertEquals(null, actualProduct.getImageUrl());
+
+        System.out.println("Test for checking that each variable in the product object are null if there is no matchin id:");
     }
     //Tests for getting a product by its id above
 }
