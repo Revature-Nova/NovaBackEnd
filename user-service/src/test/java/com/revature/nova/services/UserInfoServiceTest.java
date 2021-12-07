@@ -2,6 +2,7 @@ package com.revature.nova.services;
 
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.clients.CartClient;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.repositories.UserInfoRepo;
@@ -40,6 +41,9 @@ public class UserInfoServiceTest {
 
     @Mock
     UserInfoRepo userInfoRepo;
+
+    @Mock
+    CartClient cartClient;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -92,7 +96,7 @@ public class UserInfoServiceTest {
 
     @Test
     void testConstructor(){
-        assertEquals(UserInfoService.class, new UserInfoService(userInfoRepo, userRepo).getClass());
+        assertEquals(UserInfoService.class, new UserInfoService(userInfoRepo, userRepo, cartClient).getClass());
     }
 
     @Test
