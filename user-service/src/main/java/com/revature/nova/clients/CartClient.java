@@ -18,7 +18,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class CartClient {
     private final WebClient client;
-    private String token;
 
     @Autowired
     public CartClient() {
@@ -30,7 +29,6 @@ public class CartClient {
 
         try {
             user = CurrentUser.getUser();
-            token = Token.getToken();
         } catch (NullPointerException e) {
             throw new AuthenticationException("There is no user currently logged in!");
         }
@@ -38,7 +36,6 @@ public class CartClient {
         return client
                 .post()
                 .uri("/cart")
-                .header("Authorization", token)
                 .bodyValue(user)
                 .retrieve()
                 .bodyToMono(Cart.class)
@@ -48,6 +45,7 @@ public class CartClient {
     public Cart persistCart() throws AuthenticationException {
         Cart cart;
 
+        String token;
         try {
             cart = CurrentUser.getCart();
             token = Token.getToken();

@@ -26,8 +26,8 @@ public class CartController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<Cart> getNewCart(@RequestHeader String authorization, @RequestBody User user){
-        return new ResponseEntity<>(cartService.createCart(authorization, user), HttpStatus.CREATED);
+    public ResponseEntity<Cart> getNewCart(@RequestBody User user){
+        return new ResponseEntity<>(cartService.createCart(user), HttpStatus.CREATED);
     }
 
     @PostMapping("/cart/save")
