@@ -33,7 +33,7 @@
 1. Open project in a Java IDE, preferrably IntelliJ
 2. To run application locally set up a 'hibernate.cfg.xml' file and place it in the 'src/main/resources' folder
 ```txt
-
+Text Here
 ```
 ## Usage
 This project is straightforward, but here is an In-Depth [Guide]() [<-- link to guide] for proper usage.
