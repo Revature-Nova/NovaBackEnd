@@ -79,6 +79,7 @@ public class AuthenticationController {
 
     @GetMapping(value = "/logout")
     public ResponseEntity<String> logout(){
+        //cartClient.persistCart();
         CurrentUser.setUser(null);
         CurrentUser.setCart(null);
         SecurityContextHolder.clearContext();
