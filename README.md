@@ -1,4 +1,4 @@
-# Nova Back-End
+# Nova
 
 ### Project Description
 Nova is an E-Commerce application.
