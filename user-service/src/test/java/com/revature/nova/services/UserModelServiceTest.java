@@ -40,25 +40,25 @@ public class UserModelServiceTest {
     @AfterEach
     public void clear(){userModelService.clearList();}
 
-    @Test
-    public void testAllUsers(){
-        List<UserModel> l = userModelService.allUsers();
+//     @Test
+//     public void testAllUsers(){
+//         List<UserModel> l = userModelService.allUsers();
 
-        assertEquals(1, l.size());
-     }
+//         assertEquals(1, l.size());
+//      }
 
-    @Test
-    public void testFindAndDeleteByID(){
-        UserModel user = userModelService.findByID(2);
+//     @Test
+//     public void testFindAndDeleteByID(){
+//         UserModel user = userModelService.findByID(2);
 
-        assertEquals("Words",user.getFirstName());
+//         assertEquals("Words",user.getFirstName());
 
-        userModelService.deleteByID(2);
+//         userModelService.deleteByID(2);
 
-        assertThrows(UserDoesNotExistException.class,
-                () -> userModelService.findByID(2),"User with ID 2 does not exist.");
+//         assertThrows(UserDoesNotExistException.class,
+//                 () -> userModelService.findByID(2),"User with ID 2 does not exist.");
 
-    }
+//     }
 
     @Test
     public void testDeleteByFirstName(){

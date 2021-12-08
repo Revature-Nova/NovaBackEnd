@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity @Table(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cart"})
@@ -36,6 +37,6 @@ public class User {
     @Transient
     private String message;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Cart cart;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Cart> cart;
 }

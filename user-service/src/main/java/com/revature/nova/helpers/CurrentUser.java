@@ -29,23 +29,11 @@ public class CurrentUser {
     @Getter @Setter
     public static Cart cart;
 
-    @Getter @Setter
-    public static String username = getUsernameFromContext();
-
     public static List<Product> getCartProducts() {
         if (cart.getProductList() == null){
             cart.setProductList(new ArrayList<>());
         }
 
         return cart.getProductList();
-    }
-
-    public static String getUsernameFromContext(){
-        if (SecurityContextHolder.getContext() != null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            return (String) auth.getPrincipal();
-        } else {
-            return username;
-        }
     }
 }

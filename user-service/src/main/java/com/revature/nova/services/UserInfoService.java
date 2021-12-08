@@ -3,6 +3,7 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.clients.CartClient;
 import com.revature.nova.exceptions.UserDoesNotExistException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.UserInfoModel;
@@ -32,12 +33,14 @@ import java.util.List;
 @Service
 @Transactional
 public class UserInfoService implements UserDetailsService {
+    private final CartClient cartClient;
     private final UserInfoRepo userInfoRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo) {
+    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo, CartClient cartClient) {
+        this.cartClient = cartClient;
         this.userRepo = userRepo;
         this.userInfoRepo = userInfoRepo;
         this.encoder = new BCryptPasswordEncoder();
@@ -54,15 +57,15 @@ public class UserInfoService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserInfoModel userModel = userInfoRepo.findByUsername(username);
+        try {
+            UserInfoModel userModel = userInfoRepo.findByUsername(username);
 
-        if (userModel != null) {
             CurrentUser.setUser(userModel);
-            CurrentUser.setUsername(userModel.getUsername());
+            CurrentUser.setCart(cartClient.getNewCart());
 
             return new User(userModel.getUsername(), userModel.getPassword(),
                     new ArrayList<>());
-        } else {
+        } catch (Exception e) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
@@ -79,7 +82,8 @@ public class UserInfoService implements UserDetailsService {
     }
 
 
-    public UserInfoModel findUserById(int id ){ return userInfoRepo.getById(id);}
+    public UserInfoModel findUserById(int id ) { return userInfoRepo.getById(id); }
+
     /**
      * Saves a user's information
      *
@@ -99,7 +103,7 @@ public class UserInfoService implements UserDetailsService {
      * @return User Info Model with updated user profile information
      */
     public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername(CurrentUser.getUsername());
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(CurrentUser.getUser().getUsername());
 
         userInfoModel.setEmail(userProfileDTO.getEmail());
         userInfoModel.setMessage(userProfileDTO.getMessage());
@@ -107,25 +111,6 @@ public class UserInfoService implements UserDetailsService {
         userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
 
         return userInfoRepo.save(userInfoModel);
-    }
-    public UserInfoModel setProfileInfoWithOutAuth(UserProfileDTO userProfileDTO) {
-
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
-
-        userInfoModel.setEmail(userProfileDTO.getEmail());
-        userInfoModel.setMessage(userProfileDTO.getMessage());
-        userInfoModel.setState(userProfileDTO.getState());
-        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
-        userInfoRepo.save(userInfoModel);
-
-        UserInfoModel responseModel = new UserInfoModel();
-        responseModel.setUsername(userInfoModel.getUsername());
-        responseModel.setEmail(userProfileDTO.getEmail());
-        responseModel.setMessage(userProfileDTO.getMessage());
-        responseModel.setState(userProfileDTO.getState());
-        responseModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
-
-        return responseModel;
     }
 
     public UserInfoModel getProfile(Integer id){
@@ -167,7 +152,7 @@ public class UserInfoService implements UserDetailsService {
         List<UserInfoModel> profileDatum = userInfoRepo.findAll();
 
         if (!profileDatum.isEmpty()) {
-            String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+            String[] dataName = new String[]{"Username", "Email", "State", "FavoriteGenre", "Message"};
 
             for (UserInfoModel profileData : profileDatum) {
                 jsonObject.append(dataName[0], profileData.getUsername());
@@ -194,10 +179,39 @@ public class UserInfoService implements UserDetailsService {
         List<UserInfoModel> profileDatum = userInfoRepo.findAll();
 
         if (!profileDatum.isEmpty()) {
-            String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+            String[] dataName = new String[]{"Username", "Email", "State", "FavoriteGenre", "Message"};
 
             for (UserInfoModel profileData : profileDatum) {
                 if (profileData.getUsername().equals(CurrentUser.getUser().getUsername())) {
+                    jsonObject.append(dataName[0], profileData.getUsername());
+                    jsonObject.append(dataName[1], profileData.getEmail());
+                    jsonObject.append(dataName[2], profileData.getState());
+                    jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+                    jsonObject.append(dataName[4], profileData.getMessage());
+                }
+            }
+        } else {
+            throw new UserDoesNotExistException("There are no users currently in this repository!");
+        }
+
+        return jsonObject.toString();
+    }
+
+    /**
+     * Retrieves profile information for a specific user
+     *
+     * @author Kollier Martin
+     * @return String of generated JSON Object
+     */
+    public String getProfileByUsername(String username) throws UserDoesNotExistException {
+        JSONObject jsonObject = new JSONObject();
+        List<UserInfoModel> profileDatum = userInfoRepo.findAll();
+
+        if (!profileDatum.isEmpty()) {
+            String[] dataName = new String[]{"Username", "Email", "State", "FavoriteGenre", "Message"};
+
+            for (UserInfoModel profileData : profileDatum) {
+                if (profileData.getUsername().equals(username)) {
                     jsonObject.append(dataName[0], profileData.getUsername());
                     jsonObject.append(dataName[1], profileData.getEmail());
                     jsonObject.append(dataName[2], profileData.getState());

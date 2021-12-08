@@ -20,7 +20,7 @@ public class ProductClient {
 
     @Autowired
     public ProductClient() {
-        client = create("http://localhost:8082/product-service/Nova");
+        client = create("http://18.212.102.32:8082/product-service/Nova");
     }
 
     public Product getProduct(String productTitle, String platform) {
