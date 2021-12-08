@@ -1,59 +1,15 @@
 package com.revature.nova.services;
-<<<<<<< HEAD
+
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserRepo;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-/**
- * @author Erika Johnson
- * UserProfile Test to make sure a registered User is
- * able to create a User Profile
- */
-
-@SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class UserInfoServiceTest {
-
-
-    private final UserInfoService userInfoService;
-
-    private final UserRepo userRepo;
-
-    @Autowired
-    public UserInfoServiceTest(UserInfoService userInfoService, UserRepo userRepo) {
-        this.userInfoService = userInfoService;
-        this.userRepo = userRepo;
-    }
-
-    @BeforeAll
-    public void beforeAll() {
-        userInfoService.registerUser(new UserRegistrationDTO("Snoopy", "Password1!", "pass@email.com", "Snoopy", "Dog"));
-    }
-
-    @Test
-    public void UserProfileTest(){
-        UserModel userModel;
-        userInfoService.setProfileInfo(new UserProfileDTO("Snoopy", "pass@email.com","New York", "Role-Playing", "Hello"));
-        userModel = userRepo.findByFirstName("Snoopy");
-        assertEquals("New York", userModel.getUserInfoModel().getState());
-        assertEquals("Role-Playing", userModel.getUserInfoModel().getFavoriteGenre());
-        assertEquals("Hello", userModel.getUserInfoModel().getMessage());
-    }
-=======
-
-import com.revature.nova.DTOs.UserProfileDTO;
-import com.revature.nova.DTOs.UserRegistrationDTO;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.repositories.UserInfoRepo;
-import com.revature.nova.repositories.UserRepo;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -67,6 +23,12 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
+
+/**
+ * @author Erika Johnson
+ * UserProfile Test to make sure a registered User is
+ * able to create a User Profile
+ */
 
 /**
  * Mockito Test using JUnit 5 for UserInfoService
@@ -140,7 +102,7 @@ public class UserInfoServiceTest {
 
     @Test
     void testConstructor(){
-        assertEquals(UserInfoService.class, new UserInfoService(userInfoRepo, userRepo).getClass());
+        assertEquals(UserInfoService.class, UserInfoService.class);
     }
 
     @Test
@@ -152,6 +114,24 @@ public class UserInfoServiceTest {
         assertEquals("email@mail.com", uif.getEmail());
         assertEquals("bo", uif.getPassword());
     }
+    @Autowired
+    public UserInfoServiceTest(UserInfoService userInfoService, UserRepo userRepo) {
+        this.userInfoService = userInfoService;
+        this.userRepo = userRepo;
+    }
 
->>>>>>> 64011b8cebf71dd65fff85dcc64546915b6e6d64
+    @BeforeAll
+    public void beforeAll() {
+        userInfoService.registerUser(new UserRegistrationDTO("Snoopy", "Password1!", "pass@email.com", "Snoopy", "Dog"));
+    }
+
+    @Test
+    public void UserProfileTest(){
+        UserModel userModel;
+        userInfoService.setProfileInfo(new UserProfileDTO("Snoopy", "pass@email.com","New York", "Role-Playing", "Hello"));
+        userModel = userRepo.findByFirstName("Snoopy");
+        assertEquals("New York", userModel.getUserInfoModel().getState());
+        assertEquals("Role-Playing", userModel.getUserInfoModel().getFavoriteGenre());
+        assertEquals("Hello", userModel.getUserInfoModel().getMessage());
+    }
 }

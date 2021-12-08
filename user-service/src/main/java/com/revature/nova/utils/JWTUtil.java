@@ -1,5 +1,6 @@
 package com.revature.nova.utils;
 
+import com.revature.nova.exceptions.AuthenticationException;
 import com.revature.nova.exceptions.MalformedTokenException;
 import com.revature.nova.exceptions.MissingTokenException;
 import io.jsonwebtoken.*;
@@ -69,15 +70,15 @@ public class JWTUtil {
     }
 
     public Claims parseJWT(String token) {
-        return Jwts.parserBuilder()
+       try{ return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (Exception e){
-            throw new AuthenticationException("Invalid Token");
-        }
+    } catch (Exception e){
+        throw new AuthenticationException("Invalid Token");
     }
+}
 
     public String getUsernameFromToken(String token) {
         return parseJWT(token).getSubject();
