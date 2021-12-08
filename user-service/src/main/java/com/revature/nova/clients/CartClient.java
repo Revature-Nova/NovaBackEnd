@@ -1,8 +1,10 @@
 package com.revature.nova.clients;
 
+import com.revature.nova.exceptions.AuthenticationException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Cart;
+import com.revature.nova.models.UserInfoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,18 +18,46 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class CartClient {
     private final WebClient client;
+    private String token;
 
     @Autowired
     public CartClient() {
-        client = WebClient.create("http://localhost:8082/cart-service/Nova");
+        client = WebClient.create("http://18.212.102.32:8082/cart-service/Nova");
     }
 
-    public Cart getNewCart() {
+    public Cart getNewCart() throws AuthenticationException {
+        UserInfoModel user;
+
+        try {
+            user = CurrentUser.getUser();
+        } catch (NullPointerException e) {
+            throw new AuthenticationException("There is no user currently logged in!");
+        }
+
         return client
                 .post()
                 .uri("/cart")
-                .header("Authorization", Token.getToken())
-                .bodyValue(CurrentUser.getUser())
+                .bodyValue(user)
+                .retrieve()
+                .bodyToMono(Cart.class)
+                .block();
+    }
+
+    public Cart persistCart() throws AuthenticationException {
+        Cart cart;
+
+        try {
+            cart = CurrentUser.getCart();
+            token = Token.getToken();
+        } catch (NullPointerException e) {
+            throw new AuthenticationException("There is no user currently logged in!");
+        }
+
+        return client
+                .post()
+                .uri("/cart/save")
+                .header("Authorization", token)
+                .bodyValue(cart)
                 .retrieve()
                 .bodyToMono(Cart.class)
                 .block();

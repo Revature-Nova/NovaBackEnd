@@ -20,7 +20,7 @@ public class Cart {
     @Column(name = "date_time")
     private String dateTime;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "cartList", cascade = CascadeType.ALL)

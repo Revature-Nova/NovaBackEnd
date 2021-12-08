@@ -1,7 +1,9 @@
 package com.revature.nova.controllers;
 
 import com.revature.nova.DTOs.UserProfileDTO;
+import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserInfoService;
+import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +26,11 @@ public class UserInfoController {
         this.userInfoService = userInfoService;
     }
 
+    @GetMapping(value = "/ping")
+    public  ResponseEntity<String> ping() {
+        return new ResponseEntity<>("pong", HttpStatus.OK);
+    }
+
     @PostMapping(value = "/user/profile/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> setProfileInfo(@RequestBody UserProfileDTO userProfileDTO) {
         return new ResponseEntity<>(userInfoService.setProfileInfo(userProfileDTO), HttpStatus.ACCEPTED);
@@ -37,5 +44,10 @@ public class UserInfoController {
     @GetMapping(value = "/user/profile", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getProfile(){
         return new ResponseEntity<>(userInfoService.getCurrentProfile(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/user/profile/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getProfile(@PathVariable String username){
+        return new ResponseEntity<>(userInfoService.getProfileByUsername(username), HttpStatus.OK);
     }
 }

@@ -7,6 +7,8 @@ import com.revature.nova.models.Product;
 import com.revature.nova.models.UserInfoModel;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +23,10 @@ import java.util.List;
  * @author Kollier Martin
  */
 public class CurrentUser {
-    @Setter
+    @Getter @Setter
     public static UserInfoModel user;
 
-    @Setter
+    @Getter @Setter
     public static Cart cart;
 
     public static List<Product> getCartProducts() {
@@ -33,21 +35,5 @@ public class CurrentUser {
         }
 
         return cart.getProductList();
-    }
-
-    public static UserInfoModel getUser(){
-        if (user == null){
-            throw new AuthenticationException("There is no user currently logged in!");
-        } else {
-            return user;
-        }
-    }
-
-    public static Cart getCart() {
-        if (cart == null) {
-            throw new FailedSaveException("Cart was not properly saved!");
-        } else {
-            return cart;
-        }
     }
 }

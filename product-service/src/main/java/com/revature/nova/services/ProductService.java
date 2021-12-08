@@ -9,7 +9,9 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +29,11 @@ import java.util.Optional;
 public class ProductService {
     private JWTUtil jwtUtil;
     private final ProductRepo repo;
-    private List<Product> productList;
+    //Initializing this list as an empty list prevents NullPointerExceptions
+    private List<Product> productList = Collections.emptyList();
     private String sortDirection = "None"; //Used to maintain the sorting direction.
+    Product product = new Product();
+    LoggerService loggerService;
 
     @Autowired
     public ProductService(JWTUtil jwtUtil, ProductRepo repo) {
@@ -40,6 +45,11 @@ public class ProductService {
         this.repo = repo;
     }
 
+    public ProductService(ProductRepo repo, @Autowired LoggerService loggerService) {
+        this.repo = repo;
+        this.loggerService = loggerService;
+    }
+
     /**
      * This method searches for a list of products containing the search parameter
      * @param search with search term
@@ -47,10 +57,8 @@ public class ProductService {
      */
     public List<Product> getProductsContainingTitle(String search)
     {
-        //Finds product(s) by their title and sets the productList equal to the results
         setProductList(repo.findByTitleContainingIgnoreCase(search));
 
-        //Maintains sorting direction
         if(!getSortDirection().equals("None")){
             sortedProductList(getSortDirection());
         }
@@ -65,7 +73,6 @@ public class ProductService {
      */
     public List<Product> displayAllProducts(){
         setProductList(repo.findAll());
-        setSortDirection("None");
         return getProductList();
     }
 
@@ -86,13 +93,13 @@ public class ProductService {
     public List<Product> filterProducts(String type, String value) {
         switch (type) {
             case "genre":
-                setProductList(repo.findByGenre(value));
+                setProductList(repo.findByGenreIgnoreCase(value));
                 break;
             case "platform":
-                setProductList(repo.findByPlatform(value));
+                setProductList(repo.findByPlatformIgnoreCase(value));
                 break;
             case "rating":
-                setProductList(repo.findByRating(value));
+                setProductList(repo.findByRatingIgnoreCase(value));
                 break;
         }
 
@@ -113,7 +120,7 @@ public class ProductService {
      *                         the highest price is returned.
      *                         If the sortingDirection = "highest", then a list sorted by the highest to the
      *                         lowest price is returned.
-     * @return
+     * @return list of products
      */
     public List<Product> sortedProductList(String sortingDirection){
         boolean validSortingDirection = false;
@@ -162,11 +169,22 @@ public class ProductService {
      * @param id for object
      * @return product with that id
      */
-    public Product getProductById(Integer id)
-    {
-        return repo.getById(id);
+    public Product getProductById(Integer id) {
+        try{
+            product = repo.getById(id);
+        } catch (EntityNotFoundException exception){
+            loggerService.writeLog("Product id does not exist in the database",3);
+        }
+        return product;
     }
 
+    /**
+     * Search the database for a product by its title and platform
+     * @param token The token received from the controller
+     * @param title Title of the product
+     * @param platform Platform of the product
+     * @return Specified product
+     */
     public Product findProductByTitleAndPlatform(String token, String title, String platform) {
         Token.setToken(token);
         String prefix = token.substring(0, jwtUtil.getPrefix().length());

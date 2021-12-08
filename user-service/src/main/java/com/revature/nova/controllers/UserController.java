@@ -5,6 +5,7 @@ import com.revature.nova.clients.CartClient;
 import com.revature.nova.clients.ProductClient;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.Cart;
+import com.revature.nova.models.Product;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.services.UserModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok()
                 .body("User successfully deleted.");
     }
-
+  
     @DeleteMapping("/user/{firstName}")
     public ResponseEntity<String> deleteByFirstName(@PathVariable String firstName) {
         userService.deleteByFirstName(firstName);
@@ -72,9 +73,14 @@ public class UserController {
     @PostMapping(value = "/user/cart")
     public ResponseEntity<Cart> getNewCart(){
         CurrentUser.setCart(cartClient.getNewCart());
-
         return ResponseEntity.ok()
                 .body(CurrentUser.getCart());
+    }
+
+    @PutMapping(value = "/user/cart/product/remove")
+    public ResponseEntity<Cart> removeProduct(@RequestBody Product product){
+        CurrentUser.getCartProducts().remove(product);
+        return new ResponseEntity<>(CurrentUser.getCart(), HttpStatus.OK);
     }
 
     @PutMapping("/user/cart/add/{productTitle}/{platform}")

@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * This controller handles all User endpoint interactions
+ * This controller handles all Cart endpoint interactions
  *
  * @date 11/22/2021
- * @author Gregg Friedman, Travis Hood
+ * @author Kollier Martin
  */
 @RestController
 @RequestMapping(value = "/Nova")
@@ -26,8 +26,8 @@ public class CartController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<Cart> getNewCart(@RequestHeader String authorization, @RequestBody User user){
-        return new ResponseEntity<>(cartService.createCart(authorization, user), HttpStatus.CREATED);
+    public ResponseEntity<Cart> getNewCart(@RequestBody User user){
+        return new ResponseEntity<>(cartService.createCart(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/cart/{id}")
@@ -40,5 +40,10 @@ public class CartController {
         cartService.deleteCartByID(id);
 
         return ResponseEntity.ok("Deleted");
+    }
+
+    @PostMapping("/cart/save")
+    public ResponseEntity<Cart> save(@RequestHeader String authorization, @RequestBody Cart cart){
+        return new ResponseEntity<>(cartService.save(authorization, cart), HttpStatus.CREATED);
     }
 }
