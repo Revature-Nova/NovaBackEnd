@@ -178,7 +178,13 @@ public class ProductService {
         return product;
     }
 
-    //TODO: Comment here
+    /**
+     * Search the database for a product by its title and platform
+     * @param token The token received from the controller
+     * @param title Title of the product
+     * @param platform Platform of the product
+     * @return Specified product
+     */
     public Product findProductByTitleAndPlatform(String token, String title, String platform) {
         Token.setToken(token);
         String prefix = token.substring(0, jwtUtil.getPrefix().length());
