@@ -15,3 +15,4 @@ public class FailedSaveException extends RuntimeException {
         super(message);
     }
 }
+

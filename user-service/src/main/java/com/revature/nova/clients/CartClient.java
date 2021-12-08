@@ -1,8 +1,10 @@
 package com.revature.nova.clients;
 
+import com.revature.nova.exceptions.AuthenticationException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.helpers.Token;
 import com.revature.nova.models.Cart;
+import com.revature.nova.models.UserInfoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,12 +24,21 @@ public class CartClient {
         client = WebClient.create("http://localhost:8082/cart-service/Nova");
     }
 
-    public Cart getNewCart() {
+    public Cart getNewCart() throws AuthenticationException {
+        String token;
+        UserInfoModel user;
+        try {
+            user = CurrentUser.getUser();
+            token = Token.getToken();
+        } catch (NullPointerException e) {
+            throw new AuthenticationException("There is no user currently logged in!");
+        }
+
         return client
                 .post()
                 .uri("/cart")
-                .header("Authorization", Token.getToken())
-                .bodyValue(CurrentUser.getUser())
+                .header("Authorization", token)
+                .bodyValue(user)
                 .retrieve()
                 .bodyToMono(Cart.class)
                 .block();
