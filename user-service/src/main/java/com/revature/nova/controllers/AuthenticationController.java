@@ -10,6 +10,7 @@ import com.revature.nova.helpers.Token;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.services.UserInfoService;
 import com.revature.nova.utils.JWTUtil;
+import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,6 +83,9 @@ public class AuthenticationController {
         CurrentUser.setCart(null);
         SecurityContextHolder.clearContext();
 
-        return ResponseEntity.ok("Successful Logout");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Status", "Logout Successful!");
+
+        return ResponseEntity.ok(jsonObject.toString());
     }
 }

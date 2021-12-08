@@ -55,4 +55,9 @@ public class UserInfoController {
     public ResponseEntity<String> getProfile(){
         return new ResponseEntity<>(userInfoService.getCurrentProfile(), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/user/profile/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getProfile(@PathVariable String username){
+        return new ResponseEntity<>(userInfoService.getProfileByUsername(username), HttpStatus.OK);
+    }
 }
