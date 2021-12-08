@@ -18,6 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class CartClient {
     private final WebClient client;
+    private String token;
 
     @Autowired
     public CartClient() {
@@ -45,7 +46,6 @@ public class CartClient {
     public Cart persistCart() throws AuthenticationException {
         Cart cart;
 
-        String token;
         try {
             cart = CurrentUser.getCart();
             token = Token.getToken();

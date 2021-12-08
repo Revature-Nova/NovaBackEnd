@@ -57,15 +57,15 @@ public class UserInfoService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserInfoModel userModel = userInfoRepo.findByUsername(username);
+        try {
+            UserInfoModel userModel = userInfoRepo.findByUsername(username);
 
-        if (userModel != null) {
             CurrentUser.setUser(userModel);
             CurrentUser.setCart(cartClient.getNewCart());
 
             return new User(userModel.getUsername(), userModel.getPassword(),
                     new ArrayList<>());
-        } else {
+        } catch (Exception e) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
@@ -152,7 +152,7 @@ public class UserInfoService implements UserDetailsService {
         List<UserInfoModel> profileDatum = userInfoRepo.findAll();
 
         if (!profileDatum.isEmpty()) {
-            String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+            String[] dataName = new String[]{"Username", "Email", "State", "FavoriteGenre", "Message"};
 
             for (UserInfoModel profileData : profileDatum) {
                 jsonObject.append(dataName[0], profileData.getUsername());
@@ -179,10 +179,39 @@ public class UserInfoService implements UserDetailsService {
         List<UserInfoModel> profileDatum = userInfoRepo.findAll();
 
         if (!profileDatum.isEmpty()) {
-            String[] dataName = new String[]{"Username", "Email", "State", "Favorite Genre", "Message"};
+            String[] dataName = new String[]{"Username", "Email", "State", "FavoriteGenre", "Message"};
 
             for (UserInfoModel profileData : profileDatum) {
                 if (profileData.getUsername().equals(CurrentUser.getUser().getUsername())) {
+                    jsonObject.append(dataName[0], profileData.getUsername());
+                    jsonObject.append(dataName[1], profileData.getEmail());
+                    jsonObject.append(dataName[2], profileData.getState());
+                    jsonObject.append(dataName[3], profileData.getFavoriteGenre());
+                    jsonObject.append(dataName[4], profileData.getMessage());
+                }
+            }
+        } else {
+            throw new UserDoesNotExistException("There are no users currently in this repository!");
+        }
+
+        return jsonObject.toString();
+    }
+
+    /**
+     * Retrieves profile information for a specific user
+     *
+     * @author Kollier Martin
+     * @return String of generated JSON Object
+     */
+    public String getProfileByUsername(String username) throws UserDoesNotExistException {
+        JSONObject jsonObject = new JSONObject();
+        List<UserInfoModel> profileDatum = userInfoRepo.findAll();
+
+        if (!profileDatum.isEmpty()) {
+            String[] dataName = new String[]{"Username", "Email", "State", "FavoriteGenre", "Message"};
+
+            for (UserInfoModel profileData : profileDatum) {
+                if (profileData.getUsername().equals(username)) {
                     jsonObject.append(dataName[0], profileData.getUsername());
                     jsonObject.append(dataName[1], profileData.getEmail());
                     jsonObject.append(dataName[2], profileData.getState());

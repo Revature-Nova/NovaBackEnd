@@ -30,11 +30,6 @@ public class CartController {
         return new ResponseEntity<>(cartService.createCart(user), HttpStatus.CREATED);
     }
 
-    @PostMapping("/cart/save")
-    public ResponseEntity<Cart> save(@RequestHeader String authorization, @RequestBody Cart cart){
-        return new ResponseEntity<>(cartService.save(authorization, cart), HttpStatus.CREATED);
-    }
-
     @GetMapping("/cart/{id}")
     public ResponseEntity<Cart> getCartByID(@PathVariable int id){
         return new ResponseEntity<>(cartService.getCartByID(id), HttpStatus.CREATED);
@@ -45,5 +40,10 @@ public class CartController {
         cartService.deleteCartByID(id);
 
         return ResponseEntity.ok("Deleted");
+    }
+
+    @PostMapping("/cart/save")
+    public ResponseEntity<Cart> save(@RequestHeader String authorization, @RequestBody Cart cart){
+        return new ResponseEntity<>(cartService.save(authorization, cart), HttpStatus.CREATED);
     }
 }
