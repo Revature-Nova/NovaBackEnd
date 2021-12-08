@@ -32,24 +32,24 @@ public class APIClientServiceTests {
     /**
      * This test verifies that the method works with the used API.
      */
-    @Test
-    public void getTest_worksWithAPI() {
-        /*
-         * API endpoint for "The Legend of Zelda: Skyward Sword"
-         */
-        String url = "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9";
+//     @Test
+//     public void getTest_worksWithAPI() {
+//         /*
+//          * API endpoint for "The Legend of Zelda: Skyward Sword"
+//          */
+//         String url = "https://rawg.io/api/games/the-legend-of-zelda-skyward-sword?key=87ad23cdc737468884eb0216a7ba8df9";
 
-        String response = APIClientService.get(url);
+//         String response = APIClientService.get(url);
 
-        try{
-            JSONObject game = new JSONObject(response);
-            String title = game.getString("name");
+//         try{
+//             JSONObject game = new JSONObject(response);
+//             String title = game.getString("name");
 
-            assertEquals(title,"The Legend of Zelda: Skyward Sword");
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-    }
+//             assertEquals(title,"The Legend of Zelda: Skyward Sword");
+//         }catch (JSONException e){
+//             e.printStackTrace();
+//         }
+//     }
 
     /**
      * This test shows that the method will throw an exception with a bad url.

@@ -46,7 +46,7 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserInfoModel> createAuthenticationToken(@RequestBody LoginCredentialsDTO loginDTO) {
-        String token = jwtUtil.getPrefix() + "";
+        String token = jwtUtil.getPrefix();
 
         if (authenticate(loginDTO.getUsername(), loginDTO.getPassword())) {
             UserDetails userDetails = userInfoService.loadUserByUsername(loginDTO.getUsername());
@@ -57,7 +57,7 @@ public class AuthenticationController {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", token);
 
-            return new ResponseEntity<>(userInfoService.findByUsername(loginDTO.getUsername()), headers, HttpStatus.OK);
+            return new ResponseEntity<>(CurrentUser.getUser(), headers, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -77,7 +77,7 @@ public class AuthenticationController {
         }
     }
 
-    @PutMapping(value = "/logout")
+    @GetMapping(value = "/logout")
     public ResponseEntity<String> logout(){
         CurrentUser.setUser(null);
         CurrentUser.setCart(null);

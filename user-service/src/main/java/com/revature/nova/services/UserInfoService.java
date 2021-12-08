@@ -3,17 +3,15 @@ package com.revature.nova.services;
 import com.revature.nova.DTOs.RegisteredDataDTO;
 import com.revature.nova.DTOs.UserProfileDTO;
 import com.revature.nova.DTOs.UserRegistrationDTO;
+import com.revature.nova.clients.CartClient;
 import com.revature.nova.exceptions.UserDoesNotExistException;
 import com.revature.nova.helpers.CurrentUser;
 import com.revature.nova.models.UserInfoModel;
 import com.revature.nova.models.UserModel;
 import com.revature.nova.repositories.UserInfoRepo;
 import com.revature.nova.repositories.UserRepo;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +33,14 @@ import java.util.List;
 @Service
 @Transactional
 public class UserInfoService implements UserDetailsService {
+    private final CartClient cartClient;
     private final UserInfoRepo userInfoRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo) {
+    public UserInfoService(UserInfoRepo userInfoRepo, UserRepo userRepo, CartClient cartClient) {
+        this.cartClient = cartClient;
         this.userRepo = userRepo;
         this.userInfoRepo = userInfoRepo;
         this.encoder = new BCryptPasswordEncoder();
@@ -62,7 +61,7 @@ public class UserInfoService implements UserDetailsService {
             UserInfoModel userModel = userInfoRepo.findByUsername(username);
 
             CurrentUser.setUser(userModel);
-            CurrentUser.setUsername(userModel.getUsername());
+            CurrentUser.setCart(cartClient.getNewCart());
 
             return new User(userModel.getUsername(), userModel.getPassword(),
                     new ArrayList<>());
@@ -83,7 +82,8 @@ public class UserInfoService implements UserDetailsService {
     }
 
 
-    public UserInfoModel findUserById(int id ){ return userInfoRepo.getById(id);}
+    public UserInfoModel findUserById(int id ) { return userInfoRepo.getById(id); }
+
     /**
      * Saves a user's information
      *
@@ -103,7 +103,7 @@ public class UserInfoService implements UserDetailsService {
      * @return User Info Model with updated user profile information
      */
     public UserInfoModel setProfileInfo(UserProfileDTO userProfileDTO) {
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername(CurrentUser.getUsername());
+        UserInfoModel userInfoModel = userInfoRepo.findByUsername(CurrentUser.getUser().getUsername());
 
         userInfoModel.setEmail(userProfileDTO.getEmail());
         userInfoModel.setMessage(userProfileDTO.getMessage());
@@ -111,25 +111,6 @@ public class UserInfoService implements UserDetailsService {
         userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
 
         return userInfoRepo.save(userInfoModel);
-    }
-    public UserInfoModel setProfileInfoWithOutAuth(UserProfileDTO userProfileDTO) {
-
-        UserInfoModel userInfoModel = userInfoRepo.findByUsername(userProfileDTO.getUsername());
-
-        userInfoModel.setEmail(userProfileDTO.getEmail());
-        userInfoModel.setMessage(userProfileDTO.getMessage());
-        userInfoModel.setState(userProfileDTO.getState());
-        userInfoModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
-        userInfoRepo.save(userInfoModel);
-
-        UserInfoModel responseModel = new UserInfoModel();
-        responseModel.setUsername(userInfoModel.getUsername());
-        responseModel.setEmail(userProfileDTO.getEmail());
-        responseModel.setMessage(userProfileDTO.getMessage());
-        responseModel.setState(userProfileDTO.getState());
-        responseModel.setFavoriteGenre(userProfileDTO.getFavoriteGenre());
-
-        return responseModel;
     }
 
     public UserInfoModel getProfile(Integer id){

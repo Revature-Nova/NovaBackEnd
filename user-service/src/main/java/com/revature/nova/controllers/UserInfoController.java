@@ -20,25 +20,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/Nova")
 public class UserInfoController {
     private final UserInfoService userInfoService;
-    private final UserModelService userModelService;
 
     @Autowired
-    public UserInfoController(UserInfoService userInfoService, UserModelService userModelService) {
+    public UserInfoController(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
-        this.userModelService = userModelService;
     }
-
 
     @GetMapping(value = "/ping")
     public  ResponseEntity<String> ping() {
         return new ResponseEntity<>("pong", HttpStatus.OK);
-    }
-
-
-    @PostMapping(value = "user/profile")
-    public ResponseEntity<?> getUserProfile( @RequestBody UserProfileDTO userProfileDTO){
-        
-        return new ResponseEntity<>(userInfoService.setProfileInfoWithOutAuth(userProfileDTO), HttpStatus.OK);
     }
 
     @PostMapping(value = "/user/profile/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
