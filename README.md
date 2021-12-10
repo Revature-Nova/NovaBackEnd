@@ -6,7 +6,7 @@
 *“NOVA is out of this world!”*
 
 
-### Features
+### User Stories
 * Users can register for an account and login.
 * Users have a session persisted throughout login.
 * Users can view and update a user-profile page.
