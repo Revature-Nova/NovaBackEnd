@@ -10,7 +10,7 @@
   * Logging //This will contain the status of hibernate's logging as well as it's type
   * Web Security (If tokens are being used) //This will contain the tokens header and prefix
 
-NOTE: Please remember to open these services following microservice guidelines i.e discovery service, product service, cart service, user-service (These three can be done in any order), finishing with zuul-service
+NOTE: Please remember to open these services following microservice guidelines i.e discovery service, then zuul-service, and finally: product service, cart service, user-service (These three can be done in any order).
 
 ## Disclosure
 This main [branch](https://github.com/Revature-Nova/NovaBackEnd/tree/main) contains the final product, with bugs. <br />
