@@ -1,7 +1,8 @@
 Create an application.properties file and insert these values into it.
 Set the values based on your database information and custom JWT information
 
-Also in this resources folder, you may find a script for quickly saving products to the database:
+Also in this resources folder, you may find a script for quickly saving products to the PostgreSQL database:
+
 https://github.com/Revature-Nova/NovaBackEnd/blob/main/product-service/src/main/resources/Product%20Database%20script.sql
 
 ```
