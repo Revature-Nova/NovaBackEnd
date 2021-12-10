@@ -8,7 +8,9 @@
   * Spring JPA & Hibernate //Should describe the Database platform, and how you want Hibernate and Jackson to function
   * Configure Eureka Server url //This should have the Eureka Client url, port, name and memory-size
   * Logging //This will contain the status of hibernate's logging as well as it's type
-  * Web Security (If tokens are being used) //This will contain the tokens header and prefix 
+  * Web Security (If tokens are being used) //This will contain the tokens header and prefix
+
+NOTE: Please remember to open these services following microservice guidelines i.e discovery service, product service, cart service, user-service (These three can be done in any order), finishing with zuul-service
 
 ## Disclosure
 This main [branch](https://github.com/Revature-Nova/NovaBackEnd/tree/main) contains the final product, with bugs. <br />
