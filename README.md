@@ -1,7 +1,10 @@
 # Nova
 
 ### Project Description
-Nova is an E-Commerce application.
+  NOVA Games is an e-Commerce application that gives users a platform to buy their favorite games and discover new games. Our intuitive search lets users discover a game by genre or name, and easily add it to their cart (or wishlist in future iterations). And because our Games are digital, we never run out of stock. NOVA is on the cutting edge of e-Commerce; try our service and you’ll be saying:
+  
+*“NOVA is out of this world!”*
+
 
 ### Features
 
