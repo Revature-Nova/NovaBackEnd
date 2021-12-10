@@ -7,6 +7,12 @@
 
 
 ### Features
+* Users can register for an account and login.
+* Users have a session persisted throughout login.
+* Users can view and update a user-profile page.
+* Users can view the profiles of other users.
+* Users can search for products and filter their search.
+* Users can add and remove products from their cart.
 
 ## Technologies Used
 * Java 8 
@@ -18,6 +24,8 @@
 * Git & GitHub for version control
 * AWS PostgreSQL used with Hibernate deployed on AWS RDS for data persistence
 * AWS EC2, ElasticBeanstalk, S3, CodeBuild, CodePipeline
+* Docker for containerization
+* Jenkins for build pipeline
 
 ## Getting Started
 
