@@ -16,6 +16,7 @@
 
 ## Technologies Used
 * Java 8 
+* Angular 4+
 * JavaScript ES6
 * HTML5 & CSS3 
 * Bootstrap v5.1.3
